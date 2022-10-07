@@ -12,6 +12,7 @@ import java.util.*;
  *
  * @author macbookair
  */
+
 public class PatientTS implements Serializable {
 
     private static final long serialVersionUID = -1156840724257282729L;
