@@ -1,7 +1,7 @@
 package BITalino;
 
 
-import java.util.Vector;
+import java.util.*;
 
 import javax.bluetooth.RemoteDevice;
 
@@ -12,22 +12,17 @@ import java.util.logging.Logger;
 public class BitalinoDemo {
 
     public static Frame[] frame;
+    public static List <Integer> arraySignal = new ArrayList <Integer>();
 
     public static void main(String[] args) {
 
-        BITalino bitalinoECG = null;
-        BITalino bitalinoEMG = null;
-        
-        // int opcion: ecg o emg
-        /*switch(opcion){
-        case 1:
-        
-        */
+        BITalino bitalino = null;
+ 
         try {
-            bitalinoECG = new BITalino();
+            bitalino = new BITalino();
             // Code to find Devices
             //Only works on some OS
-            Vector<RemoteDevice> devices = bitalinoECG.findDevices();
+            Vector<RemoteDevice> devices = bitalino.findDevices();
             System.out.println(devices);
 
             //You need TO CHANGE THE MAC ADDRESS
@@ -36,37 +31,31 @@ public class BitalinoDemo {
             
             //Sampling rate, should be 10, 100 or 1000
             int SamplingRate = 10;
-            bitalinoECG.open(macAddress, SamplingRate);
+            bitalino.open(macAddress, SamplingRate);
 
             // Start acquisition on analog channels A2 and A6
             // For example, If you want A1, A3 and A4 you should use {0,2,3}
-            int[] channelsToAcquire = {1, 5};
-            bitalinoECG.start(channelsToAcquire);
+            int[] channelsToAcquire = {1,2};
+            bitalino.start(channelsToAcquire);
 
-            //Read in total 10000000 times
+            //Read in total 10000000 times --> por que elegimos este num
             for (int j = 0; j < 10000000; j++) {
 
-                //Each time read a block of 10 samples 
+                //Each time read a block of 10 samples --> por que elegimos este num
                 int block_size=10;
-                frame = bitalinoECG.read(block_size);
+                frame = bitalino.read(block_size);
 
                 System.out.println("size block: " + frame.length);
 
-                //Print the samples
+                //Store the samples --> preguntar si se guarda el fichero 
                 for (int i = 0; i < frame.length; i++) {
-                    System.out.println((j * block_size + i) + " seq: " + frame[i].seq + " "
-                            + frame[i].analog[0] + " "
-                            + frame[i].analog[1] + " "
-                    //  + frame[i].analog[2] + " "
-                    //  + frame[i].analog[3] + " "
-                    //  + frame[i].analog[4] + " "
-                    //  + frame[i].analog[5]
-                    );
-
+                    arraySignal.add(frame[i].analog[2]);
+                    System.out.println(" seq: " + frame[i].seq + " "
+                            + frame[i].analog[0] + " ");
                 }
             }
             //stop acquisition
-            bitalinoECG.stop();
+            bitalino.stop();
         } catch (BITalinoException ex) {
             Logger.getLogger(BitalinoDemo.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Throwable ex) {
@@ -74,8 +63,8 @@ public class BitalinoDemo {
         } finally {
             try {
                 //close bluetooth connection
-                if (bitalinoECG != null) {
-                    bitalinoECG.close();
+                if (bitalino != null) {
+                    bitalino.close();
                 }
             } catch (BITalinoException ex) {
                 Logger.getLogger(BitalinoDemo.class.getName()).log(Level.SEVERE, null, ex);

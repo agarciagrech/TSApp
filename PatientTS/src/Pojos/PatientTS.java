@@ -6,8 +6,7 @@
 package Pojos;
 
 import java.io.Serializable;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  *
@@ -23,14 +22,15 @@ public class PatientTS implements Serializable {
     private String address;
     private String email;
     private int age;
-    private String sexe;
-    private List<Integer> ecgs;
+    private String sex;
+    private Signal ecg ;
+    private Signal emg ;
     
     
     
-    //private Doctor doctor;
+    
 
-    public PatientTS(String dni, String name, String surname, Date dob, String address, String email, int age, String sexe) {
+    public PatientTS(String dni, String name, String surname, Date dob, String address, String email, int age, String sexe, Signal ecg, Signal emg) {
         this.dni = dni;
         this.name = name;
         this.surname = surname;
@@ -38,12 +38,22 @@ public class PatientTS implements Serializable {
         this.address = address;
         this.email = email;
         this.age = age;
-        this.sexe = sexe;
+        this.sex = sexe;
+        this.emg = emg;
+        this.ecg = ecg;
     }
 
     @Override
     public String toString() {
-        return "Patient{" + "dni=" + dni + ", name=" + name + ", surname=" + surname + ", dob=" + dob + ", address=" + address + ", email=" + email + ", age=" + age + ", sexe=" + sexe + '}';
+        return "PatientTS{" + "dni=" + dni + ", name=" + name + ", surname=" + surname + ", dob=" + dob + ", address=" + address + ", email=" + email + ", age=" + age + ", sex=" + sex + ", ecg=" + ecg + ", emg=" + emg + '}';
+    }
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
+    public String getDni() {
+        return dni;
     }
 
     public String getName() {
@@ -70,8 +80,57 @@ public class PatientTS implements Serializable {
         return age;
     }
 
-    public String getSexe() {
-        return sexe;
+    public String getSex() {
+        return sex;
     }
+
+    public Signal getEcg() {
+        return ecg;
+    }
+
+    public Signal getEmg() {
+        return emg;
+    }
+
+    public void setDni(String dni) {
+        this.dni = dni;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
+    public void setDob(Date dob) {
+        this.dob = dob;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
+
+    public void setEcg(Signal ecg) {
+        this.ecg = ecg;
+    }
+
+    public void setEmg(Signal emg) {
+        this.emg = emg;
+    }
+
 
 }
