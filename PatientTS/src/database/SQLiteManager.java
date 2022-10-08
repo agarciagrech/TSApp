@@ -52,11 +52,15 @@ public class SQLiteManager implements DBManager {
       Statement stmt1;
       try{
           stmt1 = c.createStatement();
-          String sql1 = "CREATE TABLE patient " + "(id medCardId INTEGER PRIMARY KEY, " 
+          String sql1 = "CREATE TABLE patient " + "(medCardId INTEGER PRIMARY KEY, " 
                   + "name TEXT NOT NULL, " + "surname TEXT NOT NULL, "
                   + "dob DATE NOT NULL, " + " address TEXT NOT NULL, "
                   + "email TEXT NOT NULL, " + "gender TEXT NOT NULL)";
           stmt1.executeUpdate(sql1);
+          
+          stmt1 = c.createStatement();
+          String sql2 = "CREATE TABLE signal " + "(id INTEGER PRIMARY KEY "
+                  + "type TEXT NOT NULL " + "(id_patient REFERENCES patient,"+ "(signal_values BYTES)";
       }catch(SQLException e){
           if(e.getMessage().contains("already exists")){
               

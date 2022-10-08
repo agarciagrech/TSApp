@@ -11,9 +11,9 @@ package Pojos;
  */
 
 public class Signal {
-    private String id;
-    private int [] values; //preguntar que tipo
-    //private fecha fecha
-    private String comment;
+    private Integer id;
+    private byte[] signal_values; //preguntar que tipo
+    //private fecha fecha 
+    private TypeOfSignal type;
     
 }
