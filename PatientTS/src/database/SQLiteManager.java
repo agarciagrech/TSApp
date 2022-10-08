@@ -61,6 +61,7 @@ public class SQLiteManager implements DBManager {
           stmt1 = c.createStatement();
           String sql2 = "CREATE TABLE signal " + "(id INTEGER PRIMARY KEY "
                   + "type TEXT NOT NULL " + "(id_patient REFERENCES patient,"+ "(signal_values BYTES)";
+          stmt1.executeUpdate(sql2);
       }catch(SQLException e){
           if(e.getMessage().contains("already exists")){
               
