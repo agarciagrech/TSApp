@@ -3,18 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package database;
-import Pojos.PatientTS;
-import Pojos.TypeOfSignal;
+package database.jdbc;
+import database.pojos.*;
 import db.interfaces.PatientTSManager;
-import java.sql.Connection;
-import java.util.List;
+import java.sql.*;
+import java.util.*;
 import BITalino.BitalinoDemo;
-import Pojos.Signal;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.io.*;
+import java.nio.file.*;
 
 /**
  *
@@ -55,5 +51,20 @@ public class SQLitePatientTSManager {
             
         Signal s = new Signal(patient_signal,filePath_signal,type);
         //HAY QUE HACER EL INSERT EN LA DB
+        
+        @Override
+	public PatientTS selectPatient(Integer medCard) throws SQLException, NotBoundException {
+		String sql = "SELECT * FROM patients WHERE medical_card_number = ?";
+		PreparedStatement p = c.prepareStatement(sql);
+		p.setInt(1,medCard);
+		ResultSet rs = p.executeQuery();
+		PatientTS patient = null;
+		if(rs.next()){
+			patient = new PatientTS(rs.getString("name"), rs.getString("surname"), rs.getString("gender"), rs.getString("blood_type"), rs.getString("allergies"), rs.getString("address"), rs.getDate("birthdate"), rs.getDate("check_in"), rs.getBoolean("hospitalized"), rs.getInt("medical_card_number"));
+		}
+		p.close();
+		rs.close();
+		return patient;	
+	}
     }
 }

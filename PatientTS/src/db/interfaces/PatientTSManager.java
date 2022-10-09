@@ -5,8 +5,8 @@
  */
 package db.interfaces;
 
-import Pojos.PatientTS;
-import Pojos.TypeOfSignal;
+import database.pojos.PatientTS;
+import database.pojos.TypeOfSignal;
 
 /**
  *
