@@ -15,5 +15,12 @@ public class Signal {
     private byte[] signal_values; //preguntar que tipo
     //private fecha fecha 
     private TypeOfSignal type;
+
+    public Signal(byte[] signal_values, TypeOfSignal type) {
+        this.signal_values = signal_values;
+        this.type = type;
+    }
+    
+    
     
 }

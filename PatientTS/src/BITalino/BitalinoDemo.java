@@ -14,7 +14,7 @@ public class BitalinoDemo {
     public static Frame[] frame;
     public static List <Integer> arraySignal = new ArrayList <Integer>();
 
-    public static void main(String[] args) {
+    public static void main() {
 
         BITalino bitalino = null;
  
