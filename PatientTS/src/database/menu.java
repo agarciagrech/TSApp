@@ -22,23 +22,25 @@ import database.jpa.JPAUserManager;
 public class menu {
     
     // static Connection c ;
-	static Scanner sc = new Scanner(System.in);
-	static SQL jdbc = new SQL();
+	private static Scanner sc = new Scanner(System.in);
+	private static SQLiteManager jdbc = new SQLiteManager();
+        private static SQLitePatientTSManager patientman = new SQLitePatientTSManager();
+        private static SQLiteSignalManager signalman = new SQLiteSignalManager();
 	private static JPAUserManager userman = new JPAUserManager();
 	public static Integer option = null;
 	public static String trashcan;
 
-        public static void main(String[] args) throws Exception, SQLException {
+        public static void main(String[] args) throws Exception {
 
 		
 		try{
 			jdbc.connect();
 			
 			try{
-				jdbc.create();			
+				jdbc.createTables();	//CREAR SIEMPRE?		
 				userman.connect();
 				firstlogin();
-			}catch(SQLException ex) {
+			}catch(SQLException ex) { //PREGUNTAR
 				if(!ex.getMessage().contains("already exists")) {
 					ex.printStackTrace();
 				}

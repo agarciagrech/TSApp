@@ -30,6 +30,13 @@ public class Signal {
         this.stype = type;
     }
     
+    public Signal( byte[] signal_values, String signal_name, TypeOfSignal type) throws Exception {
+        
+        this.svalues = signal_values;
+        this.sname = signal_name;
+        this.stype = type;
+    }
+    
     public Signal(byte[] signal_values, Date sDate, String signal_name, TypeOfSignal type) throws Exception {
         this.svalues = signal_values;
         this.startDate = sDate;

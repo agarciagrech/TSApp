@@ -26,9 +26,9 @@ public class SQLitePatientTSManager {
       public SQLitePatientTSManager() {
         super();
     }
-    public void recordSignal(PatientTS p, TypeOfSignal type, String signal_file) throws IOException{
+    public void recordSignal(PatientTS p, TypeOfSignal type, String signal_file) throws IOException, Exception{
        
-        List<Integer> signal_list = BITalino.BitalinoDemo.main();
+        List<Integer> signal_list = BITalino.BitalinoDemo.main(); //PREGUNTAR
         
         PrintWriter pw = null; 
         try{

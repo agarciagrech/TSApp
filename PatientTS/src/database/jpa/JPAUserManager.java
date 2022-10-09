@@ -4,12 +4,13 @@
  */
 package database.jpa;
 
+import db.interfaces.UserManager;
 import java.security.*;
 import javax.persistence.*;
 
 import users.*;
 
-public class JPAUserManager {
+public class JPAUserManager implements UserManager{
     
     private EntityManager em;
 	

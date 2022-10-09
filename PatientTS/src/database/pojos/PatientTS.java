@@ -18,7 +18,7 @@ public class PatientTS implements Serializable {
 
     private static final long serialVersionUID = -1156840724257282729L;
     
-    private Integer userId;
+    
     private Integer medical_card_number;
         //Unique for each patient - cannot be repeated for another patient.
     private String name;
@@ -56,16 +56,7 @@ public class PatientTS implements Serializable {
         this.ecg = ecg;
     }
 
-    public PatientTS(Integer userId, Integer medCardId, String name, String surname, Date dob, String address, String email, String gender) {
-        this.userId= userId;
-        this.medical_card_number = medCardId;
-        this.name = name;
-        this.surname = surname;
-        this.dob = dob;
-        this.address = address;
-        this.email = email;
-        this.gender = gender;
-    }
+  
     
     public PatientTS(Integer medCardId, String name, String surname, Date dob, String address, String email, String gender) {
         this.medical_card_number = medCardId;
@@ -87,9 +78,7 @@ public class PatientTS implements Serializable {
 
 //Getters+Setters
     
-    public Integer getUserId() {
-        return userId;
-    }
+    
     
     /**
      *Used to get the medical card number of the patient
