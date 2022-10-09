@@ -53,7 +53,7 @@ public class SQLitePatientTSManager {
        
         byte[] patient_signal = Files.readAllBytes(Paths.get(filePath_signal));
             
-        Signal s = new Signal(patient_signal,type);
+        Signal s = new Signal(patient_signal,filePath_signal,type);
         //HAY QUE HACER EL INSERT EN LA DB
     }
 }

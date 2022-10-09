@@ -14,10 +14,12 @@ public class Signal {
     private Integer id;
     private byte[] signal_values; //preguntar que tipo
     //private fecha fecha 
+    private String signal_name;
     private TypeOfSignal type;
 
-    public Signal(byte[] signal_values, TypeOfSignal type) {
+    public Signal(byte[] signal_values, String signal_name, TypeOfSignal type) {
         this.signal_values = signal_values;
+        this.signal_name = signal_name;
         this.type = type;
     }
     
