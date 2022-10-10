@@ -30,8 +30,8 @@ public class SQLitePatientTSManager implements PatientTSManager {
       public SQLitePatientTSManager() {
         super();
     }
-     @Override
-    public void recordSignal(PatientTS p, TypeOfSignal type, String signal_file) throws IOException, Exception{
+     
+    /*public void recordSignal(PatientTS p, TypeOfSignal type, String signal_file) throws IOException, Exception{
        
         List<Integer> signal_list = BITalino.BitalinoDemo.main(); //PREGUNTAR
         
@@ -58,7 +58,7 @@ public class SQLitePatientTSManager implements PatientTSManager {
         //HAY QUE HACER EL INSERT EN LA DB
         
         
-    }
+    }*/
 
     @Override
     public PatientTS selectPatient(Integer medcard) {
@@ -91,4 +91,9 @@ public class SQLitePatientTSManager implements PatientTSManager {
         }
         return newPatient;
         }
+
+    @Override
+    public void recordSignal(PatientTS p, TypeOfSignal type, String signal_file) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     }
