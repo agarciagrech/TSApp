@@ -6,17 +6,21 @@
 package database.jdbc;
 import database.pojos.*;
 import db.interfaces.PatientTSManager;
-import java.sql.*;
+//import java.sql.*;
 import java.util.*;
 import BITalino.BitalinoDemo;
 import java.io.*;
 import java.nio.file.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 /**
  *
  * @author agarc
  */
-public class SQLitePatientTSManager {
+public class SQLitePatientTSManager implements PatientTSManager {
     
     private Connection c;
     
@@ -26,6 +30,7 @@ public class SQLitePatientTSManager {
       public SQLitePatientTSManager() {
         super();
     }
+     @Override
     public void recordSignal(PatientTS p, TypeOfSignal type, String signal_file) throws IOException, Exception{
        
         List<Integer> signal_list = BITalino.BitalinoDemo.main(); //PREGUNTAR
@@ -52,19 +57,38 @@ public class SQLitePatientTSManager {
         Signal s = new Signal(patient_signal,filePath_signal,type);
         //HAY QUE HACER EL INSERT EN LA DB
         
-        @Override
-	public PatientTS selectPatient(Integer medCard) throws SQLException, NotBoundException {
-		String sql = "SELECT * FROM patients WHERE medical_card_number = ?";
-		PreparedStatement p = c.prepareStatement(sql);
-		p.setInt(1,medCard);
-		ResultSet rs = p.executeQuery();
-		PatientTS patient = null;
-		if(rs.next()){
-			patient = new PatientTS(rs.getString("name"), rs.getString("surname"), rs.getString("gender"), rs.getString("blood_type"), rs.getString("allergies"), rs.getString("address"), rs.getDate("birthdate"), rs.getDate("check_in"), rs.getBoolean("hospitalized"), rs.getInt("medical_card_number"));
-		}
-		p.close();
-		rs.close();
-		return patient;	
-	}
+        
     }
-}
+
+    @Override
+    public PatientTS selectPatient(Integer medcard) {
+        PatientTS newPatient = null;
+        try {
+            String sql = "SELECT * FROM patient" + " WHERE id = ?";
+            PreparedStatement prep = c.prepareStatement(sql);
+            prep.setInt(1, medcard);
+            ResultSet rs = prep.executeQuery();
+            boolean patientCreated = false;
+            while (rs.next()) {
+                if (!patientCreated) {
+                    Integer patientMedCard = rs.getInt(1);
+                    String patientName = rs.getString(2);
+                    String patientSurname = rs.getString(3);
+                    Date patientdob = rs.getDate(4);
+                    String patientAddress = rs.getString(5);
+                    String patientEmail = rs.getString(6);
+                    String patientGender = rs.getString(7);
+
+                    newPatient = new PatientTS(patientMedCard, patientName, patientSurname,
+                            patientdob, patientAddress, patientEmail,patientGender);
+
+                    patientCreated = true;
+                }
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return newPatient;
+        }
+    }

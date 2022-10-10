@@ -14,4 +14,5 @@ import database.pojos.TypeOfSignal;
  */
 public interface PatientTSManager {
     public void recordSignal(PatientTS p, TypeOfSignal type, String signal_file);
+    public PatientTS selectPatient(Integer medcard);
 }

@@ -29,8 +29,8 @@ public class PatientTS implements Serializable {
     private String email;
     private String gender;
         //Can be either Male or Female, nothing else.
-    private Signal ecg ;
-    private Signal emg ;
+    private Signal signal;
+    
     
     /**
      *
@@ -45,7 +45,7 @@ public class PatientTS implements Serializable {
      * @param emg
      * @throws java.rmi.NotBoundException
      */
-    public PatientTS(Integer medCardId, String name, String surname, Date dob, String address, String email, String gender, Signal ecg, Signal emg) throws NotBoundException{
+    public PatientTS(Integer medCardId, String name, String surname, Date dob, String address, String email, String gender, Signal signal) throws NotBoundException{
         this.medical_card_number = medCardId;
         this.name = name;
         this.surname = surname;
@@ -53,8 +53,8 @@ public class PatientTS implements Serializable {
         this.address = address;
         this.email = email;
         this.gender = gender;
-        this.emg = emg;
-        this.ecg = ecg;
+        this.signal = signal;
+        
     }
 
   
@@ -74,7 +74,7 @@ public class PatientTS implements Serializable {
     
     @Override
     public String toString() {
-        return "PatientTS{" + "Medical card =" + medical_card_number + ", Name =" + name + ", Surname =" + surname + ", Date of birth =" + dob + ", Address=" + address + ", Email=" + email + ", Gender=" + gender + ", Ecg=" + ecg + ", Emg=" + emg + '}';
+        return "PatientTS{" + "Medical card =" + medical_card_number + ", Name =" + name + ", Surname =" + surname + ", Date of birth =" + dob + ", Address=" + address + ", Email=" + email + ", Gender=" + gender + ", Signal=" + signal + '}';
     }
 
 //Getters+Setters
@@ -141,18 +141,15 @@ public class PatientTS implements Serializable {
      * Used to get the ECG signal of the patient.
      * @return [Signal] The patient's ECG signal.
      */
-    public Signal getPatientECG() {
-        return ecg;
+    public Signal getPatientSignal() {
+        return signal;
     }
 
     /**
      * Used to get the EMG signal of the patient.
      * @return [Signal] The patient's ECG signal.
      */
-    public Signal getPatientEMG() {
-        return emg;
-    }
-
+    
     /**
      * Used to set the medical card id of the patient
      * @param medCardId
@@ -227,18 +224,15 @@ public class PatientTS implements Serializable {
      * Used to set the patient's ECG signal.
      * @param ecg
      */
-    public void setPatientECG(Signal ecg) {
-        this.ecg = ecg;
+    public void setPatientSignal(Signal signal) {
+        this.signal= signal;
     }
 
     /**
      * Used to set the patient's EMG signal.
      * @param emg
      */
-    public void setPatientEMG
-        (Signal emg) {
-        this.emg = emg;
-    }
+    
 
     @Override
     public int hashCode() {
