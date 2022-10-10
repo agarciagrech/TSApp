@@ -14,6 +14,6 @@ public interface DBManager {
 
     public void disconnect();
 
-    public void createTables();
+    public boolean createTables();
     
 }
