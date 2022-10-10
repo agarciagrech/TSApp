@@ -8,6 +8,7 @@ package database.pojos;
 import java.io.*;
 import java.rmi.*;
 import java.util.*;
+import java.util.regex.*;
 
 /**
  *
@@ -195,9 +196,16 @@ public class PatientTS implements Serializable {
     /**
      * Used to set the patient's email.
      * @param email
+     * @throws java.rmi.NotBoundException
      */
-    public void setPatientEmail(String email) {
-        this.email = email;
+    public void setPatientEmail(String email) throws NotBoundException {
+        Pattern pattern = Pattern.compile("([a-z0-9]+(\\.?[a-z0-9])*)+@(([a-z]+)\\.([a-z]+))+");
+        Matcher mather = pattern.matcher(email);
+        if (mather.find() == true) {
+            this.email = email;
+        } else {
+            throw new NotBoundException("Not valid email") ;
+        }
     }
 
     /**
