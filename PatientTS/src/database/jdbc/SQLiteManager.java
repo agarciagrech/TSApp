@@ -47,8 +47,9 @@ public class SQLiteManager implements DBManager {
     }
     
 
+  
     @Override
-    public void createTables() {
+    public boolean createTables() {
       Statement stmt1;
       try{
           stmt1 = c.createStatement();
@@ -62,12 +63,16 @@ public class SQLiteManager implements DBManager {
           String sql2 = "CREATE TABLE signal " + "(id INTEGER PRIMARY KEY "
                   + "type TEXT NOT NULL " + "id_patient REFERENCES patient (medical_card_number),"+ "(signal_values BYTES)";
           stmt1.executeUpdate(sql2);
-      }catch(SQLException e){
-          if(e.getMessage().contains("already exists")){
-              
-          }else{
-               e.printStackTrace();
-          }
+          return true;
+      }catch(SQLException tables_error){
+          if (tables_error.getMessage().contains("already exists")) {
+				System.out.println("Database already exists.");
+				return false;
+			} else {
+				System.out.println("Error creating tables! Abort.");
+				tables_error.printStackTrace();
+				return false;
+			}
       }
       
           
