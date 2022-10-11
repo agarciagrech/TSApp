@@ -27,9 +27,12 @@ public class PatientTS implements Serializable {
     private Date dob;
     private String address;
     private String email;
+    private String diagnosis;
+    private String allergies;
     private String gender;
         //Can be either Male or Female, nothing else.
     private Signal signal;
+    private Integer userId;
     
     
     /**
@@ -39,43 +42,61 @@ public class PatientTS implements Serializable {
      * @param surname - Surname of the patient (String)
      * @param dob - Birthdate of the patient (SQL Date)
      * @param address - String with the home address of the patient.
-     * @param email
-     * @param gender Gender of the patient [Must be Male or Female] (String)
-     * @param ecg
-     * @param emg
+     * @param email - String with the email of the patient
+     * @param diagnosis - String with the diagnosis of the patient (for the clinical history)
+     * @param allergies - String with the allergies of the patient (for the clinical history)
+     * @param gender - Gender of the patient [Must be Male or Female] (String)
+     * @param signal
+     * @param userID
      * @throws java.rmi.NotBoundException
      */
-    public PatientTS(Integer medCardId, String name, String surname, Date dob, String address, String email, String gender, Signal signal) throws NotBoundException{
+    public PatientTS(Integer medCardId, String name, String surname, Date dob, String address, String email, String diagnosis, String allergies, String gender, Signal signal, Integer userID) throws NotBoundException{
         this.medical_card_number = medCardId;
         this.name = name;
         this.surname = surname;
         this.dob = dob;
         this.address = address;
         this.email = email;
+        this.diagnosis = diagnosis;
+        this.allergies = allergies;
         this.gender = gender;
         this.signal = signal;
-        
+        this.userId = userID;
     }
-
-  
     
-    public PatientTS(Integer medCardId, String name, String surname, Date dob, String address, String email, String gender) {
+    public PatientTS(Integer medCardId, String name, String surname, Date dob, String address, String email, String diagnosis, String allergies, String gender, Signal signal) throws NotBoundException{
         this.medical_card_number = medCardId;
         this.name = name;
         this.surname = surname;
         this.dob = dob;
         this.address = address;
         this.email = email;
+        this.diagnosis = diagnosis;
+        this.allergies = allergies;
+        this.gender = gender;
+        this.signal = signal;
+    }
+
+    public PatientTS(Integer medCardId, String name, String surname, Date dob, String address, String email, String diagnosis, String allergies, String gender) {
+        this.medical_card_number = medCardId;
+        this.name = name;
+        this.surname = surname;
+        this.dob = dob;
+        this.address = address;
+        this.email = email;
+        this.diagnosis = diagnosis;
+        this.allergies = allergies;
         this.gender = gender;
     }
     
     public PatientTS() {
     }
-    
+
     @Override
     public String toString() {
-        return "PatientTS{" + "Medical card =" + medical_card_number + ", Name =" + name + ", Surname =" + surname + ", Date of birth =" + dob + ", Address=" + address + ", Email=" + email + ", Gender=" + gender + ", Signal=" + signal + '}';
+        return "PatientTS{" + "medical_card_number=" + medical_card_number + ", name=" + name + ", surname=" + surname + ", dob=" + dob + ", address=" + address + ", email=" + email + ", diagnosis=" + diagnosis + ", allergies=" + allergies + ", gender=" + gender + '}';
     }
+   
 
 //Getters+Setters
     
@@ -128,7 +149,23 @@ public class PatientTS implements Serializable {
     public String getPatientEmail() {
         return email;
     }
-
+    
+    /**
+    * Used to get the diagnosis of the patient.
+    *  @return the diagnosis of the patient
+    */ 
+    public String getPatientDiagnosis() {
+            return diagnosis;
+    }
+    
+    /**
+    * Used to get the patient allergies
+    * @return A string with all of the patient allergies.
+    */
+    public String getPatientAllergies() {
+            return allergies;
+    }
+        
     /**
      * Used to get the gender of the patient.
      * @return [String] The patient's gender (Male / Female)
@@ -204,7 +241,23 @@ public class PatientTS implements Serializable {
             throw new NotBoundException("Not valid email") ;
         }
     }
-
+    
+    /**
+    * Used to set the diagnosis of the patient.
+    * @param diagnosis - String that contains the diagnosis of the patient.
+    */
+    public void setPatientDiagnosis(String diagnosis) {
+            this.diagnosis = diagnosis;
+    }
+        
+    /**
+    * Used to set the patient allergies.
+    * @param allergy - String that contains all of the patient allergies.
+    */
+    public void setPatientAllergies(String allergy) {
+            this.allergies= allergy;
+    }
+        
     /**
      * Sets the gender of the patient.
      * @param gender - Must be Male or Female.
@@ -221,17 +274,16 @@ public class PatientTS implements Serializable {
     }
 
     /**
-     * Used to set the patient's ECG signal.
-     * @param ecg
+     * Used to set the patient's signals.
+     * @param signal
      */
     public void setPatientSignal(Signal signal) {
         this.signal= signal;
     }
 
-    /**
-     * Used to set the patient's EMG signal.
-     * @param emg
-     */
+    public Integer getUserId() {
+            return userId;
+    }
     
 
     @Override

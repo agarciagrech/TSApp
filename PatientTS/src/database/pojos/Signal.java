@@ -5,7 +5,6 @@
  */
 package database.pojos;
 
-import java.io.*;
 import java.rmi.*;
 import java.util.*;
 
@@ -16,13 +15,22 @@ public class Signal {
     private byte[] svalues; //preguntar que tipo
     private Date startDate; //Date when the signal starts recording
     private String sname;
-    private TypeOfSignal stype;
+    private String stype;
 
     public Signal() {
         super();
     }
     
-    public Signal(Integer signalId, byte[] signal_values, Date sDate, String signal_name, TypeOfSignal type) throws Exception {
+    /**
+     *
+     * @param signalId
+     * @param signal_values
+     * @param sDate
+     * @param signal_name
+     * @param type
+     * @throws Exception
+     */
+    public Signal(Integer signalId, byte[] signal_values, Date sDate, String signal_name, String type) throws Exception {
         this.signalId = signalId;
         this.svalues = signal_values;
         this.startDate = sDate;
@@ -30,14 +38,14 @@ public class Signal {
         this.stype = type;
     }
     
-    public Signal( byte[] signal_values, String signal_name, TypeOfSignal type) throws Exception {
+    public Signal( byte[] signal_values, String signal_name, String type) throws Exception {
         
         this.svalues = signal_values;
         this.sname = signal_name;
         this.stype = type;
     }
     
-    public Signal(byte[] signal_values, Date sDate, String signal_name, TypeOfSignal type) throws Exception {
+    public Signal(byte[] signal_values, Date sDate, String signal_name, String type) throws Exception {
         this.svalues = signal_values;
         this.startDate = sDate;
         this.sname = signal_name;
@@ -76,12 +84,18 @@ public class Signal {
         this.sname = sname;
     }
 
-    public TypeOfSignal getSignaltype() {
+    public String getSignaltype() {
         return stype;
     }
 
-    public void setSignaltype(TypeOfSignal stype) {
-        this.stype = stype;
+    public void setSignaltype(String stype) throws NotBoundException {
+        if(stype.equalsIgnoreCase("EMG")) {
+                this.stype = stype;
+        } else if(stype.equalsIgnoreCase("ECG")){
+                this.stype = stype;		
+        } else {
+                throw new NotBoundException("Not a valid type of signal.") ;
+        }
     }
 
     @Override
@@ -110,7 +124,5 @@ public class Signal {
     public String toString() {
         return "Signal{" + "signalId=" + signalId + ", svalues=" + svalues + ", sname=" + sname + ", stype=" + stype + '}';
     }
-    
-    
     
 }

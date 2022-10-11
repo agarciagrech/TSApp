@@ -6,13 +6,14 @@
 package db.interfaces;
 
 import database.pojos.PatientTS;
-import database.pojos.TypeOfSignal;
 
 /**
  *
  * @author agarc
  */
 public interface PatientTSManager {
-    public void recordSignal(PatientTS p, TypeOfSignal type, String signal_file);
+    public void recordSignal(PatientTS p, String type, String signal_file);
+    public void createPatient(PatientTS p);
     public PatientTS selectPatient(Integer medcard);
+    public PatientTS selectPatientbyUserId(Integer userId);
 }
