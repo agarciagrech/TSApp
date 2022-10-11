@@ -33,6 +33,7 @@ public class PatientTS implements Serializable {
         //Can be either Male or Female, nothing else.
     private Signal signal;
     private Integer userId;
+    private String macAddress; 
     
     
     /**
@@ -64,7 +65,10 @@ public class PatientTS implements Serializable {
         this.userId = userID;
     }
     
-    public PatientTS(Integer medCardId, String name, String surname, Date dob, String address, String email, String diagnosis, String allergies, String gender, Signal signal) throws NotBoundException{
+    
+    
+    
+    public PatientTS(Integer medCardId, String name, String surname, Date dob, String address, String email, String diagnosis, String allergies, String gender,Integer userId, String macAddress){
         this.medical_card_number = medCardId;
         this.name = name;
         this.surname = surname;
@@ -74,7 +78,8 @@ public class PatientTS implements Serializable {
         this.diagnosis = diagnosis;
         this.allergies = allergies;
         this.gender = gender;
-        this.signal = signal;
+        this.userId = userId;
+        this.macAddress = macAddress;
     }
 
     public PatientTS(Integer medCardId, String name, String surname, Date dob, String address, String email, String diagnosis, String allergies, String gender) {
@@ -108,6 +113,10 @@ public class PatientTS implements Serializable {
      */
     public Integer getMedCardId() {
         return medical_card_number;
+    }
+    
+    public String getMacAddress(){
+        return macAddress; 
     }
 
     /**

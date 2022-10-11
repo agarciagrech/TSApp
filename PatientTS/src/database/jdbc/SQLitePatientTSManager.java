@@ -4,11 +4,16 @@
  * and open the template in the editor.
  */
 package database.jdbc;
+import BITalino.BITalino;
+import BITalino.BITalinoException;
 import database.pojos.*;
 import db.interfaces.PatientTSManager;
 //import java.sql.*;
 import java.util.*;
 import BITalino.BitalinoDemo;
+import static BITalino.BitalinoDemo.arraySignal;
+import static BITalino.BitalinoDemo.frame;
+import BITalino.Frame;
 import java.io.*;
 import java.nio.file.*;
 import java.rmi.NotBoundException;
@@ -18,6 +23,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.bluetooth.RemoteDevice;
 
 /**
  *
@@ -34,46 +40,19 @@ public class SQLitePatientTSManager implements PatientTSManager {
         super();
     }
      
-    /*public void recordSignal(PatientTS p, TypeOfSignal type, String signal_file) throws IOException, Exception{
-       
-        List<Integer> signal_list = BITalino.BitalinoDemo.main(); //PREGUNTAR
-        
-        PrintWriter pw = null; 
-        try{
-            pw = new PrintWriter(signal_file);
-            for(int i = 0; i<signal_list.size(); i++){
-                pw.print(signal_list.get(i) + "\n");
-            }
-        }catch(IOException e){
-            
-        }finally{
-            if(pw != null){
-            pw.close();
-        }
-        }
-        
-        String filePath_signal = signal_file;
-
-       
-        byte[] patient_signal = Files.readAllBytes(Paths.get(filePath_signal));
-            
-        Signal s = new Signal(patient_signal,filePath_signal,type);
-        //HAY QUE HACER EL INSERT EN LA DB
-        
-        
-    }*/
 
     @Override
-    public PatientTS selectPatient(Integer medcard) {
+    public PatientTS selectPatient(Integer userId) {
         PatientTS newPatient = null;
         try {
             String sql = "SELECT * FROM patient" + " WHERE id = ?"; //no estoy segura de que aqui sea id
             PreparedStatement prep = c.prepareStatement(sql);
-            prep.setInt(1, medcard);
+            prep.setInt(1, userId);
             ResultSet rs = prep.executeQuery();
             boolean patientCreated = false;
             while (rs.next()) {
                 if (!patientCreated) {
+                   
                     Integer patientMedCard = rs.getInt(1);
                     String patientName = rs.getString(2);
                     String patientSurname = rs.getString(3);
@@ -83,9 +62,11 @@ public class SQLitePatientTSManager implements PatientTSManager {
                     String patientDiagnosis = rs.getString(7);
                     String patientAllergies = rs.getString(8);
                     String patientGender = rs.getString(9);
-
+                    Integer patientuserId = rs.getInt(10);
+                    String patientmacAddress = rs.getString(11);
+                            
                     newPatient = new PatientTS(patientMedCard, patientName, patientSurname,
-                            patientdob, patientAddress, patientEmail, patientDiagnosis, patientAllergies, patientGender);
+                            patientdob, patientAddress, patientEmail, patientDiagnosis, patientAllergies, patientGender,patientuserId,patientmacAddress);
 
                     patientCreated = true;
                 }
@@ -98,15 +79,79 @@ public class SQLitePatientTSManager implements PatientTSManager {
         }
 
     @Override
-    public void recordSignal(PatientTS p, String type, String signal_file) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void recordSignal(PatientTS p, String name) {
+        Frame[] frame;
+        List <Integer> arraySignal = new ArrayList <Integer>();
+        
+        BITalino bitalino = null;
+        Signal s = null;
+        byte[] ecg_values = null;
+        byte[] emg_values = null;
+        try {
+            bitalino = new BITalino();
+            // Code to find Devices
+            //Only works on some OS
+            Vector<RemoteDevice> devices = bitalino.findDevices();
+            System.out.println(devices);
+
+           
+            String macAddress = p.getMacAddress(); 
+            
+            //Sampling rate, should be 10, 100 or 1000
+            int SamplingRate = 10; //PONER COMO PARAMETRO?
+            bitalino.open(macAddress, SamplingRate);
+
+            // Start acquisition on analog channels A2 and A6
+            // For example, If you want A1, A3 and A4 you should use {0,2,3}
+            int[] channelsToAcquire = {1,2}; //for ECG and EMG
+            bitalino.start(channelsToAcquire);
+
+            //Read in total 10000000 times --> por que elegimos este num
+            for (int j = 0; j < 10000000; j++) {
+
+                //Each time read a block of 10 samples --> por que elegimos este num
+                int block_size=10;
+                frame = bitalino.read(block_size);
+
+                System.out.println("size block: " + frame.length);
+
+                //Store the samples --> preguntar si se guarda el fichero 
+                for (int i = 0; i < frame.length; i++) {
+                    arraySignal.add(frame[i].analog[2]);
+                    System.out.println(" seq: " + frame[i].seq + " "
+                            + frame[i].analog[0] + " ");
+                    
+                    
+                    
+                }
+            }
+            //stop acquisition
+            bitalino.stop();
+        } catch (BITalinoException ex) {
+            Logger.getLogger(BitalinoDemo.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Throwable ex) {
+            Logger.getLogger(BitalinoDemo.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                //close bluetooth connection
+                if (bitalino != null) {
+                    bitalino.close();
+                }
+            } catch (BITalinoException ex) {
+                Logger.getLogger(BitalinoDemo.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        //ecg_values = 
+        //emg_values = PREGUNTAR COMO COGER CADA COLUMNA DEL FRAME
+        s = new Signal(ecg_values, emg_values, name); 
+
     }
 
    
     @Override
     public void createPatient(PatientTS p) {
         if (p.getPatientAllergies()==null) {
-                String sq1 = "INSERT INTO patient ( medical_card_number, name, surname, dob, address, email, diagnosis, gender) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                String sq1 = "INSERT INTO patient ( medical_card_number, name, surname, dob, address, email, diagnosis, gender, macAddress) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
                 try {
                     PreparedStatement preparedStatement = c.prepareStatement(sq1);
                     preparedStatement.setInt(1, p.getMedCardId());
@@ -117,6 +162,7 @@ public class SQLitePatientTSManager implements PatientTSManager {
                     preparedStatement.setString(6, p.getPatientEmail());
                     preparedStatement.setString(7, p.getPatientDiagnosis());
                     preparedStatement.setString(8, p.getPatientGender());
+                    preparedStatement.setString(9, p.getMacAddress());
                     preparedStatement.executeUpdate();
                     preparedStatement.close();
                 } catch (SQLException ex) {
@@ -142,8 +188,9 @@ public class SQLitePatientTSManager implements PatientTSManager {
             }
         }
     }
-    @Override
-    public PatientTS selectPatientByUserId(Integer userId) throws SQLException, NotBoundException {
+    //@Override SERIA IGUAL QUE EL DE MEDCARD
+    /*public PatientTS selectPatientByUserId(Integer userId) {
+           try{
             String sql = "SELECT * FROM patient WHERE userId = ?";
             PreparedStatement p = c.prepareStatement(sql);
             p.setInt(1,userId);
@@ -163,5 +210,9 @@ public class SQLitePatientTSManager implements PatientTSManager {
             p.close();
             rs.close();
             return patient;	
-    }
+    }*/
+
+    
+
+   
  }

@@ -23,7 +23,7 @@ public class SQLiteManager implements DBManager {
     private Connection c;
     private PatientTSManager patient;
     //private DoctorManager doctor;
-    private SignalManager signal;
+    private SignalManager signalman;
     
     public SQLiteManager(){
         super();
@@ -42,7 +42,7 @@ public class SQLiteManager implements DBManager {
     
     @Override
     public SignalManager getSignalManager() {
-        return signal;
+        return signalman;
     }
     
     @Override
@@ -53,7 +53,7 @@ public class SQLiteManager implements DBManager {
             c.createStatement().execute("PRAGMA foreign_keys=ON");
             patient = new SQLitePatientTSManager(c);
             //doctor = new SQLiteDoctorManager(c);
-            signal = new SQLiteSignalManager(c);
+            signalman = (SignalManager) new SQLiteSignalManager(c); //PORQ? 
             
         } catch (ClassNotFoundException exc) {
             exc.printStackTrace();
@@ -87,6 +87,7 @@ public class SQLiteManager implements DBManager {
                   + "diagnosis TEXT NOT NULL, "
                   + "allergies TEXT, "
                   + "gender TEXT NOT NULL, "
+                  + "macAddress TEXT NOT NULL"
                   + "userId INTEGER REFERENCES users(USERID) ON UPDATE CASCADE ON DELETE SET NULL)";
           stmt1.executeUpdate(sql1);
           stmt1.close();

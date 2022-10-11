@@ -15,7 +15,8 @@ import database.pojos.*;
 import users.*;
 import database.jdbc.*;
 import database.jpa.JPAUserManager;
-import org.sqlite.SQLiteException;
+import java.sql.SQLException;
+//import org.sqlite.SQLiteException;
 
 
 public class menu {
@@ -39,7 +40,7 @@ public class menu {
 				jdbc.createTables();	//CREAR SIEMPRE?		
 				userman.connect();
 				firstlogin();
-			}catch(SQLiteException ex) { //PREGUNTAR
+			}catch(Exception ex) { //PREGUNTAR
 				if(!ex.getMessage().contains("already exists")) {
 					ex.printStackTrace();
 				}
@@ -122,12 +123,12 @@ public class menu {
         
         public static void patientMenu(Integer userID) throws Exception{
 		sc = new Scanner (System.in);
-		
+		PatientTS patient = null;
 		do{
 
 			int a = 0;
-
-			PatientTS patient = new PatientTS(patientman.selectPatientByUserId(userID));
+                      
+			patient = patientman.selectPatient(userID);
 			System.out.println("Hello Mr/Ms "+patient.getPatientSurname());
 			System.out.println("Choose an option [0-3]:"
 					+ "\n1. Start recording \n2. Stop recording \n3. Show my recordings \n0.Exit");

@@ -12,10 +12,14 @@ public class Signal {
     
     
     private Integer signalId;
-    private byte[] svalues; //pregunbytetar que tipo
+    private byte[] ECG_values; 
+    private byte[] EMG_values;
+    private byte[] svalues;
+
+  
     private Date startDate; //Date when the signal starts recording
     private String sname;
-    private String stype;
+    private String stype; //SOBRA??
 
     public Signal() {
         super();
@@ -30,6 +34,13 @@ public class Signal {
      * @param type
      * @throws Exception
      */
+    
+      public Signal(byte[] ECG_values, byte[] EMG_values, String sname) {
+        this.ECG_values = ECG_values;
+        this.EMG_values = EMG_values;
+        this.sname = sname;
+    }
+      
     public Signal(Integer signalId, byte[] signal_values, Date sDate, String signal_name, String type) throws Exception {
         this.signalId = signalId;
         this.svalues = signal_values;

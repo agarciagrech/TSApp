@@ -12,8 +12,8 @@ import database.pojos.PatientTS;
  * @author agarc
  */
 public interface PatientTSManager {
-    public void recordSignal(PatientTS p, String type, String signal_file);
+    public void recordSignal(PatientTS p, String name);
     public void createPatient(PatientTS p);
-    public PatientTS selectPatient(Integer medcard);
-    public PatientTS selectPatientbyUserId(Integer userId);
+    public PatientTS selectPatient(Integer userId);
+    //public PatientTS selectPatientByUserId(Integer userId);
 }

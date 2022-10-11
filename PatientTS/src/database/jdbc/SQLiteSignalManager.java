@@ -20,4 +20,6 @@ public class SQLiteSignalManager {
       public SQLiteSignalManager() {
         super();
     }
+
+   
 }
