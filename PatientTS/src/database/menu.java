@@ -283,7 +283,7 @@ public class menu {
         
         private static void deletePatient() throws Exception {
 		sc = new Scanner (System.in);
-		PatientTS p = patientmanselectPatient();
+		PatientTS p = patientman.selectPatient();
 		User u = userman.getUser(p.getPatientUserId());
 		jdbc.deletePatientByMedicalCardId(p.getMedCardId());
 		userman.deleteUser(u);

@@ -5,10 +5,12 @@
  */
 package db.interfaces;
 
+import database.pojos.*;
+
 /**
  *
  * @author agarc
  */
 public interface SignalManager {
-    
+    public void insertSignal(Signal s, PatientTS p);
 }

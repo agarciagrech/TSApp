@@ -52,6 +52,9 @@ public class BitalinoDemo {
                     arraySignal.add(frame[i].analog[2]);
                     System.out.println(" seq: " + frame[i].seq + " "
                             + frame[i].analog[0] + " ");
+                    
+                    
+                    
                 }
             }
             //stop acquisition

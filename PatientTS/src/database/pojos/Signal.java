@@ -12,7 +12,7 @@ public class Signal {
     
     
     private Integer signalId;
-    private byte[] svalues; //preguntar que tipo
+    private byte[] svalues; //pregunbytetar que tipo
     private Date startDate; //Date when the signal starts recording
     private String sname;
     private String stype;

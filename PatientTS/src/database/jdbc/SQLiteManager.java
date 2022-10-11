@@ -40,6 +40,7 @@ public class SQLiteManager implements DBManager {
         return doctor;
     }*/
     
+    @Override
     public SignalManager getSignalManager() {
         return signal;
     }
@@ -100,6 +101,8 @@ public class SQLiteManager implements DBManager {
                   + "(signal_values BYTES)";
           stmt2.executeUpdate(sql2);
           stmt2.close();
+          //create doctor
+          
           return true;
       }catch(SQLException tables_error){
           if (tables_error.getMessage().contains("already exists")) {
@@ -113,4 +116,6 @@ public class SQLiteManager implements DBManager {
       }
             
 }
+
+
 }
