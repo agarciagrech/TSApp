@@ -94,15 +94,34 @@ public class SQLiteManager implements DBManager {
           Statement stmt2 = c.createStatement();
           String sql2 = "CREATE TABLE signal " 
                   + "(signalId INTEGER PRIMARY KEY "
-                  + "svalues TEXT NOT NULL " 
-                  + "startDate DATE NOT NULL "
+                  + "svalues TEXT NOT NULL " //--> NO HAY ATRIBUTOS DE ESTO, SI AÑADIMOS MODIFICAR METODOS DE MANAGER
+                  + "startDate DATE NOT NULL " //--> NO HAY ATRIBUTOS DE ESTO, SI AÑADIMOS MODIFICAR METODOS DE MANAGER
                   + "sname TEXT NOT NULL " 
                   + "stype TEXT NOT NULL " 
                   + "id_patient REFERENCES patient (medical_card_number),"
                   + "(signal_values BYTES)";
           stmt2.executeUpdate(sql2);
           stmt2.close();
-          //create doctor
+          
+          Statement stmt3 = c.createStatement();
+          String sql3 = "CREATE TABLE patient " 
+                  + "(doctorId INTEGER PRIMARY KEY, " 
+                  + "dname TEXT NOT NULL, " 
+                  + "dsurname TEXT NOT NULL, "
+                  + "demail TEXT NOT NULL, " 
+                  + "userId INTEGER REFERENCES users(USERID) ON UPDATE CASCADE ON DELETE SET NULL)";
+          stmt3.executeUpdate(sql3);
+          stmt3.close();
+          
+          /*
+          	// many to many table 
+            Statement stmt4 = sqlite_connection.createStatement();
+		String sql4 = "CREATE TABLE DoctorPatient " + "(name REFERENCES doctor(name) ON UPDATE RESTRICT ON DELETE CASCADE,"+"medical_card_number REFERENCES patient(medical_card_number) ON UPDATE RESTRICT ON DELETE CASCADE,"+"PRIMARY KEY (dname, medical_card_number))";
+		stmt4.execute(sql4);
+		stmt4.close();
+			
+          
+          */
           
           return true;
       }catch(SQLException tables_error){

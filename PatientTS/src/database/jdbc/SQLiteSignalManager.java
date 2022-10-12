@@ -11,6 +11,8 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.List;
 
 /**
  *
@@ -111,5 +113,79 @@ public class SQLiteSignalManager {
 	}       
 }
 
+      
+     // list all the signals of a patient
+     public List<Signal> listSignalsByPatient(int userid) {
+	    List<Signal> signals = new LinkedList<Signal>();
+	    try {
+	        Statement statement = this.c.createStatement();
+	        String SQL_code = "SELECT * FROM signal WHERE id_patient LIKE ?";
+                PreparedStatement template = this.c.prepareStatement(SQL_code);
+                template.setInt(1,userid);
+	        ResultSet rs = statement.executeQuery(SQL_code);
+	        while(rs.next()) {
+	            Date startDate = rs.getDate("sartDate");
+                    String sname = rs.getString("sname");
+                    String stype = rs.getString("stype");
+                    bytes[] signal_salues = rs.getBytes("signal_values");
+	            signals.add(new Signal(startDate,sname,stype,signal_values)); // -> mirar bien
+                }
+                template.close();
+                return signals;
+	    } catch (SQLException listSignalsByPatient_error) {
+	        listSignalsByPatient_error.printStackTrace(); 
+	        return null;
+	    }
+	
+	}
+     //list all the signaal depending on the type
+         public List<Signal> listSignalsByType(String t) {
+	    List<Signal> signals = new LinkedList<Signal>();
+	    try {
+	        Statement statement = this.c.createStatement();
+	        String SQL_code = "SELECT * FROM signal WHERE stype LIKE ?";
+	        PreparedStatement template = this.c.prepareStatement(SQL_code);
+                template.setString(1,t);
+                ResultSet rs = statement.executeQuery(SQL_code);
+	        while(rs.next()) {
+	            Date startDate = rs.getDate("sartDate");
+                    String sname = rs.getString("sname");
+                    String stype = rs.getString("stype");
+                    Bytes[] signal_salues = rs.getBytes("signal_values");
+	            signals.add(new Signal(startDate,sname,stype,signal_values)); // -> mirar bien
+                }
+                template.close();
+                return signals;
+	    } catch (SQLException listSignalsByType_error) {
+	        listSignalsByType_error.printStackTrace(); 
+	        return null;
+	    }
+	
+	}
+      // list all one type of signals of an specific patient
+         public List<Signal> listPatientSignalsByType(int userid,String t) {
+	    List<Signal> signals = new LinkedList<Signal>();
+	    try {
+	        Statement statement = this.c.createStatement();
+	        String SQL_code = "SELECT * FROM signal WHERE user_id LIKE ? AND stype LIKE ?";
+	        PreparedStatement template = this.c.prepareStatement(SQL_code);
+                template.setString(1,userid);
+                template.setString(1,t);
+                ResultSet rs = statement.executeQuery(SQL_code);
+	        while(rs.next()) {
+	            Date startDate = rs.getDate("sartDate");
+                    String sname = rs.getString("sname");
+                    String stype = rs.getString("stype");
+                    Bytes[] signal_salues = rs.getBytes("signal_values");
+	            signals.add(new Signal(startDate,sname,stype,signal_values)); // -> mirar bien
+                }
+                template.close();
+                return signals;
+	    } catch (SQLException listPatientSignalsByType_error) {
+	        listPatientSignalsByType_error.printStackTrace(); 
+	        return null;
+	    }
+	
+	}
 */
 }

@@ -144,15 +144,5 @@ public class SQLiteDoctorManager implements DoctorManager{
         pStatement.executeUpdate();
         pStatement.close();
     }
-    
- /*   Statement stmt3 = c.createStatement();
-          String sql3 = "CREATE TABLE patient " 
-                  + "(doctorId INTEGER PRIMARY KEY, " 
-                  + "dname TEXT NOT NULL, " 
-                  + "dsurname TEXT NOT NULL, "
-                  + "demail TEXT NOT NULL, " 
-                  + "userId INTEGER REFERENCES users(USERID) ON UPDATE CASCADE ON DELETE SET NULL)";
-          stmt3.executeUpdate(sql1);
-          stmt3.close();
-        */  
+     
 }
