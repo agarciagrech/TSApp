@@ -6,14 +6,19 @@
 package db.interfaces;
 
 import database.pojos.PatientTS;
+import java.rmi.NotBoundException;
+import java.sql.SQLException;
+import java.util.List;
 
 /**
- *
+ * 
  * @author agarc
  */
 public interface PatientTSManager {
     public void recordSignal(PatientTS p, String name);
-    public void createPatient(PatientTS p);
-    public PatientTS selectPatient(Integer userId);
-    //public PatientTS selectPatientByUserId(Integer userId);
+    public void addPatient(PatientTS p) throws SQLException;
+    public PatientTS selectPatient(Integer medCard) throws SQLException, NotBoundException;
+    public PatientTS selectPatientByUserId( Integer userId) throws SQLException, NotBoundException;
+    public List<PatientTS> selectAllPatients() throws SQLException, NotBoundException;
+    public void deletePatientByMedicalCardId(Integer medCardNumber) throws SQLException;
 }

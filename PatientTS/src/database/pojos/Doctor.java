@@ -4,7 +4,10 @@
  */
 package database.pojos;
 
+import java.rmi.NotBoundException;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 /**
@@ -23,7 +26,16 @@ public class Doctor {
     public Doctor() {
     }
     
-    public Doctor(Integer id, String name, String surname, String email, Integer userId) {
+    /**
+     *
+     * @param id - [Integer] The id of the doctor [Cannot be changed once it's created]
+     * @param name - [String] The name of the doctor
+     * @param surname - [String] The surname of the doctor
+     * @param email - [String] The professional email of the doctor
+     * @param userId - [Integer] User Id associated to the doctor
+     * @throws java.rmi.NotBoundException
+     */
+    public Doctor(Integer id, String name, String surname, String email, Integer userId) throws NotBoundException{
         this.doctotrId = id;
         this.dname = name;
         this.dsurname = surname;
@@ -31,51 +43,86 @@ public class Doctor {
         this.userId = userId;
     }
 
-    public Doctor(Integer id, String name, String surname, String email) {
+    public Doctor(Integer id, String name, String surname, String email) throws NotBoundException{
         this.doctotrId = id;
         this.dname = name;
         this.dsurname = surname;
         this.demail = email;
     }
 
+    /**
+     * Used to get the id number of the doctor
+     * @return [Integer] Doctor's Id
+     */
     public Integer getDoctorId() {
         return doctotrId;
     }
 
+    /**
+     * Used to set the id number of the doctor
+     * @param id
+     */
     public void setDoctorId(Integer id) {
         this.doctotrId = id;
     }
 
+    /**
+     * Used to get the name of the doctor
+     * @return [String] Doctor's name
+     */
     public String getDoctorName() {
         return dname;
     }
 
+    /**
+     * Used to set the name of the doctor
+     * @param name 
+     */
     public void setDoctorName(String name) {
         this.dname = name;
     }
 
+    /**
+     * Used to get the surname of the doctor
+     * @return [String] Doctor's surname
+     */
     public String getDoctorSurname() {
         return dsurname;
     }
 
+    /**
+     * Used to set the surname of the doctor
+     * @param surname
+     */
     public void setDoctorSurname(String surname) {
         this.dsurname = surname;
     }
 
+    /**
+     * Used to get the email of the doctor
+     * @return [String] Doctor's professional email
+     */
     public String getDoctorEmail() {
         return demail;
     }
 
-    public void setDoctorEmail(String email) {
-        this.demail = email;
+    /**
+     * Used to set the email of the doctor
+     * @param email
+     * @throws NotBoundException
+     */
+    public void setDoctorEmail(String email) throws NotBoundException {
+        Pattern pattern = Pattern.compile("([a-z0-9]+(\\.?[a-z0-9])*)+@(([a-z]+)\\.([a-z]+))+");
+        Matcher mather = pattern.matcher(email);
+        if (mather.find() == true) {
+            this.demail = email;
+        } else {
+            throw new NotBoundException("Not valid email") ;
+        }
     }
 
     public Integer getDoctorUserId() {
         return userId;
-    }
-
-    public void setDoctorUserId(Integer userId) {
-        this.userId = userId;
     }
 
     @Override

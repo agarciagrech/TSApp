@@ -5,7 +5,9 @@
  */
 package database.jdbc;
 
+import database.pojos.PatientTS;
 import database.pojos.Signal;
+import db.interfaces.SignalManager;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -18,7 +20,7 @@ import java.util.List;
  *
  * @author agarc
  */
-public class SQLiteSignalManager {
+public class SQLiteSignalManager implements SignalManager{
     private Connection c;
     
      public SQLiteSignalManager(Connection c){
@@ -188,4 +190,9 @@ public class SQLiteSignalManager {
 	
 	}
 */
+
+    @Override
+    public void insertSignal(Signal s, PatientTS p) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }

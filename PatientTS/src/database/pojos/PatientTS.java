@@ -68,7 +68,7 @@ public class PatientTS implements Serializable {
     
     
     
-    public PatientTS(Integer medCardId, String name, String surname, Date dob, String address, String email, String diagnosis, String allergies, String gender,Integer userId, String macAddress){
+    public PatientTS(Integer medCardId, String name, String surname, Date dob, String address, String email, String diagnosis, String allergies, String gender,Integer userId, String macAddress) throws NotBoundException{
         this.medical_card_number = medCardId;
         this.name = name;
         this.surname = surname;
@@ -82,7 +82,7 @@ public class PatientTS implements Serializable {
         this.macAddress = macAddress;
     }
 
-    public PatientTS(Integer medCardId, String name, String surname, Date dob, String address, String email, String diagnosis, String allergies, String gender) {
+    public PatientTS(Integer medCardId, String name, String surname, Date dob, String address, String email, String diagnosis, String allergies, String gender) throws NotBoundException{
         this.medical_card_number = medCardId;
         this.name = name;
         this.surname = surname;
@@ -108,13 +108,17 @@ public class PatientTS implements Serializable {
     
     
     /**
-     *Used to get the medical card number of the patient
-     * @return
+     * Used to get the medical card number of the patient
+     * @return [Integer] The patient's medical card number
      */
     public Integer getMedCardId() {
         return medical_card_number;
     }
     
+    /**
+     * Used to get the MAC address.
+     * @return [String] The MAC address related to the patient
+     */
     public String getMacAddress(){
         return macAddress; 
     }
@@ -191,11 +195,6 @@ public class PatientTS implements Serializable {
         return signal;
     }
 
-    /**
-     * Used to get the EMG signal of the patient.
-     * @return [Signal] The patient's ECG signal.
-     */
-    
     /**
      * Used to set the medical card id of the patient
      * @param medCardId
@@ -290,10 +289,9 @@ public class PatientTS implements Serializable {
         this.signal= signal;
     }
 
-    public Integer getUserId() {
+    public Integer getPatientUserId() {
             return userId;
     }
-    
 
     @Override
     public int hashCode() {

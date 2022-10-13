@@ -22,7 +22,7 @@ public class SQLiteManager implements DBManager {
     
     private Connection c;
     private PatientTSManager patient;
-    //private DoctorManager doctor;
+    private DoctorManager doctor;
     private SignalManager signalman;
     
     public SQLiteManager(){
@@ -35,10 +35,10 @@ public class SQLiteManager implements DBManager {
         return patient;
     }
 
-    /*@Override
+    @Override
     public DoctorManager getDoctorManager() {
         return doctor;
-    }*/
+    }
     
     @Override
     public SignalManager getSignalManager() {
@@ -52,8 +52,8 @@ public class SQLiteManager implements DBManager {
             this.c = DriverManager.getConnection("jdbc:sqlite:./db/DSS.db");
             c.createStatement().execute("PRAGMA foreign_keys=ON");
             patient = new SQLitePatientTSManager(c);
-            //doctor = new SQLiteDoctorManager(c);
-            signalman = (SignalManager) new SQLiteSignalManager(c); //PORQ? 
+            doctor = new SQLiteDoctorManager(c);
+            signalman = new SQLiteSignalManager(c);
             
         } catch (ClassNotFoundException exc) {
             exc.printStackTrace();
@@ -74,9 +74,8 @@ public class SQLiteManager implements DBManager {
     
     @Override
     public boolean createTables() {
-      Statement stmt1;
       try{
-          stmt1 = c.createStatement();
+          Statement stmt1 = c.createStatement();
           String sql1 = "CREATE TABLE patient " 
                   + "(medical_card_number INTEGER PRIMARY KEY, " 
                   + "name TEXT NOT NULL, " 
@@ -104,7 +103,7 @@ public class SQLiteManager implements DBManager {
           stmt2.close();
           
           Statement stmt3 = c.createStatement();
-          String sql3 = "CREATE TABLE patient " 
+          String sql3 = "CREATE TABLE doctor " 
                   + "(doctorId INTEGER PRIMARY KEY, " 
                   + "dname TEXT NOT NULL, " 
                   + "dsurname TEXT NOT NULL, "
@@ -113,15 +112,13 @@ public class SQLiteManager implements DBManager {
           stmt3.executeUpdate(sql3);
           stmt3.close();
           
-          /*
-          	// many to many table 
-            Statement stmt4 = sqlite_connection.createStatement();
-		String sql4 = "CREATE TABLE DoctorPatient " + "(name REFERENCES doctor(name) ON UPDATE RESTRICT ON DELETE CASCADE,"+"medical_card_number REFERENCES patient(medical_card_number) ON UPDATE RESTRICT ON DELETE CASCADE,"+"PRIMARY KEY (dname, medical_card_number))";
-		stmt4.execute(sql4);
+          Statement stmt4 = c.createStatement();
+		String sql4 = "CREATE TABLE doctor_patient "
+				   + "(patient_id     INTEGER  REFERENCES patient(medical_card_number) ON UPDATE CASCADE ON DELETE SET NULL,"
+				   + " doctor_id   INTEGER  REFERENCES doctor(doctorId) ON UPDATE CASCADE ON DELETE SET NULL,"
+				   + " PRIMARY KEY (patient_id,doctor_id))";
+		stmt4.executeUpdate(sql4);
 		stmt4.close();
-			
-          
-          */
           
           return true;
       }catch(SQLException tables_error){

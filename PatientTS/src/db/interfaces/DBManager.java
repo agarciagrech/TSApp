@@ -14,7 +14,7 @@ public interface DBManager {
     public void connect();
     public void disconnect();
     public PatientTSManager getPatientManager(); 
-    //public DoctorManager getDoctorManager();
+    public DoctorManager getDoctorManager();
     public SignalManager getSignalManager();
     public boolean createTables();
     

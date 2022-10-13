@@ -63,50 +63,28 @@ public class SQLiteDoctorManager implements DoctorManager{
         return pList;
     }
 
-    /**
-     * Selects a patient by using the patients's medical card number.
-     * @param medCard - [Integer] Medical cavd number of the patient the doctor is looking for.
-     * @return - [PatientTS] The patient to whom the inserted medical card number corresponds.
-     * @throws SQLException
-     * @throws NotBoundException
-     */
-    @Override
-    public PatientTS selectPatient(Integer medCard) throws SQLException, NotBoundException {
-        String sql = "SELECT * FROM patients WHERE medical_card_number = ?";
-		PreparedStatement p = c.prepareStatement(sql);
-		p.setInt(1,medCard);
-		ResultSet rs = p.executeQuery();
-		PatientTS patient = null;
-		if(rs.next()){
-			patient = new PatientTS(rs.getInt("medical_card_number"),rs.getString("name"),rs.getString("surname"),rs.getDate("dob"), 
-                        rs.getString("address"),rs.getString("email"),rs.getString("diagnosis"),rs.getString("allergies"),rs.getString("gender"));
-                }
-		p.close();
-		rs.close();
-		return patient;	
-    }
+
 
     /**
-     * Selects a patient by using the patients's userId.
-     * @param userId - [Integer] User Id of the patient the doctor is looking for.
-     * @return - [PatientTS] The patient to whom the inserted user Id corresponds.
+     * Selects a dctor by using the doctor's userId.
+     * @param userID - [Integer] User Id of the doctor.
+     * @return - [Doctor] The doctor to whom the inserted user Id corresponds.
      * @throws SQLException
      * @throws NotBoundException
      */
     @Override
-    public PatientTS selectPatientByUserId(Integer userId) throws SQLException, NotBoundException {
-        String sql = "SELECT * FROM patient WHERE userId = ?";
-        PreparedStatement p = c.prepareStatement(sql);
-        p.setInt(1,userId);
-        ResultSet rs = p.executeQuery();
-        PatientTS patient = null;
+    public Doctor selectDoctorByUserId(Integer userID) throws Exception {
+        String sql = "SELECT * FROM workers WHERE userId = ? ";
+        PreparedStatement pStatement = c.prepareStatement(sql);
+        pStatement.setInt(1, userID);
+        ResultSet rs = pStatement.executeQuery();
+        Doctor doctor = null;
         if(rs.next()){
-                patient = new PatientTS(rs.getInt("medical_card_number"),rs.getString("name"),rs.getString("surname"),rs.getDate("dob"), 
-                        rs.getString("address"),rs.getString("email"),rs.getString("diagnosis"),rs.getString("allergies"),rs.getString("gender"));
+                doctor = new Doctor(rs.getInt("doctorId"), rs.getString("dname"), rs.getString("dsurname"), rs.getString("demail"));
         }
-        p.close();
+        pStatement.close();
         rs.close();
-        return patient;	
+        return doctor;
     }
 
     /**
@@ -130,7 +108,7 @@ public class SQLiteDoctorManager implements DoctorManager{
         rs.close();
         return doctor;	
     }
-
+    
     /**
      * Deletes any doctor with an id that matches the given id.
      * @param doctorId - [Integer] Id from the doctor that will be deleted.
