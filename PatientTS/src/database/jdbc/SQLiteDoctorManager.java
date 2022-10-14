@@ -122,5 +122,21 @@ public class SQLiteDoctorManager implements DoctorManager{
         pStatement.executeUpdate();
         pStatement.close();
     }
+
+    /**
+     * Associates a doctor with a user of the application
+     * @param userId
+     * @param doctorId
+     * @throws Exception
+     */
+    @Override
+    public void createLinkUserDoctor(Integer userId, Integer doctorId) throws Exception {
+        String sql1 = "UPDATE doctor SET userId = ? WHERE doctorId = ? ";
+        PreparedStatement pStatement = c.prepareStatement(sql1);
+        pStatement.setInt(1, userId);
+        pStatement.setInt(2, doctorId);
+        pStatement.executeUpdate();
+        pStatement.close();
+    }
      
 }

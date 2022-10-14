@@ -9,7 +9,7 @@ import java.rmi.NotBoundException;
 import java.security.*;
 import java.time.LocalDate;
 import java.util.*;
-
+import java.sql.Date;
 
 import database.pojos.*;
 import users.*;
@@ -160,13 +160,13 @@ public class menu {
 					break;
 				case 3:
 					System.out.println("Here you can see all your signals recorded");
-					signals.addAll(jdbc.searchSignal());
+					signals.addAll(signalman.selectAllSignals());
 					for (Signal signal : signals) { 
 						System.out.println(signal.toString());
 					}
                                         System.out.println("Please, enter the name of the signal:");
 					String signal_name = sc.next();
-                                        signals.addAll(jdbc.searchSignaltByName(patient, signal_name));
+                                        signals.addAll(signalman.searchSignal(signal_name));
 					for (Signal signal : signals) { 
 						System.out.println(signal.toString());
 					}	
@@ -284,9 +284,10 @@ public class menu {
         
         private static void deletePatient() throws Exception {
 		sc = new Scanner (System.in);
-		PatientTS p = patientman.selectPatient();
+		PatientTS p = new PatientTS();
+                p=patientman.selectPatient(p.getMedCardId());
 		User u = userman.getUser(p.getPatientUserId());
-		jdbc.deletePatientByMedicalCardId(p.getMedCardId());
+		patientman.deletePatientByMedicalCardId(p.getMedCardId());
 		userman.deleteUser(u);
 	}
         

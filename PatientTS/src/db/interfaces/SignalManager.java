@@ -6,6 +6,9 @@
 package db.interfaces;
 
 import database.pojos.*;
+import java.rmi.NotBoundException;
+import java.sql.SQLException;
+import java.util.List;
 
 /**
  *
@@ -13,4 +16,7 @@ import database.pojos.*;
  */
 public interface SignalManager {
     public void insertSignal(Signal s, PatientTS p);
+    public List<Signal> searchSignal(String sname) throws SQLException, NotBoundException;
+    public Signal selectSignal(Integer signalId) throws SQLException, NotBoundException;
+    public List<Signal> selectAllSignals() throws SQLException, NotBoundException;
 }

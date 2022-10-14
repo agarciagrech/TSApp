@@ -8,6 +8,7 @@ package database.jdbc;
 import database.pojos.PatientTS;
 import database.pojos.Signal;
 import db.interfaces.SignalManager;
+import java.rmi.NotBoundException;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -193,6 +194,21 @@ public class SQLiteSignalManager implements SignalManager{
 
     @Override
     public void insertSignal(Signal s, PatientTS p) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public List<Signal> searchSignal(String sname) throws SQLException, NotBoundException {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public Signal selectSignal(Integer signalId) throws SQLException, NotBoundException {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public List<Signal> selectAllSignals() throws SQLException, NotBoundException {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

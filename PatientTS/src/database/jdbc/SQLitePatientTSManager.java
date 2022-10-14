@@ -11,17 +11,12 @@ import db.interfaces.PatientTSManager;
 //import java.sql.*;
 import java.util.*;
 import BITalino.BitalinoDemo;
-import static BITalino.BitalinoDemo.arraySignal;
-import static BITalino.BitalinoDemo.frame;
 import BITalino.Frame;
-import java.io.*;
-import java.nio.file.*;
 import java.rmi.NotBoundException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.bluetooth.RemoteDevice;
@@ -68,7 +63,7 @@ public class SQLitePatientTSManager implements PatientTSManager {
                 Logger.getLogger(SQLitePatientTSManager.class.getName()).log(Level.SEVERE, null, ex);
             }
         }else {
-                String sq1 = "INSERT INTO patient ( medical_card_number, name, surname, dob, address, email, diagnosis, allergies, gender) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                String sq1 = "INSERT INTO patient ( medical_card_number, name, surname, dob, address, email, diagnosis, allergies, gender, macAddress) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
                 try {
                     PreparedStatement preparedStatement = c.prepareStatement(sq1);
                     preparedStatement.setInt(1, p.getMedCardId());
@@ -80,6 +75,7 @@ public class SQLitePatientTSManager implements PatientTSManager {
                     preparedStatement.setString(7, p.getPatientDiagnosis());
                     preparedStatement.setString(8, p.getPatientAllergies());
                     preparedStatement.setString(9, p.getPatientGender());
+                    preparedStatement.setString(10, p.getMacAddress());
                     preparedStatement.executeUpdate();
                     preparedStatement.close();
                 } catch (SQLException ex) {
@@ -89,10 +85,8 @@ public class SQLitePatientTSManager implements PatientTSManager {
     }
     
     /*Updates patients information
-    
     TO DO: La parte de las signals 
-    */
-    
+    @Override
     public boolean updatePatient(PatientTS p) {
         try {
             String SQL_code = "UPDATE Patient SET medical_card_number = ?, name = ?, surname = ?, dob = ?, address = ?, email = ?, diagnosis = ?, allergies = ?, gender = ?, macAddress = ? WHERE name = ?";
@@ -115,37 +109,107 @@ public class SQLitePatientTSManager implements PatientTSManager {
             update_patient_error.printStackTrace();
             return false;
         }
-    }
+    }*/
 
-    /*
-    // list all the patients in the db
-    	public List<PatientTS> ListAllPatients() {
-	    List<PatientTS> patients = new LinkedList<PatientTS>();
-	    try {
-	        Statement statement = this.c.createStatement();
-	        String SQL_code = "SELECT * FROM patient";
-	        ResultSet rs = statement.executeQuery(SQL_code);
-	        while(rs.next()) {
-	            Integer patientMedCard = rs.getInt("patientMedCard");
-                    String patientName = rs.getString("patientName");
-                    String patientSurname = rs.getString("patientSurname");
-                    Date patientdob = rs.getDate("patientdob");
-                    String patientAddress = rs.getString("patientAddress");
-                    String patientEmail = rs.getString("patientEmail");
-                    String patientDiagnosis = rs.getString("patientDiagnosis");
-                    String patientAllergies = rs.getString("patientAllergies");
-                    String patientGender = rs.getString("patientGender");
-                    Integer patientuserId = rs.getInt("patientuserId");
-                    String patientmacAddress = rs.getString("patientmacAddress");
-	           
-	            
-	            patients.add(new PatientTS(patientMedCard , patientName, patientSurname, patientdob, patientAddress, patientEmail, patientDiagnosis , patientAllergies, patientGender, patientuserId, patientmacAddress));
-	        }
-	        return patients;
-	    } catch (SQLException listAllPatients_error) {
-	        listAllPatients_error.printStackTrace(); 
-	        return null;
-	    }*/
+    /**
+     * Edit the information of a patient
+     * @param medCardNum
+     * @param name
+     * @param surname
+     * @param dob
+     * @param address
+     * @param email
+     * @param diagnosis
+     * @param allergies
+     * @param gender
+     * @param macAd
+     * @return
+     * TODO edit signal
+     */
+    @Override
+	public boolean editPatient(Integer medCardNum, String name, String surname, Date dob, String address, 
+                String email, String diagnosis, String allergies, String gender, String macAd) {
+
+		String sql;
+		PreparedStatement pStatement;
+                try {
+		if (name != null) {
+			sql = "UPDATE patient SET name = ? WHERE medical_card_number = ?";
+			pStatement = c.prepareStatement(sql);
+			pStatement.setString(1, name);
+			pStatement.setInt(2, medCardNum);
+			pStatement.executeUpdate();	
+		} 
+		if (surname != null) {
+			sql = "UPDATE patient SET surname = ? WHERE medical_card_number = ?";
+			pStatement = c.prepareStatement(sql);
+			pStatement.setString(1, surname);
+			pStatement.setInt(2, medCardNum);
+			pStatement.executeUpdate();
+		}
+                
+                if (dob != null) {
+			sql = "UPDATE patient SET dob = ? WHERE medical_card_number = ?";
+			pStatement = c.prepareStatement(sql);
+			pStatement.setDate(1, (java.sql.Date) dob);
+			pStatement.setInt(2, medCardNum);
+			pStatement.executeUpdate();
+		}
+                
+                if (address != null) {
+			sql = "UPDATE patient SET address = ? WHERE medical_card_number = ?";
+			pStatement = c.prepareStatement(sql);
+			pStatement.setString(1, address);
+			pStatement.setInt(2, medCardNum);
+			pStatement.executeUpdate();	
+		}
+                
+                if (email != null) {
+			sql = "UPDATE patient SET email = ? WHERE medical_card_number = ?";
+			pStatement = c.prepareStatement(sql);
+			pStatement.setString(1, email);
+			pStatement.setInt(2, medCardNum);
+			pStatement.executeUpdate();	
+		}
+                
+                if (diagnosis != null) {
+			sql = "UPDATE patient SET diagnosis = ? WHERE medical_card_number = ?";
+			pStatement = c.prepareStatement(sql);
+			pStatement.setString(1, diagnosis);
+			pStatement.setInt(2, medCardNum);
+			pStatement.executeUpdate();	
+		}
+                
+                if (allergies != null) {
+			sql = "UPDATE patient SET allergies = ? WHERE medical_card_number = ?";
+			pStatement = c.prepareStatement(sql);
+			pStatement.setString(1, allergies);
+			pStatement.setInt(2, medCardNum);
+			pStatement.executeUpdate();
+		}
+                
+		if (gender != null) {
+			sql = "UPDATE patient SET gender = ? WHERE medical_card_number = ?";
+			pStatement = c.prepareStatement(sql);
+			pStatement.setString(1, gender);
+			pStatement.setInt(2, medCardNum);
+			pStatement.executeUpdate();	
+		}
+		
+		if (macAd != null) {
+			sql = "UPDATE patient SET macAddress = ? WHERE medical_card_number = ?";
+			pStatement = c.prepareStatement(sql);
+			pStatement.setString(1, macAd);
+			pStatement.setInt(2, medCardNum);
+			pStatement.executeUpdate();
+		}
+		
+		   return true;
+            } catch (SQLException update_patient_error) {
+                update_patient_error.printStackTrace();
+                return false;
+            }
+	}
 
     /**
      * Selects a patient by using the patients's user Id.
@@ -292,6 +356,38 @@ public class SQLitePatientTSManager implements PatientTSManager {
         String sql = "DELETE FROM patient WHERE medical_card_number = ?";
         PreparedStatement pStatement = c.prepareStatement(sql);
         pStatement.setInt(1, medCardNumber);
+        pStatement.executeUpdate();
+        pStatement.close();
+    }
+
+    /**
+     * Associates a doctor with a patient
+     * @param medCardNumber
+     * @param doctorId
+     * @throws SQLException
+     */
+    @Override
+    public void createLinkDoctorPatient(int medCardNumber, int doctorId) throws SQLException {
+        String sql = "INSERT INTO doctor_patient (patient_id, doctor_id) VALUES (?,?)";
+        PreparedStatement pStatement = c.prepareStatement(sql);
+        pStatement.setInt(1, medCardNumber);
+        pStatement.setInt(2, doctorId);
+        pStatement.executeUpdate();
+        pStatement.close();
+    }
+
+    /**
+     * Associates a patient with a user of the application
+     * @param userId
+     * @param medCardNumber
+     * @throws Exception
+     */
+    @Override
+    public void createLinkUserPatient(int userId, int medCardNumber) throws Exception {
+        String sql1 = "UPDATE patient SET userId = ? WHERE medical_card_number = ? ";
+        PreparedStatement pStatement = c.prepareStatement(sql1);
+        pStatement.setInt(1, userId);
+        pStatement.setInt(2, medCardNumber);
         pStatement.executeUpdate();
         pStatement.close();
     }

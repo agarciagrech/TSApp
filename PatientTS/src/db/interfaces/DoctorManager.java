@@ -20,7 +20,6 @@ public interface DoctorManager {
     public Doctor selectDoctorByUserId(Integer userID) throws Exception;
     public Doctor selectDoctor(Integer doctorId) throws SQLException, NotBoundException;
     public void deleteDoctorById(Integer doctorId) throws SQLException;
-    //public List<Signal> searchSignal(String sname) throws SQLException, NotBoundException;
-    //public Signal selectSignal(Integer signalId) throws SQLException, NotBoundException;
-    
+    public void createLinkUserDoctor(Integer userId, Integer doctorId) throws Exception;
+	
 }
