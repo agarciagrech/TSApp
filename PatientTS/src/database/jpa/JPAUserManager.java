@@ -6,6 +6,7 @@ package database.jpa;
 
 import db.interfaces.UserManager;
 import java.security.*;
+import java.util.List;
 import javax.persistence.*;
 
 import users.*;
@@ -78,5 +79,17 @@ public class JPAUserManager implements UserManager{
             }
             return user;
     }
+     @Override
+     public boolean existingUserName(String username){
+         Query q = em.createNativeQuery("SELECT * FROM users WHERE email = ?", User.class);
+	 q.setParameter(1, username);
+	 List<User> userList= (List) q.getResultList();
+	 if(userList.isEmpty()) {
+		return false;
+	}
+	else {
+		return true;
+	}
+     }
 }
 

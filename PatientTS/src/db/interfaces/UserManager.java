@@ -19,4 +19,5 @@ public interface UserManager {
     public void deleteUser(User u);
     public User getUser(int userId);
     public void updateUser(User u, byte[] password);
+    public boolean existingUserName(String username);
 }
