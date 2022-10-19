@@ -3,9 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package database.jdbc;
+package db.jdbc;
 
-import db.interfaces.*;
+import db.interfaces.PatientTSManager;
+import db.interfaces.SignalManager;
+import db.interfaces.DoctorManager;
+import db.interfaces.DBManager;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;

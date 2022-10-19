@@ -2,8 +2,14 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package database;
+package db;
 
+import pojos.users.User;
+import db.pojos.Signal;
+import db.pojos.PatientTS;
+import db.jdbc.SQLiteManager;
+import db.jdbc.SQLiteSignalManager;
+import db.jdbc.SQLitePatientTSManager;
 import java.rmi.NotBoundException;
 
 import java.security.*;
@@ -11,10 +17,7 @@ import java.time.LocalDate;
 import java.util.*;
 import java.sql.Date;
 
-import database.pojos.*;
-import users.*;
-import database.jdbc.*;
-import database.jpa.JPAUserManager;
+import db.jpa.JPAUserManager;
 import java.sql.SQLException;
 //import org.sqlite.SQLiteException;
 

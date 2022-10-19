@@ -4,7 +4,8 @@
  */
 package db.interfaces;
 
-import database.pojos.*;
+import db.pojos.Doctor;
+import db.pojos.PatientTS;
 import java.rmi.*;
 import java.sql.*;
 import java.util.*;

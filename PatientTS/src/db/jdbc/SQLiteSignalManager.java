@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package database.jdbc;
+package db.jdbc;
 
-import database.pojos.PatientTS;
-import database.pojos.Signal;
+import db.pojos.PatientTS;
+import db.pojos.Signal;
 import db.interfaces.SignalManager;
 import java.rmi.NotBoundException;
 import java.sql.Connection;

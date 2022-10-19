@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package db.interfaces;
+package db.jpa;
 
-import users.User;
+import pojos.users.User;
 
 /**
  *

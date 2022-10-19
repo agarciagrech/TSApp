@@ -2,10 +2,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package database.jdbc;
+package db.jdbc;
 
-import database.pojos.*;
-import db.interfaces.*;
+import db.pojos.Doctor;
+import db.pojos.PatientTS;
+import db.interfaces.DoctorManager;
 import java.sql.*;
 import java.util.*;
 import java.rmi.*;

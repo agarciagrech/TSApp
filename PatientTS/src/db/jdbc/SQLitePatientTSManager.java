@@ -3,10 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package database.jdbc;
+package db.jdbc;
+import db.pojos.Signal;
+import db.pojos.PatientTS;
 import BITalino.BITalino;
 import BITalino.BITalinoException;
-import database.pojos.*;
 import db.interfaces.PatientTSManager;
 //import java.sql.*;
 import java.util.*;

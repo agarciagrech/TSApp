@@ -5,7 +5,8 @@
  */
 package db.interfaces;
 
-import database.pojos.*;
+import db.pojos.Signal;
+import db.pojos.PatientTS;
 import java.rmi.NotBoundException;
 import java.sql.SQLException;
 import java.util.List;

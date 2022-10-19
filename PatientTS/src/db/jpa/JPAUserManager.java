@@ -2,14 +2,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package database.jpa;
+package db.jpa;
 
-import db.interfaces.UserManager;
+import pojos.users.User;
 import java.security.*;
 import java.util.List;
 import javax.persistence.*;
 
-import users.*;
 
 public class JPAUserManager implements UserManager{
     
