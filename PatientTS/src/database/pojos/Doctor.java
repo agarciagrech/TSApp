@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
  */
 public class Doctor {
     
-    private Integer doctotrId;
+    private Integer doctorId;
         //Unique for each doctor - cannot be repeated for another patient.
     private String dname;
     private String dsurname;
@@ -36,7 +36,7 @@ public class Doctor {
      * @throws java.rmi.NotBoundException
      */
     public Doctor(Integer id, String name, String surname, String email, Integer userId) throws NotBoundException{
-        this.doctotrId = id;
+        this.doctorId = id;
         this.dname = name;
         this.dsurname = surname;
         this.demail = email;
@@ -44,7 +44,7 @@ public class Doctor {
     }
 
     public Doctor(Integer id, String name, String surname, String email) throws NotBoundException{
-        this.doctotrId = id;
+        this.doctorId = id;
         this.dname = name;
         this.dsurname = surname;
         this.demail = email;
@@ -55,7 +55,7 @@ public class Doctor {
      * @return [Integer] Doctor's Id
      */
     public Integer getDoctorId() {
-        return doctotrId;
+        return doctorId;
     }
 
     /**
@@ -63,7 +63,7 @@ public class Doctor {
      * @param id
      */
     public void setDoctorId(Integer id) {
-        this.doctotrId = id;
+        this.doctorId = id;
     }
 
     /**
@@ -127,13 +127,13 @@ public class Doctor {
 
     @Override
     public String toString() {
-        return "Doctor{" + "id=" + doctotrId + ", name=" + dname + ", surname=" + dsurname + ", email=" + demail + '}';
+        return "Doctor{" + "id=" + doctorId + ", name=" + dname + ", surname=" + dsurname + ", email=" + demail + '}';
     }
 
     @Override
     public int hashCode() {
         int hash = 3;
-        hash = 97 * hash + Objects.hashCode(this.doctotrId);
+        hash = 97 * hash + Objects.hashCode(this.doctorId);
         return hash;
     }
 
@@ -149,7 +149,7 @@ public class Doctor {
             return false;
         }
         final Doctor other = (Doctor) obj;
-        return Objects.equals(this.doctotrId, other.doctotrId);
+        return Objects.equals(this.doctorId, other.doctorId);
     }
 
 }
