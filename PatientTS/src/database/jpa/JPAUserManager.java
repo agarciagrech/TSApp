@@ -37,7 +37,7 @@ public class JPAUserManager implements UserManager{
     }
 
     @Override
-    public User getUser(int userId) {
+    public User getUser(Integer userId) {
             Query q = em.createNativeQuery("SELECT * FROM users WHERE userId = ?", User.class);
             q.setParameter(1, userId);
             return (User) q.getSingleResult();
