@@ -20,8 +20,8 @@ public class BitalinoDemo {
         Frame[] frame;
         BITalino bitalino = null;
         Signal s = new Signal();
-        int[] ecg_values = new int[1000000];
-        int[] emg_values = new int[100];
+        int[] ecg_values = new int[10];
+        int[] emg_values = new int[10];
  
         try {
             bitalino = new BITalino();
