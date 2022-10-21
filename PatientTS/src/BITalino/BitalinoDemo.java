@@ -15,7 +15,7 @@ public class BitalinoDemo {
     public static Frame[] frame;
     public static List <Integer> arraySignal = new ArrayList <Integer>();
 
-    public static void main() {
+    public static void main(String[] args) {
 
         Frame[] frame;
         BITalino bitalino = null;
@@ -56,11 +56,13 @@ public class BitalinoDemo {
                 for (int i = 0; i < frame.length; i++) {
                     ecg_values[i]=frame[i].analog[0];
                     emg_values[i]=frame[i].analog[1];
-                    System.out.println(" seq: " + frame[i].seq + " "
-                            + frame[i].analog[0] + " ");
+                   // System.out.println(" seq: " + frame[i].seq + " "
+                            //+ frame[i].analog[0] + " ");
                 }
                 s.setECG_values(ecg_values);
                 s.setEMG_values(emg_values);
+                s.ImprimirECG(s.getECG_values());
+                s.ImprimirEMG(s.getEMG_values());
             }
             //stop acquisition
             bitalino.stop();

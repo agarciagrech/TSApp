@@ -111,10 +111,25 @@ public class Signal {
         final Signal other = (Signal) obj;
         return Objects.equals(this.signalId, other.signalId);
     }
+    
+    public void ImprimirECG (int[] ECG_values){
+         System.out.println("ECG");
+        for (int i=0; i<ECG_values.length; i++){
+            System.out.println(ECG_values[i]);
+        } 
+    }
+    
+    public void ImprimirEMG (int[] EMG_values){
+         System.out.println("EMG");
+        for (int i=0; i<EMG_values.length; i++){
+            System.out.println(EMG_values[i]);
+        } 
+    }
 
     @Override
     public String toString() {
-        return "Signal{" + "signalId=" + signalId + ", startDate=" + startDate + ", sname=" + sname + '}';
+       // return "Signal{" + "signalId=" + signalId + ", startDate=" + startDate + ", sname=" + sname + '}';
+       return "ECG:"+ 
     }
 
 }
