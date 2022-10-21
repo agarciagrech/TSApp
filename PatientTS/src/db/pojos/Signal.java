@@ -5,21 +5,16 @@
  */
 package db.pojos;
 
-import java.rmi.*;
 import java.util.*;
 
 public class Signal {
     
     
     private Integer signalId;
-    private byte[] ECG_values; 
-    private byte[] EMG_values;
-    private byte[] svalues;
-
-  
-    private Date startDate; //Date when the signal starts recording
+    private int[] ECG_values; 
+    private int[] EMG_values;
+    private Date startDate;
     private String sname;
-    private String stype; //SOBRA??
 
     public Signal() {
         super();
@@ -27,40 +22,31 @@ public class Signal {
     
     /**
      *
-     * @param signalId
-     * @param signal_values
-     * @param sDate
-     * @param signal_name
-     * @param type
-     * @throws Exception
+     * @param ECG_values
+     * @param EMG_values
+     * @param sname
+     * @throws java.lang.Exception
      */
     
-      public Signal(byte[] ECG_values, byte[] EMG_values, String sname) {
+      public Signal(int[] ECG_values, int[] EMG_values, String sname) throws Exception{
         this.ECG_values = ECG_values;
         this.EMG_values = EMG_values;
         this.sname = sname;
     }
       
-    public Signal(Integer signalId, byte[] signal_values, Date sDate, String signal_name, String type) throws Exception {
+     public Signal(Integer signalId, int[] ECG_values, int[] EMG_values, Date sDate, String sname) throws Exception{
         this.signalId = signalId;
-        this.svalues = signal_values;
+         this.ECG_values = ECG_values;
+        this.EMG_values = EMG_values;
         this.startDate = sDate;
-        this.sname = signal_name;
-        this.stype = type;
+        this.sname = sname;
     }
-    
-    public Signal( byte[] signal_values, String signal_name, String type) throws Exception {
-        
-        this.svalues = signal_values;
-        this.sname = signal_name;
-        this.stype = type;
-    }
-    
-    public Signal(byte[] signal_values, Date sDate, String signal_name, String type) throws Exception {
-        this.svalues = signal_values;
+     
+    public Signal(int[] ECG_values, int[] EMG_values, Date sDate, String sname) throws Exception{
+         this.ECG_values = ECG_values;
+        this.EMG_values = EMG_values;
         this.startDate = sDate;
-        this.sname = signal_name;
-        this.stype = type;
+        this.sname = sname;
     }
 
     public Integer getSignalId() {
@@ -71,12 +57,20 @@ public class Signal {
         this.signalId = signalId;
     }
 
-    public byte[] getSignalvalues() {
-        return svalues;
+    public int[] getECG_values() {
+        return ECG_values;
     }
 
-    public void setSignalvalues(byte[] svalues) {
-        this.svalues = svalues;
+    public int[] getEMG_values() {
+        return EMG_values;
+    }
+
+    public void setECG_values(int[] ECG_values) {
+        this.ECG_values = ECG_values;
+    }
+
+    public void setEMG_values(int[] EMG_values) {
+        this.EMG_values = EMG_values;
     }
 
     public Date getSignalStartDate() {
@@ -95,19 +89,6 @@ public class Signal {
         this.sname = sname;
     }
 
-    public String getSignaltype() {
-        return stype;
-    }
-
-    public void setSignaltype(String stype) throws NotBoundException {
-        if(stype.equalsIgnoreCase("EMG")) {
-                this.stype = stype;
-        } else if(stype.equalsIgnoreCase("ECG")){
-                this.stype = stype;		
-        } else {
-                throw new NotBoundException("Not a valid type of signal.") ;
-        }
-    }
 
     @Override
     public int hashCode() {
@@ -133,9 +114,7 @@ public class Signal {
 
     @Override
     public String toString() {
-        return "Signal{" + "signalId=" + signalId + ", svalues=" + svalues + ", sname=" + sname + ", stype=" + stype + '}';
+        return "Signal{" + "signalId=" + signalId + ", startDate=" + startDate + ", sname=" + sname + '}';
     }
 
-  
-    
 }

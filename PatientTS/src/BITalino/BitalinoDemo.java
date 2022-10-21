@@ -1,6 +1,7 @@
 package BITalino;
 
 
+import db.pojos.Signal;
 import java.util.*;
 
 import javax.bluetooth.RemoteDevice;
@@ -16,7 +17,11 @@ public class BitalinoDemo {
 
     public static void main() {
 
+        Frame[] frame;
         BITalino bitalino = null;
+        Signal s = new Signal();
+        int[] ecg_values = new int[1000000];
+        int[] emg_values = new int[100];
  
         try {
             bitalino = new BITalino();
@@ -27,7 +32,7 @@ public class BitalinoDemo {
 
             //You need TO CHANGE THE MAC ADDRESS
             //You should have the MAC ADDRESS in a sticker in the Bitalino
-            String macAddress = "20:16:02:14:75:76"; //codigo del BITALINO
+            String macAddress = "98:D3:91:FD:3E:C4"; //codigo del BITALINO
             
             //Sampling rate, should be 10, 100 or 1000
             int SamplingRate = 10;
@@ -49,13 +54,13 @@ public class BitalinoDemo {
 
                 //Store the samples --> preguntar si se guarda el fichero 
                 for (int i = 0; i < frame.length; i++) {
-                    arraySignal.add(frame[i].analog[2]);
+                    ecg_values[i]=frame[i].analog[0];
+                    emg_values[i]=frame[i].analog[1];
                     System.out.println(" seq: " + frame[i].seq + " "
                             + frame[i].analog[0] + " ");
-                    
-                    
-                    
                 }
+                s.setECG_values(ecg_values);
+                s.setEMG_values(emg_values);
             }
             //stop acquisition
             bitalino.stop();

@@ -85,32 +85,6 @@ public class SQLitePatientTSManager implements PatientTSManager {
         }
     }
     
-    /*Updates patients information
-    TO DO: La parte de las signals 
-    @Override
-    public boolean updatePatient(PatientTS p) {
-        try {
-            String SQL_code = "UPDATE Patient SET medical_card_number = ?, name = ?, surname = ?, dob = ?, address = ?, email = ?, diagnosis = ?, allergies = ?, gender = ?, macAddress = ? WHERE name = ?";
-            PreparedStatement template = this.c.prepareStatement(SQL_code);
-            template.setInt(10, p.getMedCardId());
-            template.setString(1, p.getPatientName());
-            template.setString(2, p.getPatientSurname());
-            template.setDate(3, (java.sql.Date) p.getPatientDob());
-            template.setString(4,p.getPatientAddress());
-            template.setString(5, p.getPatientEmail());
-            template.setString(6, p.getPatientDiagnosis());
-            template.setString(7, p.getPatientAllergies());
-            template.setString(8, p.getPatientGender());
-            template.setString(9, p.getMacAddress());
-           // template.setSignal(1, p.getPatientSignal());  --> ESTO QUEDA PARA CUANDO SEPAMOS COMO HACERLO 
-            template.executeUpdate();
-            template.close();
-            return true;
-        } catch (SQLException update_patient_error) {
-            update_patient_error.printStackTrace();
-            return false;
-        }
-    }*/
 
     /**
      * Edit the information of a patient
@@ -278,15 +252,14 @@ public class SQLitePatientTSManager implements PatientTSManager {
 		rs.close();
 		return pList;
     }
+    
     @Override
-    public void recordSignal(PatientTS p, String name) {
+    public void recordSignal(PatientTS p, String sname) {
         Frame[] frame;
-        List <Integer> arraySignal = new ArrayList <Integer>();
-        
         BITalino bitalino = null;
-        Signal s = null;
-        byte[] ecg_values = null;
-        byte[] emg_values = null;
+        Signal s = new Signal();
+        int[] ecg_values = new int[1000000];
+        int[] emg_values = new int[100];
         try {
             bitalino = new BITalino();
             // Code to find Devices
@@ -315,15 +288,14 @@ public class SQLitePatientTSManager implements PatientTSManager {
 
                 System.out.println("size block: " + frame.length);
 
-                //Store the samples --> preguntar si se guarda el fichero 
                 for (int i = 0; i < frame.length; i++) {
-                    arraySignal.add(frame[i].analog[2]);
+                    ecg_values[i]=frame[i].analog[0];
+                    emg_values[i]=frame[i].analog[1];
                     System.out.println(" seq: " + frame[i].seq + " "
                             + frame[i].analog[0] + " ");
-                    
-                    
-                    
                 }
+                s.setECG_values(ecg_values);
+                s.setEMG_values(emg_values);
             }
             //stop acquisition
             bitalino.stop();
@@ -341,10 +313,6 @@ public class SQLitePatientTSManager implements PatientTSManager {
                 Logger.getLogger(BitalinoDemo.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        //ecg_values = 
-        //emg_values = PREGUNTAR COMO COGER CADA COLUMNA DEL FRAME
-        s = new Signal(ecg_values, emg_values, name); 
-
     }
     
     /**
