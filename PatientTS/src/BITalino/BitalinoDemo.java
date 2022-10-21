@@ -2,6 +2,9 @@ package BITalino;
 
 
 import db.pojos.Signal;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.util.*;
 
 import javax.bluetooth.RemoteDevice;
@@ -44,7 +47,7 @@ public class BitalinoDemo {
             bitalino.start(channelsToAcquire);
 
             //Read in total 10000000 times --> por que elegimos este num
-            for (int j = 0; j < 10000000; j++) {
+            for (int j = 0; j < 10; j++) {
 
                 //Each time read a block of 10 samples --> por que elegimos este num
                 int block_size=10;
@@ -80,6 +83,35 @@ public class BitalinoDemo {
                 Logger.getLogger(BitalinoDemo.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        
+        try {
+            //ruta + signal_name + date ".txt"
+            String ruta = "C:/Users/agarc/OneDrive/Desktop/TSApp/filename.txt";
+            String ruta2 = "C:/Users/agarc/OneDrive/Desktop/TSApp/filename2.txt";
+            String contenido = Arrays.toString(s.getECG_values());
+            String contenido2 = Arrays.toString(s.getEMG_values());
+            File file = new File(ruta);
+            File file2 = new File(ruta2);
+            // Si el archivo no existe es creado
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+            if (!file2.exists()) {
+                file2.createNewFile();
+            }
+            FileWriter fwECG = new FileWriter(file);
+            FileWriter fwEMG = new FileWriter(file2);
+            BufferedWriter bwECG = new BufferedWriter(fwECG);
+            BufferedWriter bwEMG = new BufferedWriter(fwEMG);
+            bwECG.write(contenido);
+            bwEMG.write(contenido2);
+            bwECG.close();
+            bwEMG.close();
+            System.out.println("Ok");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
 
     }
 
