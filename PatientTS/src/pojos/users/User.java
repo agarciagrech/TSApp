@@ -22,11 +22,15 @@ public class User implements Serializable {
 	private String username;
 	@Lob
 	private byte[] password;
+        @ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "role_id")
+	private Role role;
 	
-	public User(String username, byte[] password) {
+	public User(String username, byte[] password, Role role) {
 		super();
 		this.username = username;
 		this.password = password;
+                this.role = role;
 	}
 
 	public User() {
@@ -57,37 +61,56 @@ public class User implements Serializable {
 		this.password = password;
 	}
 
-	
+	public Role getRole() {
+		return role;
+	}
+
+	public void setRole(Role role) {
+		this.role = role;
+	}
+        
 	@Override
 	public String toString() {
 		String password1 = new String(this.password);
-		return "User [userId=" + userId + ", username=" + username + ", password=" + password1 + "]";
+		return "User [userId=" + userId + ", username=" + username + ", password=" + password1
+				+ ", role=" + role + "]";
+        }
+
+    @Override
+	public int hashCode() {
+            final int prime = 31;
+            int result = 1;
+            result = prime * result + ((role == null) ? 0 : role.hashCode());
+            result = prime * result + ((userId == null) ? 0 : userId.hashCode());
+            result = prime * result + ((username == null) ? 0 : username.hashCode());
+            return result;
 	}
 
-    @Override
-    public int hashCode() {
-        int hash = 7;
-        hash = 59 * hash + Objects.hashCode(this.userId);
-        hash = 59 * hash + Objects.hashCode(this.username);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
+	@Override
+	public boolean equals(Object obj) {
+            if (this == obj)
+                    return true;
+            if (obj == null)
+                    return false;
+            if (getClass() != obj.getClass())
+                    return false;
+            User other = (User) obj;
+            if (role == null) {
+                    if (other.role != null)
+                            return false;
+            } else if (!role.equals(other.role))
+                    return false;
+            if (userId == null) {
+                    if (other.userId != null)
+                            return false;
+            } else if (!userId.equals(other.userId))
+                    return false;
+            if (username == null) {
+                    if (other.username != null)
+                            return false;
+            } else if (!username.equals(other.username))
+                    return false;
             return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final User other = (User) obj;
-        if (!Objects.equals(this.username, other.username)) {
-            return false;
-        }
-        return Objects.equals(this.userId, other.userId);
-    }
+	}
     
 }

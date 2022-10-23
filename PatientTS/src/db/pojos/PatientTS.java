@@ -65,9 +65,6 @@ public class PatientTS implements Serializable {
         this.userId = userID;
     }
     
-    
-    
-    
     public PatientTS(Integer medCardId, String name, String surname, Date dob, String address, String email, String diagnosis, String allergies, String gender,Integer userId, String macAddress) throws NotBoundException{
         this.medical_card_number = medCardId;
         this.name = name;
@@ -96,7 +93,18 @@ public class PatientTS implements Serializable {
     
     public PatientTS() {
     }
-
+    
+    public PatientTS(PatientTS p) throws NotBoundException{
+        this.setMedCardId(p.medical_card_number);
+        this.setPatientAddress(p.address);
+        this.setPatientAllergies(p.allergies);
+        this.setPatientDiagnosis(p.diagnosis);
+        this.setPatientDob(p.dob);
+        this.setPatientEmail(p.email);
+        this.setPatientGender(p.gender);
+        this.setPatientName(p.name);
+        this.setPatientSurname(p.surname);
+    }
     @Override
     public String toString() {
         return "PatientTS{" + "medical_card_number=" + medical_card_number + ", name=" + name + ", surname=" + surname + ", dob=" + dob + ", address=" + address + ", email=" + email + ", diagnosis=" + diagnosis + ", allergies=" + allergies + ", gender=" + gender + '}';

@@ -15,78 +15,147 @@ public class Signal {
     private int[] EMG_values;
     private Date startDate;
     private String sname;
+    private int samplingRate;
 
+    
     public Signal() {
         super();
     }
     
     /**
      *
-     * @param ECG_values
-     * @param EMG_values
-     * @param sname
-     * @throws java.lang.Exception
+     * @param signalId - The id of the signal (int) [Cannot be changed once it's created]
+     * @param ECG_values - Values of the ECG signal (int[])
+     * @param EMG_values - Values of the EMG signal (int[])
+     * @param sDate - The date and hour when the signal starts recording (Date)
+     * @param sname - The name of the signal (String)
+     * @param sr - The sampling rate of the signal recorded.
+     * @throws Exception
      */
+    public Signal(Integer signalId, int[] ECG_values, int[] EMG_values, Date sDate, String sname, int sr) throws Exception{
+        this.signalId = signalId;
+        this.ECG_values = ECG_values;
+        this.EMG_values = EMG_values;
+        this.startDate = sDate;
+        this.sname = sname;
+        this.samplingRate = sr;
+    }
+
+    public Signal(Integer signalId, Date startDate, String sname, int samplingRate) {
+        this.signalId = signalId;
+        this.startDate = startDate;
+        this.sname = sname;
+        this.samplingRate = samplingRate;
+    }
     
-      public Signal(int[] ECG_values, int[] EMG_values, String sname) throws Exception{
+    public Signal(int[] ECG_values, int[] EMG_values, Date sDate, String sname, int sr) throws Exception{
+        this.ECG_values = ECG_values;
+        this.EMG_values = EMG_values;
+        this.startDate = sDate;
+        this.sname = sname;
+        this.samplingRate = sr;
+    }
+    
+    public Signal(int[] ECG_values, int[] EMG_values, String sname) throws Exception{
         this.ECG_values = ECG_values;
         this.EMG_values = EMG_values;
         this.sname = sname;
     }
-      
-     public Signal(Integer signalId, int[] ECG_values, int[] EMG_values, Date sDate, String sname) throws Exception{
-        this.signalId = signalId;
-         this.ECG_values = ECG_values;
-        this.EMG_values = EMG_values;
-        this.startDate = sDate;
-        this.sname = sname;
-    }
-     
-    public Signal(int[] ECG_values, int[] EMG_values, Date sDate, String sname) throws Exception{
-         this.ECG_values = ECG_values;
-        this.EMG_values = EMG_values;
-        this.startDate = sDate;
-        this.sname = sname;
-    }
 
+    /**
+     * Used to get the id of the signal
+     * @return [Integer] The signal's id
+     */
     public Integer getSignalId() {
         return signalId;
     }
 
+    /**
+     * Used to set the id of the signal
+     * @param signalId
+     */
     public void setSignalId(Integer signalId) {
         this.signalId = signalId;
     }
 
+    /**
+     * Used to get the values of the ECG signal
+     * @return [int[]] The signal's ECG values
+     */
     public int[] getECG_values() {
         return ECG_values;
     }
 
+    /**
+     * Used to get the values of the EMG signal
+     * @return [int[]] The signal's EMG values
+     */
     public int[] getEMG_values() {
         return EMG_values;
     }
 
+    /**
+     * Used to set the values of the ECG signal
+     * @param ECG_values
+     */
     public void setECG_values(int[] ECG_values) {
         this.ECG_values = ECG_values;
     }
 
+    /**
+     * Used to set the values of the EMG signal
+     * @param EMG_values
+     */
     public void setEMG_values(int[] EMG_values) {
         this.EMG_values = EMG_values;
     }
 
+    /**
+     * Used to get the start date and hour of the signal
+     * @return [Date] The signal's start date and hour
+     */
     public Date getSignalStartDate() {
         return startDate;
     }
 
+    /**
+     * Used to set the start date and hour of the signal
+     * @param startDate
+     */
     public void setSignalStartDate(Date startDate) {
         this.startDate = startDate;
     }
     
+    /**
+     * Used to get the name of the signal
+     * @return [Date] The signal's name
+     */
     public String getSignalname() {
         return sname;
     }
 
+    /**
+     * Used to set the name of the signal
+     * @param sname
+     */
     public void setSignalname(String sname) {
         this.sname = sname;
+    }
+
+    /**
+    * Used to get the sampling rate of the signal
+    * @return [int] The signal's sampling rate
+     */
+    public int getSignlaSamplingRate() {
+        return samplingRate;
+    }
+
+    /**
+     * Used to set the sampling rate of the signal
+     * @param samplingRate
+     */
+    public void setSignalSamplingRate(int samplingRate) {
+        this.samplingRate = samplingRate;
     }
 
 
@@ -128,8 +197,7 @@ public class Signal {
 
     @Override
     public String toString() {
-       // return "Signal{" + "signalId=" + signalId + ", startDate=" + startDate + ", sname=" + sname + '}';
-       return "ECG:"+ 
+       return "Signal{" + "signalId=" + signalId + ", startDate=" + startDate + ", sname=" + sname + '}';
     }
 
 }

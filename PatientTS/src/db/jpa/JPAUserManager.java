@@ -8,6 +8,7 @@ import pojos.users.User;
 import java.security.*;
 import java.util.List;
 import javax.persistence.*;
+import pojos.users.Role;
 
 
 public class JPAUserManager implements UserManager{
@@ -20,6 +21,11 @@ public class JPAUserManager implements UserManager{
         em.getTransaction().begin();
         em.createNativeQuery("PRAGMA foreign_keys=ON").executeUpdate();
         em.getTransaction().commit();
+        List<Role> existingRoles = this.getRoles();
+        if(existingRoles.size() < 3) {
+                this.newRole(new Role("patient")); 
+                this.newRole(new Role("doctor"));
+        }
     }
 	
 
@@ -50,6 +56,7 @@ public class JPAUserManager implements UserManager{
             em.getTransaction().begin();
             userToUpdate.setUsername(u.getUsername());
             userToUpdate.setPassword(password);
+            userToUpdate.setRole(u.getRole());
             em.getTransaction().commit();
     }
 
@@ -60,6 +67,34 @@ public class JPAUserManager implements UserManager{
             em.getTransaction().commit();
     }
 
+    @Override
+    public void newRole(Role r) {
+            em.getTransaction().begin();
+            em.persist(r);
+            em.getTransaction().commit();
+    }
+    
+    @Override
+    public Role getRole(int id) {
+            Query q = em.createNativeQuery("SELECT * FROM roles WHERE id = ?", Role.class);
+            q.setParameter(1, id);
+            return (Role) q.getSingleResult();
+    }
+
+    @Override
+    public Role getRoleByName(String name) {
+            Query q = em.createNativeQuery("SELECT * FROM roles WHERE ROLE = ?", Role.class);
+            q.setParameter(1, name);
+            Role role = (Role) q.getSingleResult();
+            return role;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<Role> getRoles() {
+            Query q = em.createNativeQuery("SELECT * FROM roles", Role.class);
+            return (List<Role>) q.getResultList();
+    }
     @Override
     public User checkPassword(String username, String password) {
             User user = null;

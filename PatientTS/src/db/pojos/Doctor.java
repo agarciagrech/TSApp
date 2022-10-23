@@ -10,10 +10,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
-/**
- *
- * @author gisel
- */
 public class Doctor {
     
     private Integer doctorId;
@@ -48,6 +44,20 @@ public class Doctor {
         this.dname = name;
         this.dsurname = surname;
         this.demail = email;
+    }
+    
+    public Doctor(String name, String surname, Integer userId) throws NotBoundException{
+        this.dname = name;
+        this.dsurname = surname;
+        this.userId = userId;
+    }
+    
+    public Doctor(Doctor d) throws NotBoundException{
+        super();
+        this.doctorId = d.doctorId;
+        this.dname = d.dname;
+        this.dsurname = d.dsurname;
+        this.demail = d.demail;
     }
 
     /**
