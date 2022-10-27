@@ -17,7 +17,14 @@ import java.util.List;
  */
 public interface SignalManager {
     public void insertSignal(Signal s, PatientTS p);
-    public List<Signal> searchSignal(String sname) throws SQLException, NotBoundException;
-    public Signal selectSignal(Integer signalId) throws SQLException, NotBoundException;
-    public List<Signal> selectAllSignals() throws SQLException, NotBoundException;
+    public boolean editSignal(int signalid, java.util.Date startDate,String sname,int samplingRate,String fileName,String comment);
+    public Signal selectSignalByName (String name);
+    public boolean deleteSignalById(int signalid);
+    public Signal selectSignalById (int id);
+    public List<Signal> listSignalsByPatient(int patient_medcard);
+    public List<Signal> listECGSignals(int patient_medcard);
+    public List<Signal> listEMGSignals(int patient_medcard);
 }
+
+
+

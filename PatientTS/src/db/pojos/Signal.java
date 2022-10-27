@@ -16,7 +16,11 @@ public class Signal {
     private Date startDate;
     private String sname;
     private int samplingRate;
+    private String fileName;
+    private String comment;
 
+ 
+    
     
     public Signal() {
         super();
@@ -30,6 +34,7 @@ public class Signal {
      * @param sDate - The date and hour when the signal starts recording (Date)
      * @param sname - The name of the signal (String)
      * @param sr - The sampling rate of the signal recorded.
+     * @param fileName - The name of the file where specific signal is saved (String)
      * @throws Exception
      */
     public Signal(Integer signalId, int[] ECG_values, int[] EMG_values, Date sDate, String sname, int sr) throws Exception{
@@ -47,7 +52,14 @@ public class Signal {
         this.sname = sname;
         this.samplingRate = samplingRate;
     }
-    
+     public Signal(Integer signalId, Date startDate, String sname, int samplingRate, String fileName, String comment) {
+        this.signalId = signalId;
+        this.startDate = startDate;
+        this.sname = sname;
+        this.samplingRate = samplingRate;
+        this.fileName = fileName;
+        this.comment = comment;
+    }
     public Signal(int[] ECG_values, int[] EMG_values, Date sDate, String sname, int sr) throws Exception{
         this.ECG_values = ECG_values;
         this.EMG_values = EMG_values;
@@ -146,7 +158,7 @@ public class Signal {
     * Used to get the sampling rate of the signal
     * @return [int] The signal's sampling rate
      */
-    public int getSignlaSamplingRate() {
+    public int getSignalSamplingRate() {
         return samplingRate;
     }
 
@@ -157,6 +169,24 @@ public class Signal {
     public void setSignalSamplingRate(int samplingRate) {
         this.samplingRate = samplingRate;
     }
+    
+    public String getSignalfileName() {
+        return fileName;
+    }
+    
+    public void setSignalfileName(String SignalfileName) {
+        this.fileName = SignalfileName;
+    }
+   
+       public String getSignalComment() {
+        return comment;
+    }
+
+    public void setSignalComment(String comment) {
+        this.comment = comment;
+    }
+
+   
 
 
     @Override

@@ -95,13 +95,13 @@ public class SQLiteManager implements DBManager {
           stmt1.close();
           Statement stmt2 = c.createStatement();
           String sql2 = "CREATE TABLE signal " 
-                  + "(signalId INTEGER PRIMARY KEY "
-                  + "svalues TEXT NOT NULL " //--> NO HAY ATRIBUTOS DE ESTO, SI AÑADIMOS MODIFICAR METODOS DE MANAGER
-                  + "startDate DATE NOT NULL " //--> NO HAY ATRIBUTOS DE ESTO, SI AÑADIMOS MODIFICAR METODOS DE MANAGER
+                  + "(signalId INTEGER PRIMARY KEY"
+                  + "startDate DATE NOT NULL " 
                   + "sname TEXT NOT NULL " 
-                  + "stype TEXT NOT NULL " 
-                  + "id_patient REFERENCES patient (medical_card_number),"
-                  + "(signal_values BYTES)";
+                  + "samplingRate INTEGER NOT NULL " 
+                  + "fileName STRING NOT NULL"
+                  + "comment STRING"
+                  + "id_patient REFERENCES patient (medical_card_number)";
           stmt2.executeUpdate(sql2);
           stmt2.close();
           

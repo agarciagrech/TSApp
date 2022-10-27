@@ -122,17 +122,18 @@ public class menu {
 		
 					break;
 				case 3:
-					System.out.println("Here you can see all your signals recorded");
-					signals.addAll(signalman.selectAllSignals());
+					System.out.println("Please enter your medical card:");
+                                        int medCard = Integer.parseInt(sc.next());
+                                        System.out.println("Here you can see all your signals recorded");
+					signals.addAll(signalman.listSignalsByPatient(medCard));
 					for (Signal signal : signals) { 
 						System.out.println(signal.toString());
 					}
                                         System.out.println("Please, enter the name of the signal:");
 					String signal_name = sc.next();
-                                        signals.addAll(signalman.searchSignal(signal_name));
-					for (Signal signal : signals) { 
-						System.out.println(signal.toString());
-					}	
+                                        Signal s =(signalman.selectSignalByName(signal_name));
+                                        System.out.println(s.toString());
+						
 					break;
 				default:
 					System.out.println("Not a valid option.");
