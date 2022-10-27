@@ -13,6 +13,9 @@ import db.interfaces.PatientTSManager;
 import java.util.*;
 import BITalino.BitalinoDemo;
 import BITalino.Frame;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.rmi.NotBoundException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -296,6 +299,7 @@ public class SQLitePatientTSManager implements PatientTSManager {
                 }
                 s.setECG_values(ecg_values);
                 s.setEMG_values(emg_values);
+                 
             }
             //stop acquisition
             bitalino.stop();
@@ -312,6 +316,33 @@ public class SQLitePatientTSManager implements PatientTSManager {
             } catch (BITalinoException ex) {
                 Logger.getLogger(BitalinoDemo.class.getName()).log(Level.SEVERE, null, ex);
             }
+        }
+        try {
+            //ruta + signal_name + date ".txt"
+            String ruta = "/TSApp/ECG.txt";
+            String ruta2 = "TSApp/EMG.txt";
+            String contenido = Arrays.toString(s.getECG_values());
+            String contenido2 = Arrays.toString(s.getEMG_values());
+            File file = new File(ruta);
+            File file2 = new File(ruta2);
+            // Si el archivo no existe es creado
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+            if (!file2.exists()) {
+                file2.createNewFile();
+            }
+            FileWriter fwECG = new FileWriter(file);
+            FileWriter fwEMG = new FileWriter(file2);
+            BufferedWriter bwECG = new BufferedWriter(fwECG);
+            BufferedWriter bwEMG = new BufferedWriter(fwEMG);
+            bwECG.write(contenido);
+            bwEMG.write(contenido2);
+            bwECG.close();
+            bwEMG.close();
+            System.out.println("Ok");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
     
