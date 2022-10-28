@@ -318,9 +318,13 @@ public class SQLitePatientTSManager implements PatientTSManager {
             }
         }
         try {
-            //ruta + signal_name + date ".txt"
-            String ruta = "/TSApp/ECG.txt";
-            String ruta2 = "TSApp/EMG.txt";
+            //Type of signal + date ".txt"
+            Calendar c = Calendar.getInstance();
+            String day=Integer.toString(c.get(Calendar.DATE));
+            String month=Integer.toString(c.get(Calendar.MONTH));
+            String year=Integer.toString(c.get(Calendar.YEAR));
+            String ruta = "../TSApp/ECG"+day+month+year+".txt";
+            String ruta2 = "../TSApp/EMG"+day+month+year+".txt";
             String contenido = Arrays.toString(s.getECG_values());
             String contenido2 = Arrays.toString(s.getEMG_values());
             File file = new File(ruta);
