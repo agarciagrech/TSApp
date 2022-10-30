@@ -87,7 +87,7 @@ public class BitalinoDemo {
         try {
             //ruta + signal_name + date ".txt"
             String ruta = "C:/Users/agarc/OneDrive/Desktop/TSApp/filename.txt";
-            String ruta2 = "C:/Users/agarc/OneDrive/Desktop/TSApp/filename2.txt";
+            String ruta2 = "C:/Users/   /OneDrive/Desktop/TSApp/filename2.txt";
             String contenido = Arrays.toString(s.getECG_values());
             String contenido2 = Arrays.toString(s.getEMG_values());
             File file = new File(ruta);
