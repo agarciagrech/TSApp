@@ -64,6 +64,8 @@ public class PatientTS implements Serializable {
         this.signal = signal;
         this.userId = userID;
     }
+
+    
     
     public PatientTS(Integer medCardId, String name, String surname, Date dob, String address, String email, String diagnosis, String allergies, String gender,Integer userId, String macAddress) throws NotBoundException{
         this.medical_card_number = medCardId;
@@ -78,6 +80,7 @@ public class PatientTS implements Serializable {
         this.userId = userId;
         this.macAddress = macAddress;
     }
+
 
     public PatientTS(Integer medCardId, String name, String surname, Date dob, String address, String email, String diagnosis, String allergies, String gender) throws NotBoundException{
         this.medical_card_number = medCardId;
@@ -107,7 +110,8 @@ public class PatientTS implements Serializable {
     }
     @Override
     public String toString() {
-        return "PatientTS{" + "medical_card_number=" + medical_card_number + ", name=" + name + ", surname=" + surname + ", dob=" + dob + ", address=" + address + ", email=" + email + ", diagnosis=" + diagnosis + ", allergies=" + allergies + ", gender=" + gender + '}';
+        return "PatientTS{" + "medical_card_number=" + medical_card_number + ", name=" + name + ", surname=" + surname + ",address=" + address + ", email=" + email + ", diagnosis=" + diagnosis + ", allergies=" + allergies + ", gender=" + gender +
+                            "mac address =" + macAddress + "userId ="+ userId+'}';
     }
    
 
@@ -242,6 +246,9 @@ public class PatientTS implements Serializable {
     public void setPatientAddress(String address) {
         this.address = address;
     }
+     public void setMacAddress(String macAddress) {
+        this.macAddress = macAddress;
+    }
 
     /**
      * Used to set the patient's email.
@@ -299,6 +306,10 @@ public class PatientTS implements Serializable {
 
     public Integer getPatientUserId() {
             return userId;
+    }
+    
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
     @Override

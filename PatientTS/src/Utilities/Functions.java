@@ -193,7 +193,7 @@ public class Functions {
         while(dList.isEmpty()) {
             System.out.println("Enter the doctor's surname:");
             String surname = sc.next();
-            dList = doctorman.searchDoctor(surname);//crear en SQL
+            dList = doctorman.selectDoctor(surname);//crear en SQL
         }
         while(d == null) {
             System.out.println(dList.toString()); 
@@ -245,7 +245,7 @@ public class Functions {
             System.exit(0);
             case 1:
                     System.out.println("Consult medical tests");
-                    consultSignals(patient);
+                    ConsultSignals(patient);
                     break;
             case 2:
                     System.out.println("Edit diagnosis");
