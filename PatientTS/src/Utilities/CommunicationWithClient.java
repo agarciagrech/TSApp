@@ -55,6 +55,7 @@ public class CommunicationWithClient {
         line=line.replace("Patient", "");
         // We divide String into arrray of strings taht are going to have each attribute: Name= ... 
         String[] atribute = line.split(",");
+        SimpleDateFormat  format = new SimpleDateFormat("dd/MM/yyyy"); 
         
             for (int i =0;i <atribute.length; i++){
                 //Dive each attribute into the name [j] and its value[j+1]
@@ -70,6 +71,13 @@ public class CommunicationWithClient {
                         case "surname":  p.setPatientSurname(data2[j+1]);
                                         break;
                        //TO Do: cast Data?? case 
+                        case "dob": 
+                            try{
+                               p.setPatientDob(format.parse(data2[j+1]));
+                            }catch(ParseException ex){
+                                
+                            }
+                                     break;
                         case "address": p.setPatientAddress(data2[j+1]);
                                         break;
                         case "email": p.setPatientEmail(data2[j+1]);
