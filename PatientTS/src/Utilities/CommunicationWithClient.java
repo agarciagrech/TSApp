@@ -4,6 +4,7 @@
  */
 package Utilities;
 
+import db.pojos.Doctor;
 import db.pojos.PatientTS;
 import java.io.BufferedReader;
 import java.io.EOFException;
@@ -41,37 +42,35 @@ public class CommunicationWithClient {
                 System.exit(0);
             }
             System.out.println(line);
-            StringToPatient(line);
+            
             
         }
         
         
     }
-     
-    private static void StringToPatient(String line) throws NotBoundException{
-        PatientTS p= new PatientTS();
-        // We eliminate { and word "Patient" form String
-        line=line.replace("{", "");
-        line=line.replace("Patient", "");
-        // We divide String into arrray of strings taht are going to have each attribute: Name= ... 
-        String[] atribute = line.split(",");
-        SimpleDateFormat  format = new SimpleDateFormat("dd/MM/yyyy"); 
+    // ToDo : Al final de los métodos deberían de insertarse en la db 
+    public static boolean recievePatient(BufferedReader bufferReader){
+        boolean recieved = true; 
+        PatientTS p = new PatientTS();
+        try{
+            String line = bufferReader.readLine();
+            line=line.replace("{", "");
+            line=line.replace("Patient", "");
+            String[] atribute = line.split(",");
+            SimpleDateFormat  format = new SimpleDateFormat("dd/MM/yyyy"); 
         
             for (int i =0;i <atribute.length; i++){
-                //Dive each attribute into the name [j] and its value[j+1]
                 String[] data2 = atribute[i].split("=");
-                //asign the attributes of p their corresponding value
                 for (int j =0;j <data2.length - 1; j++){
                     data2[j]=data2[j].replace(" ", "");
                     switch(data2[j]){
-                        case "medical_card_number": p.setMedCardId(Integer.parseInt(data2[j+1]));
-                                                            break;
-                        case "name":p.setPatientName(data2[j+1]);
+                        case "medical_card_number": p.setMedCardId(Integer.parseInt(data2[j+1])); 
+                                                     break;
+                        case "name":p.setPatientName(data2[j+1]); 
                                      break;
                         case "surname":  p.setPatientSurname(data2[j+1]);
                                         break;
-                       //TO Do: cast Data?? case 
-                        case "dob": 
+                         case "dob": 
                             try{
                                p.setPatientDob(format.parse(data2[j+1]));
                             }catch(ParseException ex){
@@ -97,11 +96,54 @@ public class CommunicationWithClient {
                 }
                 
              }
-        System.out.println("Patient created:");
+        System.out.println("Patient recieved:");
         System.out.println(p.toString());
         
+        
+        }catch(IOException exception){
+            recieved = false;
+        } catch (NotBoundException ex) {
+             Logger.getLogger(CommunicationWithClient.class.getName()).log(Level.SEVERE, null, ex);
+         }
+        return recieved; 
     }
-    
+        public static boolean recieveDoctor(BufferedReader bufferReader){
+        boolean recieved = true; 
+        Doctor d= new Doctor();
+        try{
+            String line = bufferReader.readLine();
+            line=line.replace("{", "");
+            line=line.replace("Patient", "");
+            String[] atribute = line.split(",");
+            for (int i =0;i <atribute.length; i++){
+                String[] data2 = atribute[i].split("=");
+                for (int j =0;j <data2.length - 1; j++){
+                    data2[j]=data2[j].replace(" ", "");
+                    switch(data2[j]){
+                         case "name":d.setDoctorName(data2[j+1]); 
+                                     break;
+                        case "surname":d.setDoctorSurname(data2[j+1]);
+                                        break;
+                        case "email": d.setDoctorEmail(data2[j+1]); 
+                                     break;
+                        case "id":d.setDoctorId(Integer.parseInt(data2[j+1]));
+                                        break;
+                    }
+ 
+                }
+                
+             }
+        System.out.println("Doctor recieved:");
+        System.out.println(d.toString());
+        
+        
+        }catch(IOException exception){
+            recieved = false;
+        } catch (NotBoundException ex) {
+             Logger.getLogger(CommunicationWithClient.class.getName()).log(Level.SEVERE, null, ex);
+         }
+        return recieved; 
+    }
     
     private static void releaseResources(BufferedReader bufferedReader, Socket socket, ServerSocket serverSocket) {
         try {

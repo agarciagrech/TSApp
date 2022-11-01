@@ -7,6 +7,7 @@ package db.pojos;
 
 import java.io.*;
 import java.rmi.*;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.*;
 
@@ -108,11 +109,15 @@ public class PatientTS implements Serializable {
         this.setPatientName(p.name);
         this.setPatientSurname(p.surname);
     }
-    @Override
-    public String toString() {
-        return "PatientTS{" + "medical_card_number=" + medical_card_number + ", name=" + name + ", surname=" + surname + ",address=" + address + ", email=" + email + ", diagnosis=" + diagnosis + ", allergies=" + allergies + ", gender=" + gender +
-                            "mac address =" + macAddress + "userId ="+ userId+'}';
+    public String formatDate (Date dob){
+        SimpleDateFormat  formato = new SimpleDateFormat("dd/MM/yyyy");
+        return formato.format(dob);
     }
+     @Override
+    public String toString() {
+        return "Patient{" + "medical_card_number=" + medical_card_number + ", name=" + name + ", surname=" + surname + ", dob=" + formatDate(dob) + ", address=" + address + ", email=" + email + ", diagnosis=" + diagnosis + ", allergies=" + allergies + ", gender=" + gender + ", userId=" + userId + ", macAddress=" + macAddress + '}';
+    }
+    
    
 
 //Getters+Setters
