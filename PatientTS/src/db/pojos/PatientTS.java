@@ -36,6 +36,8 @@ public class PatientTS implements Serializable {
     private Integer userId;
     private String macAddress; 
     
+    public PatientTS() {
+    }
     
     /**
      *
@@ -67,7 +69,6 @@ public class PatientTS implements Serializable {
     }
 
     
-    
     public PatientTS(Integer medCardId, String name, String surname, Date dob, String address, String email, String diagnosis, String allergies, String gender,Integer userId, String macAddress) throws NotBoundException{
         this.medical_card_number = medCardId;
         this.name = name;
@@ -94,9 +95,7 @@ public class PatientTS implements Serializable {
         this.allergies = allergies;
         this.gender = gender;
     }
-    
-    public PatientTS() {
-    }
+ 
     
     public PatientTS(PatientTS p) throws NotBoundException{
         this.setMedCardId(p.medical_card_number);
@@ -109,19 +108,17 @@ public class PatientTS implements Serializable {
         this.setPatientName(p.name);
         this.setPatientSurname(p.surname);
     }
+    
+    //ESTO IGUAL SE PUEDE METER EN UTILITIES
+    /**
+     * Convert from Date format (dd/MM/yyyy) to a String format.
+     * @param dob
+     * @return String containing the date.
+     */
     public String formatDate (Date dob){
         SimpleDateFormat  formato = new SimpleDateFormat("dd/MM/yyyy");
         return formato.format(dob);
     }
-     @Override
-    public String toString() {
-        return "Patient{" + "medical_card_number=" + medical_card_number + ", name=" + name + ", surname=" + surname + ", dob=" + formatDate(dob) + ", address=" + address + ", email=" + email + ", diagnosis=" + diagnosis + ", allergies=" + allergies + ", gender=" + gender + ", userId=" + userId + ", macAddress=" + macAddress + '}';
-    }
-    
-   
-
-//Getters+Setters
-    
     
     
     /**
@@ -251,7 +248,12 @@ public class PatientTS implements Serializable {
     public void setPatientAddress(String address) {
         this.address = address;
     }
-     public void setMacAddress(String macAddress) {
+
+    /**
+     * Used to set the MAC address of the patient
+     * @param macAddress
+     */
+    public void setMacAddress(String macAddress) {
         this.macAddress = macAddress;
     }
 
@@ -309,14 +311,27 @@ public class PatientTS implements Serializable {
         this.signal= signal;
     }
 
+    /**
+     * Used to get the user Id associated with the patient.
+     * @return [Integer] UserId associated with the patient.
+     */
     public Integer getPatientUserId() {
             return userId;
     }
     
+    /**
+     * Used to set the user Id associated with the patient.
+     * @param userId
+     */
     public void setUserId(Integer userId) {
         this.userId = userId;
     }
-
+    
+     @Override
+    public String toString() {
+        return "Patient{" + "medical_card_number=" + medical_card_number + ", name=" + name + ", surname=" + surname + ", dob=" + formatDate(dob) + ", address=" + address + ", email=" + email + ", diagnosis=" + diagnosis + ", allergies=" + allergies + ", gender=" + gender + ", userId=" + userId + ", macAddress=" + macAddress + '}';
+    }
+    
     @Override
     public int hashCode() {
         int hash = 7;
