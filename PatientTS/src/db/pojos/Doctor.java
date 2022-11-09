@@ -131,6 +131,10 @@ public class Doctor {
         }
     }
 
+    /**
+     * Used to get the asseigned user Id of the doctor
+     * @return [Integer] Assigned user id of the doctor
+     */
     public Integer getDoctorUserId() {
         return userId;
     }
