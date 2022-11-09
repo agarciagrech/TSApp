@@ -135,7 +135,6 @@ public class SQLiteManager implements DBManager {
 			}
       }
             
-}
-
+    }
 
 }

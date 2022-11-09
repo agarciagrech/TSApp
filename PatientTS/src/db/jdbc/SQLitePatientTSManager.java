@@ -256,6 +256,11 @@ public class SQLitePatientTSManager implements PatientTSManager {
 		return pList;
     }
     
+    /**
+     * Record an ECG and EMG signals form the patient using BITalino.
+     * @param p - [PatientTS] Patient that is recording the signal
+     * @param sname - [String] Name of the recorded signal.
+     */
     @Override
     public void recordSignal(PatientTS p, String sname) {
         Frame[] frame;
