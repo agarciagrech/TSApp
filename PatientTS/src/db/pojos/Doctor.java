@@ -9,7 +9,6 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
 public class Doctor {
     
     private Integer doctorId;
@@ -38,7 +37,15 @@ public class Doctor {
         this.demail = email;
         this.userId = userId;
     }
-
+    
+    /**
+     *
+     * @param id - [Integer] The id of the doctor [Cannot be changed once it's created]
+     * @param name - [String] The name of the doctor
+     * @param surname - [String] The surname of the doctor
+     * @param email - [String] The professional email of the doctor
+     * @throws java.rmi.NotBoundException
+     */
     public Doctor(Integer id, String name, String surname, String email) throws NotBoundException{
         this.doctorId = id;
         this.dname = name;
@@ -46,12 +53,24 @@ public class Doctor {
         this.demail = email;
     }
     
+    /**
+     *
+     * @param name - [String] The name of the doctor
+     * @param surname - [String] The surname of the doctor
+     * @param userId - [Integer] User Id associated to the doctor
+     * @throws java.rmi.NotBoundException
+     */
     public Doctor(String name, String surname, Integer userId) throws NotBoundException{
         this.dname = name;
         this.dsurname = surname;
         this.userId = userId;
     }
     
+    /**
+     *
+     * @param d - [Doctor] Object doctor
+     * @throws java.rmi.NotBoundException
+     */
     public Doctor(Doctor d) throws NotBoundException{
         super();
         this.doctorId = d.doctorId;

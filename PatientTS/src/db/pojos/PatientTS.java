@@ -11,11 +11,6 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.*;
 
-/**
- *
- * @author macbookair
- */
-
 public class PatientTS implements Serializable {
 
     private static final long serialVersionUID = -1156840724257282729L;
@@ -68,7 +63,21 @@ public class PatientTS implements Serializable {
         this.userId = userID;
     }
 
-    
+    /**
+     *
+     * @param medCardId - The medical card id of the patient (int) [Cannot be changed once it's created]
+     * @param name - Name of the patient (String)
+     * @param surname - Surname of the patient (String)
+     * @param dob - Birthdate of the patient (SQL Date)
+     * @param address - String with the home address of the patient.
+     * @param email - String with the email of the patient
+     * @param diagnosis - String with the diagnosis of the patient (for the clinical history)
+     * @param allergies - String with the allergies of the patient (for the clinical history)
+     * @param gender - Gender of the patient [Must be Male or Female] (String)
+     * @param userId - User ID associated to the patient (Integer)
+     * @param macAddress - MAC address associated to the computer of the patient (String)
+     * @throws java.rmi.NotBoundException
+     */
     public PatientTS(Integer medCardId, String name, String surname, Date dob, String address, String email, String diagnosis, String allergies, String gender,Integer userId, String macAddress) throws NotBoundException{
         this.medical_card_number = medCardId;
         this.name = name;
@@ -83,7 +92,19 @@ public class PatientTS implements Serializable {
         this.macAddress = macAddress;
     }
 
-
+    /**
+     *
+     * @param medCardId - The medical card id of the patient (int) [Cannot be changed once it's created]
+     * @param name - Name of the patient (String)
+     * @param surname - Surname of the patient (String)
+     * @param dob - Birthdate of the patient (SQL Date)
+     * @param address - String with the home address of the patient.
+     * @param email - String with the email of the patient
+     * @param diagnosis - String with the diagnosis of the patient (for the clinical history)
+     * @param allergies - String with the allergies of the patient (for the clinical history)
+     * @param gender - Gender of the patient [Must be Male or Female] (String)
+     * @throws java.rmi.NotBoundException
+     */
     public PatientTS(Integer medCardId, String name, String surname, Date dob, String address, String email, String diagnosis, String allergies, String gender) throws NotBoundException{
         this.medical_card_number = medCardId;
         this.name = name;
@@ -96,7 +117,11 @@ public class PatientTS implements Serializable {
         this.gender = gender;
     }
  
-    
+    /**
+     *
+     * @param p - Object patient (PatientTS)
+     * @throws java.rmi.NotBoundException
+     */
     public PatientTS(PatientTS p) throws NotBoundException{
         this.setMedCardId(p.medical_card_number);
         this.setPatientAddress(p.address);

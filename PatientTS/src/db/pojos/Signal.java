@@ -19,8 +19,7 @@ public class Signal {
     private String fileName;
     private String comment;
 
- 
-    
+
     
     public Signal() {
         super();
@@ -33,8 +32,7 @@ public class Signal {
      * @param EMG_values - Values of the EMG signal (int[])
      * @param sDate - The date and hour when the signal starts recording (Date)
      * @param sname - The name of the signal (String)
-     * @param sr - The sampling rate of the signal recorded.
-     * @param fileName - The name of the file where specific signal is saved (String)
+     * @param sr - The sampling rate of the signal recorded (int)
      * @throws Exception
      */
     public Signal(Integer signalId, int[] ECG_values, int[] EMG_values, Date sDate, String sname, int sr) throws Exception{
@@ -45,14 +43,33 @@ public class Signal {
         this.sname = sname;
         this.samplingRate = sr;
     }
-
-    public Signal(Integer signalId, Date startDate, String sname, int samplingRate) {
+    
+    /**
+     *
+     * @param signalId - The id of the signal (int) [Cannot be changed once it's created]
+     * @param startDate - The date and hour when the signal starts recording (Date)
+     * @param sname - The name of the signal (String)
+     * @param samplingRate - The sampling rate of the signal recorded (int)
+     * @throws Exception
+     */
+    public Signal(Integer signalId, Date startDate, String sname, int samplingRate) throws Exception{
         this.signalId = signalId;
         this.startDate = startDate;
         this.sname = sname;
         this.samplingRate = samplingRate;
     }
-     public Signal(Integer signalId, Date startDate, String sname, int samplingRate, String fileName, String comment) {
+    
+    /**
+     *
+     * @param signalId - The id of the signal (int) [Cannot be changed once it's created]
+     * @param startDate - The date and hour when the signal starts recording (Date)
+     * @param sname - The name of the signal (String)
+     * @param samplingRate - The sampling rate of the signal recorded (int)
+     * @param fileName - The name of the file were the signal is stored (String)
+     * @param comment - The comments included by the doctor about the signal (String)
+     * @throws Exception
+     */
+     public Signal(Integer signalId, Date startDate, String sname, int samplingRate, String fileName, String comment) throws Exception{
         this.signalId = signalId;
         this.startDate = startDate;
         this.sname = sname;
@@ -60,6 +77,16 @@ public class Signal {
         this.fileName = fileName;
         this.comment = comment;
     }
+     
+    /**
+     *
+     * @param ECG_values - Values of the ECG signal (int[])
+     * @param EMG_values - Values of the EMG signal (int[])
+     * @param sDate - The date and hour when the signal starts recording (Date)
+     * @param sname - The name of the signal (String)
+     * @param sr - The sampling rate of the signal recorded.
+     * @throws Exception
+     */
     public Signal(int[] ECG_values, int[] EMG_values, Date sDate, String sname, int sr) throws Exception{
         this.ECG_values = ECG_values;
         this.EMG_values = EMG_values;
@@ -68,6 +95,14 @@ public class Signal {
         this.samplingRate = sr;
     }
     
+    
+    /**
+     *
+     * @param ECG_values - Values of the ECG signal (int[])
+     * @param EMG_values - Values of the EMG signal (int[])
+     * @param sname - The name of the signal (String)
+     * @throws Exception
+     */
     public Signal(int[] ECG_values, int[] EMG_values, String sname) throws Exception{
         this.ECG_values = ECG_values;
         this.EMG_values = EMG_values;
@@ -170,24 +205,42 @@ public class Signal {
         this.samplingRate = samplingRate;
     }
     
+    /**
+     * Used to get the file name where the signal is stored.
+     * @return [String] the file name where the signal is stored
+     */
     public String getSignalfileName() {
         return fileName;
     }
     
+    /**
+     * Used to set the file name where the signal is stored.
+     * @param SignalfileName
+     */
     public void setSignalfileName(String SignalfileName) {
         this.fileName = SignalfileName;
     }
    
-       public String getSignalComment() {
+    /**
+     * Used to get the comments includfed by the doctor about the signal.
+     * @return [String] The comments related to the signal.
+     */
+    public String getSignalComment() {
         return comment;
     }
 
+    /**
+     * Used to set the comments includfed by the doctor about the signal.
+     * @param comment
+     */
     public void setSignalComment(String comment) {
         this.comment = comment;
     }
 
-   
-
+    @Override
+    public String toString() {
+       return "Signal{" + "signalId=" + signalId + ", startDate=" + startDate + ", sname=" + sname + '}';
+    }
 
     @Override
     public int hashCode() {
@@ -211,6 +264,10 @@ public class Signal {
         return Objects.equals(this.signalId, other.signalId);
     }
     
+    /**
+     * Used to print the values of the ECG signal recorded one by one
+     * @param ECG_values
+     */
     public void ImprimirECG (int[] ECG_values){
          System.out.println("ECG");
         for (int i=0; i<ECG_values.length; i++){
@@ -218,16 +275,15 @@ public class Signal {
         } 
     }
     
+    /**
+     * Used to print the values of the EMG signal recorded one by one
+     * @param EMG_values
+     */
     public void ImprimirEMG (int[] EMG_values){
          System.out.println("EMG");
         for (int i=0; i<EMG_values.length; i++){
             System.out.println(EMG_values[i]);
         } 
-    }
-
-    @Override
-    public String toString() {
-       return "Signal{" + "signalId=" + signalId + ", startDate=" + startDate + ", sname=" + sname + '}';
     }
 
 }
