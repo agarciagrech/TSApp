@@ -11,11 +11,11 @@ import java.net.Socket;
  *
  * @author agarc
  */
-public class PatientThread implements Runnable {
+public class ClientThread implements Runnable {
 
     public static Socket socket;
     
-    public PatientThread(Socket socket){
+    public ClientThread(Socket socket){
         this.socket = socket;
     }
 
