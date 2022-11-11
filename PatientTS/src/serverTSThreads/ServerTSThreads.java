@@ -39,6 +39,7 @@ public class ServerTSThreads {
             socketClient = serverSocketClient.accept();
             cThread = new ClientThread(socketClient);
             Thread clientThread = new Thread(cThread);
+            clientThread.start();
             clientsThreadsList[contadorClients] = clientThread;
             contadorClients++;
                     

@@ -20,6 +20,9 @@ public class User implements Serializable {
 	    pkColumnName="name", valueColumnName="seq", pkColumnValue="users")
 	private Integer userId;
 	private String username;
+        private Integer userRole;
+
+    
 	@Lob
 	private byte[] password;
         @ManyToOne(fetch = FetchType.EAGER)
@@ -49,6 +52,10 @@ public class User implements Serializable {
      */
     public Integer getUserId() {
         return userId;
+    }
+    
+    public void setRole(Integer userRole) {
+        this.userRole = userRole;
     }
 
     /**
