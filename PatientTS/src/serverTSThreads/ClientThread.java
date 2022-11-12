@@ -35,6 +35,8 @@ public class ClientThread implements Runnable {
     private static SQLitePatientTSManager patientman = new SQLitePatientTSManager();
     private static SQLiteSignalManager signalman = new SQLiteSignalManager();
     private static JPAUserManager userman = new JPAUserManager();
+    private static InputStream inputStream = null;
+    private static OutputStream outputStream = null;
     
     public ClientThread(Socket socket){
         this.socket = socket;
@@ -43,17 +45,18 @@ public class ClientThread implements Runnable {
     @Override
     public void run() {
         
-        InputStream inputStream = null;
-        OutputStream outputStream = null;
+       
         User u = new User();
         jdbc.connect();
        
         
         try{
             inputStream = socket.getInputStream();
+            outputStream = socket.getOutputStream();
             BufferedReader br = new BufferedReader (new InputStreamReader(inputStream));
+            PrintWriter pw = new PrintWriter(outputStream, true);
             //byteRead = br.readLine();
-            String line = br.readLine();
+            /*String line = br.readLine();
             line=line.replace("{", "");
             line=line.replace("User", "");
             String[] atribute = line.split(",");
@@ -72,43 +75,65 @@ public class ClientThread implements Runnable {
                         
                    }
                 }
+            }*/
+            String s;
+            Integer roleUser = Integer.parseInt(br.readLine());
+            if(roleUser == 1 || roleUser == 2){
+                s = "Connection stablished";
+                pw.println(s);
+            }else{
+                s = "Invalid option";
+                pw.println(s);
             }
-            Integer roleUser = u.getUserRole();
             if(roleUser == 1){
                 //userman.newUser(u);
-                PatientsMenu(socket);
-                
-            
-                
-            }else if(roleUser == 2){
-                //userman.newUser(u);
-                DoctorsMenu(socket);
-            }
- 
-            
-        }catch(IOException ex){
-             Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        //LOGIN Y REGISTER DEL PATIENT 
-    }
-    
-    public static void PatientsMenu(Socket socket){
-        while(true){
-           System.out.println("Choose an option:");
-           System.out.println("1. Login");
-           System.out.println("2. Record signal");
-           System.out.println("3. View signal");
-           
-           try{
+                //PatientsMenu(socket, u.getUserId());
+                while(true){
+                    
                BufferedReader reader;
-               reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-               PrintWriter printWriter = new PrintWriter(socket.getOutputStream(),true);
+               reader = new BufferedReader(new InputStreamReader(inputStream));
+               PrintWriter printWriter = new PrintWriter(outputStream,true);
+               try{
+               
+               
                int choice = Integer.parseInt(reader.readLine());
                
                switch(choice){
                    case 1:
-                       //login
+                      String m;
+                      String line = reader.readLine();
+                      line=line.replace("{", "");
+                      line=line.replace("User", "");
+                      String[] atribute = line.split(",");
+        
+                    for (int i =0;i <atribute.length; i++){
+                    String[] data2 = atribute[i].split("=");
+                    for (int j =0;j <data2.length - 1; j++){
+                    data2[j]=data2[j].replace(" ", "");
+                    switch(data2[j]){
+                        case "username": u.setUsername((data2[j+1])); 
+                                                     break;
+                        case "password":u.setPassword(data2[j+1].getBytes()); 
+                                     break;
+                      
+          
+                        
+                           }
+                        }
+                     }
+                    User user_correct = new User();
+                    String password = new String (u.getPassword());
+                    user_correct = userman.checkPassword(u.getUsername(), password);
+                    if(user_correct != null){
+                        m = "Correct login";
+                        pw.println(m);
+                    }else{
+                        m = "Incorrect username or password";
+                        pw.println(m);
+                    }
+                    
+                    
+                       
                        break;
                    case 2: 
                        String message = "Start your recording and send the data to the server";
@@ -133,24 +158,37 @@ public class ClientThread implements Runnable {
                System.out.println("An error has occured");
            }
         }
-       
-        
-        
-        
-    }
-    
-    public static void DoctorsMenu(Socket socket){
-        while(true){
-           System.out.println("Choose an option:");
-           System.out.println("1. Login");
-           System.out.println("2. Add patient");
-           System.out.println("3. Update Patient");
-           System.out.println("4. View Patient");
-           System.out.println("5. View patient's recording");
+                   
+            }else if(roleUser == 2){
+                //Login aqui 
+           while(true){
+           BufferedReader reader;
+           reader = new BufferedReader(new InputStreamReader(inputStream));
+           PrintWriter printWriter = new PrintWriter(outputStream, true);
            
+           try{
+               int choice = Integer.parseInt(reader.readLine());
+               switch(choice){
+                   
+               }
+           }catch(Exception e){
+               System.out.println("Error");
+           }
+           }  
+         
+               
+            }
+ 
+            
+        }catch(IOException ex){
+             Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
         }
         
+        //LOGIN Y REGISTER DEL PATIENT 
     }
+    
+   
+    
     
     public static void ReleaseResourcesClient(InputStream inputStream, OutputStream outputStream, Socket socket ){
         try{
