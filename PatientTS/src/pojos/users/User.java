@@ -22,6 +22,10 @@ public class User implements Serializable {
 	private String username;
         private Integer userRole;
 
+    public Integer getUserRole() {
+        return userRole;
+    }
+
     
 	@Lob
 	private byte[] password;

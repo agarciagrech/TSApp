@@ -5,14 +5,20 @@
  */
 package serverTSThreads;
 
+import db.jdbc.SQLiteManager;
+import db.jdbc.SQLitePatientTSManager;
+import db.jdbc.SQLiteSignalManager;
+import db.jpa.JPAUserManager;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.net.Socket;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import pojos.users.User;
@@ -25,6 +31,10 @@ public class ClientThread implements Runnable {
 
     public static Socket socket;
     String byteRead;
+    private static SQLiteManager jdbc = new SQLiteManager();
+    private static SQLitePatientTSManager patientman = new SQLitePatientTSManager();
+    private static SQLiteSignalManager signalman = new SQLiteSignalManager();
+    private static JPAUserManager userman = new JPAUserManager();
     
     public ClientThread(Socket socket){
         this.socket = socket;
@@ -36,6 +46,8 @@ public class ClientThread implements Runnable {
         InputStream inputStream = null;
         OutputStream outputStream = null;
         User u = new User();
+        jdbc.connect();
+       
         
         try{
             inputStream = socket.getInputStream();
@@ -61,6 +73,17 @@ public class ClientThread implements Runnable {
                    }
                 }
             }
+            Integer roleUser = u.getUserRole();
+            if(roleUser == 1){
+                //userman.newUser(u);
+                PatientsMenu(socket);
+                
+            
+                
+            }else if(roleUser == 2){
+                //userman.newUser(u);
+                DoctorsMenu(socket);
+            }
  
             
         }catch(IOException ex){
@@ -68,6 +91,65 @@ public class ClientThread implements Runnable {
         }
         
         //LOGIN Y REGISTER DEL PATIENT 
+    }
+    
+    public static void PatientsMenu(Socket socket){
+        while(true){
+           System.out.println("Choose an option:");
+           System.out.println("1. Login");
+           System.out.println("2. Record signal");
+           System.out.println("3. View signal");
+           
+           try{
+               BufferedReader reader;
+               reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+               PrintWriter printWriter = new PrintWriter(socket.getOutputStream(),true);
+               int choice = Integer.parseInt(reader.readLine());
+               
+               switch(choice){
+                   case 1:
+                       //login
+                       break;
+                   case 2: 
+                       String message = "Start your recording and send the data to the server";
+                       printWriter.println(message);
+                       
+                       ArrayList<Integer> signalValues = new ArrayList<Integer>();
+                       String byteRead = reader.readLine();
+                       if(byteRead !=null){
+                           Integer value = Integer.parseInt(byteRead);
+                           signalValues.add(value);
+                       }
+                               
+                       
+                       //recordSignal
+                       break;
+                   case 3: 
+                       //view signal
+                       break;
+               }
+               
+           }catch(Exception e){
+               System.out.println("An error has occured");
+           }
+        }
+       
+        
+        
+        
+    }
+    
+    public static void DoctorsMenu(Socket socket){
+        while(true){
+           System.out.println("Choose an option:");
+           System.out.println("1. Login");
+           System.out.println("2. Add patient");
+           System.out.println("3. Update Patient");
+           System.out.println("4. View Patient");
+           System.out.println("5. View patient's recording");
+           
+        }
+        
     }
     
     public static void ReleaseResourcesClient(InputStream inputStream, OutputStream outputStream, Socket socket ){
