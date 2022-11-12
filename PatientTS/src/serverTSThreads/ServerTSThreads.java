@@ -28,7 +28,7 @@ public class ServerTSThreads {
     
     public static void main(String[] args) throws IOException{
        
-        serverSocketClient = new ServerSocket(); //IP, PORT?
+        serverSocketClient = new ServerSocket(9200); //IP, PORT?
        
         
         clientsThreadsList = new Thread[1000];
