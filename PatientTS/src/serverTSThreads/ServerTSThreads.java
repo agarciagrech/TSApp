@@ -10,12 +10,22 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import Utilities.ClientUtilities;
+import db.jdbc.SQLiteDoctorManager;
+import db.jdbc.SQLitePatientTSManager;
+import db.jpa.JPAUserManager;
+import db.pojos.Doctor;
+import java.security.MessageDigest;
+import java.util.Scanner;
+import pojos.users.Role;
+import pojos.users.User;
 
 /**
  *
  * @author agarc
  */
 public class ServerTSThreads {
+    
     public static Socket socketClient;
     
     public static ServerSocket serverSocketClient; 
@@ -32,6 +42,8 @@ public class ServerTSThreads {
        
         
         clientsThreadsList = new Thread[1000];
+        
+        firstlogin();
         
         //COMO COMPROBAR SI ES UN PATIENT O UN DOCTOR??
         while(true){
@@ -59,6 +71,30 @@ public class ServerTSThreads {
     }
     
     
-   
+   private static void firstlogin(){
+           
+   Scanner sc = new Scanner(System.in);
+   JPAUserManager userman = new JPAUserManager();
+    SQLitePatientTSManager patientman = new SQLitePatientTSManager();
+    SQLiteDoctorManager doctorman = new SQLiteDoctorManager();
+    String trashcan;
+        try{
+        String username = "admin";
+        String password = "admin";
+        Role role = userman.getRole(2);
+        MessageDigest md = MessageDigest.getInstance("MD5");
+        md.update(password.getBytes());
+        byte[] hash = md.digest();
+        User user = new User(username, hash, role);
+        userman.newUser(user);
+        Doctor doctor = new Doctor("admin", "adnmin", 1);
+        doctorman.addDoctor(doctor);
+	Doctor created = new Doctor(doctorman.selectDoctor(1));
+	doctorman.createLinkUserDoctor(user.getUserId(), created.getDoctorId());
+        System.out.println("Admin created");
+        }catch(Exception ex) {
+                ex.printStackTrace();
+        }
+    }
     
 }

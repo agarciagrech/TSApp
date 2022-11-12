@@ -6,6 +6,7 @@ package Utilities;
 
 import db.pojos.Doctor;
 import db.pojos.PatientTS;
+import db.pojos.Signal;
 import java.io.BufferedReader;
 import java.io.EOFException;
 import java.io.IOException;
@@ -17,6 +18,7 @@ import java.net.Socket;
 import java.rmi.NotBoundException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -31,10 +33,10 @@ public class CommunicationWithClient {
         Socket socket = serverSocket.accept();
         System.out.println("Connection client created");
         BufferedReader bufferedReader = new BufferedReader(
-                new InputStreamReader(socket.getInputStream()));
+        new InputStreamReader(socket.getInputStream()));
         System.out.println("Text Received:\n");
         String line;
-        
+       
         while ((line = bufferedReader.readLine()) != null) {
             if (line.toLowerCase().contains("stop")) {
                 System.out.println("Stopping the server");
@@ -42,7 +44,41 @@ public class CommunicationWithClient {
                 System.exit(0);
             }
             System.out.println(line);
-            
+           Signal s = new Signal();
+           
+           
+           line=line.replace("[", "");
+           line=line.replace("]","");
+           line=line.replace(",","");
+           String[] signals = line.split("/n");
+           for (int j=0; j < signals.length;j++){
+              String[] lines;
+              lines=signals[j].split(" ");
+              
+           
+            int [] ECG= new int[10];
+            int [] EMG= new int[10];
+            if (lines[0].equals("ECG")){
+
+                for (int i = 1; i<lines.length; i++){
+                     ECG[i-1]=Integer.parseInt(lines[i]);
+                }
+               s.setECG_values(ECG);
+               System.out.println("Siganl saved");
+                System.out.println(Arrays.toString(s.getECG_values())); 
+            } else{
+                for (int i = 1; i<lines.length; i++){
+                     EMG[i-1]=Integer.parseInt(lines[i]);
+                }
+               s.setEMG_values(EMG);
+               System.out.println("Siganl saved");
+               System.out.println(Arrays.toString(s.getEMG_values())); 
+                
+            }
+
+
+            }
+           
             
         }
         
