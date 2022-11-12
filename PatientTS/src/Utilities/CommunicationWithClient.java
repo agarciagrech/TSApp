@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.rmi.NotBoundException;
@@ -180,7 +181,38 @@ public class CommunicationWithClient {
          }
         return recieved; 
     }
-    
+    private static void recieveSignal(BufferedReader bf, PrintWriter pw){
+        int[] ecg_vals = new int [100];
+        int[] emg_vals = new int [100];
+         try {
+             boolean recieved = true;
+             Signal s = new Signal();
+             
+             while(bf.readLine()!=null){
+                 if (bf.readLine().equals("ECG")){
+                    for (int i=0;i<100;i++){
+                      ecg_vals[i]=bf.read();
+                     }
+                    if (bf.readLine().equals("ECG END")){
+                        pw.println("success");
+                    }
+                 }else if (bf.readLine().equals("EMG")){
+                        for (int j=0;j<100;j++){
+                         emg_vals[j]=bf.read();
+                        }
+                        if (bf.readLine().equals("EMG END")){
+                        pw.println("success");
+                        }
+                }
+                  
+             }
+             System.out.println("ECG:"+Arrays.toString(ecg_vals));
+             System.out.println("EMG:"+Arrays.toString(emg_vals));
+         } catch (IOException ex) {
+             Logger.getLogger(CommunicationWithClient.class.getName()).log(Level.SEVERE, null, ex);
+         }
+       
+    }
     private static void releaseResources(BufferedReader bufferedReader, Socket socket, ServerSocket serverSocket) {
         try {
             bufferedReader.close();
