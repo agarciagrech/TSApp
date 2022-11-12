@@ -19,6 +19,7 @@ import java.net.Socket;
 import java.rmi.NotBoundException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.logging.Level;
@@ -181,33 +182,102 @@ public class CommunicationWithClient {
          }
         return recieved; 
     }
-    private static void recieveSignal(BufferedReader bf, PrintWriter pw){
-        int[] ecg_vals = new int [100];
-        int[] emg_vals = new int [100];
+    public static void recieveSignal(BufferedReader bf, PrintWriter pw){
+
          try {
-             boolean recieved = true;
              Signal s = new Signal();
-             
-             while(bf.readLine()!=null){
-                 if (bf.readLine().equals("ECG")){
-                    for (int i=0;i<100;i++){
-                      ecg_vals[i]=bf.read();
+             String line = bf.readLine();
+             System.out.println(line);
+             line=line.replace("[", "");
+             line=line.replace("]","");
+             line=line.replace(",","");
+             String[] signals = line.split("//");
+            int [] ECG= new int[10];
+            int [] EMG= new int[10];
+             for (int j=0; j < signals.length; j++){
+                 String[] lines;
+                 lines=signals[j].split(" ");
+                 
+                 if (lines[0].equals("ECG:")){
+                     for (int i = 1; i<lines.length; i++){
+                         ECG[i-1]=Integer.parseInt(lines[i]);
                      }
-                    if (bf.readLine().equals("ECG END")){
-                        pw.println("success");
-                    }
-                 }else if (bf.readLine().equals("EMG")){
-                        for (int j=0;j<100;j++){
-                         emg_vals[j]=bf.read();
-                        }
-                        if (bf.readLine().equals("EMG END")){
-                        pw.println("success");
-                        }
-                }
-                  
+                     s.setECG_values(ECG);
+                     System.out.println("Siganl saved");
+                     System.out.println(Arrays.toString(s.getECG_values()));
+                 }
+                 if(lines[0].equals("EMG:")){
+                     for (int i = 1; i<lines.length; i++){
+                         EMG[i-1]=Integer.parseInt(lines[i]);
+                     }
+                     s.setEMG_values(EMG);
+                     System.out.println("Siganl saved");
+                     System.out.println(Arrays.toString(s.getEMG_values()));
+                 }
+                 
+                 
              }
-             System.out.println("ECG:"+Arrays.toString(ecg_vals));
-             System.out.println("EMG:"+Arrays.toString(emg_vals));
+             /*ArrayList <Integer> ecg_vals = new ArrayList <> ();
+             ArrayList <Integer> emg_vals = new ArrayList <> ();
+             boolean stopClient = false;
+             boolean endOfTransmission = false;
+             while(!stopClient && !endOfTransmission){
+             try {
+             String readed = bf.readLine();
+             if(readed != null){
+             if(readed.equals("ECG")){
+             if (readed.equals("ECG END")){
+             pw.println("success");
+             endOfTransmission = true;
+             } else {
+             Integer value = Integer.parseInt(readed);
+             ecg_vals.add(value);
+             }
+             } else if (readed.equals("EMG")){
+             if (readed.equals("EMG END")){
+             pw.println("success");
+             endOfTransmission = true;
+             } else {
+             Integer value = Integer.parseInt(readed);
+             emg_vals.add(value);
+             }
+             }
+             }
+             } catch (IOException ex) {
+             Logger.getLogger(CommunicationWithClient.class.getName()).log(Level.SEVERE, null, ex);
+             }
+             
+             }*/            
+            /* try {
+                 //boolean recieved = true;
+                 //Signal s = new Signal();
+                 
+                 
+                 System.out.println(bf.readLine());
+                 /* if (bf.readLine().equals("ECG")){
+                 System.out.println("hola");
+                 for (int i=0;i<100;i++){
+                 ecg_vals[i]=Integer.parseInt(bf.readLine());
+                 }
+                 if (bf.readLine().equals("ECG END")){
+                 pw.println("success");
+                 }
+                 }else if (bf.readLine().equals("EMG")){
+                 System.out.println("hola2");
+                 for (int j=0;j<100;j++){
+                 emg_vals[j]=Integer.parseInt(bf.readLine());
+                 }
+                 if (bf.readLine().equals("EMG END")){
+                 pw.println("success");
+                 }
+                 }
+                 
+                 //System.out.println("ECG:"+ecg_vals.toString());
+                 //System.out.println("EMG:"+emg_vals.toString());
+             } catch (IOException ex) {
+                 Logger.getLogger(CommunicationWithClient.class.getName()).log(Level.SEVERE, null, ex);
+             } */
+             System.out.println("ECG: " + Arrays.toString(ECG) + "EMG: " + Arrays.toString(EMG));
          } catch (IOException ex) {
              Logger.getLogger(CommunicationWithClient.class.getName()).log(Level.SEVERE, null, ex);
          }

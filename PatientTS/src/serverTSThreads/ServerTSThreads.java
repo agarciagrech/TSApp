@@ -38,12 +38,12 @@ public class ServerTSThreads {
     
     public static void main(String[] args) throws IOException{
        
-        serverSocketClient = new ServerSocket(9200); //IP, PORT?
+        serverSocketClient = new ServerSocket(9000); //IP, PORT?
        
         
         clientsThreadsList = new Thread[1000];
         
-        firstlogin();
+        //firstlogin();
         
         //COMO COMPROBAR SI ES UN PATIENT O UN DOCTOR??
         while(true){

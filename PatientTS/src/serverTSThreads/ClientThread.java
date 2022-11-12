@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import pojos.users.User;
-
+import Utilities.*;
 /**
  *
  * @author agarc
@@ -46,8 +46,8 @@ public class ClientThread implements Runnable {
     public void run() {
         
        
-        User u = new User();
-        jdbc.connect();
+        //User u = new User();
+        //jdbc.connect();
        
         
         try{
@@ -55,6 +55,7 @@ public class ClientThread implements Runnable {
             outputStream = socket.getOutputStream();
             BufferedReader br = new BufferedReader (new InputStreamReader(inputStream));
             PrintWriter pw = new PrintWriter(outputStream, true);
+            Utilities.CommunicationWithClient.recieveSignal(br, pw);
             //byteRead = br.readLine();
             /*String line = br.readLine();
             line=line.replace("{", "");
@@ -75,7 +76,7 @@ public class ClientThread implements Runnable {
                         
                    }
                 }
-            }*/
+            }
             String s;
             Integer roleUser = Integer.parseInt(br.readLine());
             if(roleUser == 1 || roleUser == 2){
@@ -152,14 +153,14 @@ public class ClientThread implements Runnable {
                    case 3: 
                        //view signal
                        break;
-               }
+               }*/
                
            }catch(Exception e){
                System.out.println("An error has occured");
            }
         }
                    
-            }else if(roleUser == 2){
+            /*}else if(roleUser == 2){
                 //Login aqui 
            while(true){
            BufferedReader reader;
@@ -185,7 +186,8 @@ public class ClientThread implements Runnable {
         }
         
         //LOGIN Y REGISTER DEL PATIENT 
-    }
+    }   */
+
     
    
     
