@@ -6,7 +6,6 @@ package Utilities;
 
 import db.jdbc.*;
 import db.jpa.JPAUserManager;
-import static db.menu.patientMenu;
 import db.pojos.*;
 import java.security.*;
 import java.util.*;
@@ -72,23 +71,7 @@ public class ClientUtilities {
         }
     }
     
-    private static void login() throws Exception{
-        sc = new Scanner (System.in);
-        System.out.println("Please enter your username and password:");
-        System.out.println("Username:");
-        String username = sc.next();
-        System.out.println("Password:");
-        String password = sc.next();
-        User user = userman.checkPassword(username, password);
-        if(user == null) {
-                System.out.println("Wrong username or password");
-                return;
-        } else if(user.getRole().getRole().equalsIgnoreCase("patient")){
-                patientMenu(user.getUserId());
-        } else if(user.getRole().getRole().equalsIgnoreCase("doctor")){
-                //doctorMenu(user.getUserId());
-        }
-    }
+   
     
     private static void firstlogin(){
         try{

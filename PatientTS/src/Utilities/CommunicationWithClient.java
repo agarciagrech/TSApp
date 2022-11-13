@@ -8,7 +8,10 @@ import db.pojos.Doctor;
 import db.pojos.PatientTS;
 import db.pojos.Signal;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.EOFException;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -243,68 +246,37 @@ public class CommunicationWithClient {
             }
             
             System.out.println("ECG: " + Arrays.toString(ECG) + " EMG: " + Arrays.toString(EMG));
-            line = bf.readLine();
-             System.out.println(line);
-             /*ArrayList <Integer> ecg_vals = new ArrayList <> ();
-             ArrayList <Integer> emg_vals = new ArrayList <> ();
-             boolean stopClient = false;
-             boolean endOfTransmission = false;
-             while(!stopClient && !endOfTransmission){
-             try {
-             String readed = bf.readLine();
-             if(readed != null){
-             if(readed.equals("ECG")){
-             if (readed.equals("ECG END")){
-             pw.println("success");
-             endOfTransmission = true;
-             } else {
-             Integer value = Integer.parseInt(readed);
-             ecg_vals.add(value);
-             }
-             } else if (readed.equals("EMG")){
-             if (readed.equals("EMG END")){
-             pw.println("success");
-             endOfTransmission = true;
-             } else {
-             Integer value = Integer.parseInt(readed);
-             emg_vals.add(value);
-             }
-             }
-             }
-             } catch (IOException ex) {
-             Logger.getLogger(CommunicationWithClient.class.getName()).log(Level.SEVERE, null, ex);
-             }
+            String line2 = bf.readLine();
+            String line3 = bf.readLine();
+            
+            System.out.println(line2);
+            System.out.println(line3);
              
-             }*/            
-            /* try {
-                 //boolean recieved = true;
-                 //Signal s = new Signal();
-                 
-                 
-                 System.out.println(bf.readLine());
-                 /* if (bf.readLine().equals("ECG")){
-                 System.out.println("hola");
-                 for (int i=0;i<100;i++){
-                 ecg_vals[i]=Integer.parseInt(bf.readLine());
-                 }
-                 if (bf.readLine().equals("ECG END")){
-                 pw.println("success");
-                 }
-                 }else if (bf.readLine().equals("EMG")){
-                 System.out.println("hola2");
-                 for (int j=0;j<100;j++){
-                 emg_vals[j]=Integer.parseInt(bf.readLine());
-                 }
-                 if (bf.readLine().equals("EMG END")){
-                 pw.println("success");
-                 }
-                 }
-                 
-                 //System.out.println("ECG:"+ecg_vals.toString());
-                 //System.out.println("EMG:"+emg_vals.toString());
-             } catch (IOException ex) {
-                 Logger.getLogger(CommunicationWithClient.class.getName()).log(Level.SEVERE, null, ex);
-             } */
+            String filenames1[] = line2.split("=");
+            String filenames2[] = line3.split("=");
+            
+             String ruta = "../PatientTS/"+filenames1[1]+".txt";
+             String ruta2 = "../PatientTS/"+filenames2[1]+".txt";
+                String contenido = Arrays.toString(ECG);
+                String contenido2 = Arrays.toString(EMG);
+                File file = new File(ruta);
+                File file2 = new File(ruta2);
+                if (!file.exists()) {
+                    file.createNewFile();
+                }
+                if (!file2.exists()) {
+                    file2.createNewFile();
+                }
+                FileWriter fwECG = new FileWriter(file);
+                FileWriter fwEMG = new FileWriter(file2);
+                BufferedWriter bwECG = new BufferedWriter(fwECG);
+                BufferedWriter bwEMG = new BufferedWriter(fwEMG);
+                bwECG.write(contenido);
+                bwEMG.write(contenido2);
+                bwECG.close();
+                bwEMG.close();
+                
+                System.out.println("Ok");
              
          } catch (IOException ex) {
              Logger.getLogger(CommunicationWithClient.class.getName()).log(Level.SEVERE, null, ex);
