@@ -207,13 +207,13 @@ public class CommunicationWithClient {
     }
     public static void recieveSignal(BufferedReader bf, PrintWriter pw){      
          try {
-             Signal s = new Signal();
-             String line = bf.readLine();
-             System.out.println(line);
-             line=line.replace("[", "");
-             line=line.replace("]","");
-             line=line.replace(",","");
-             String[] signals = line.split("// ");
+            Signal s = new Signal();
+            String line = bf.readLine();
+            System.out.println(line);
+            line=line.replace("[", "");
+            line=line.replace("]","");
+            line=line.replace(",","");
+            String[] signals = line.split("// ");
             int [] ECG= new int[10];
             int [] EMG= new int[10];
             String[] lines;
@@ -240,7 +240,10 @@ public class CommunicationWithClient {
                         break;
                 }
             }
+            
             System.out.println("ECG: " + Arrays.toString(ECG) + " EMG: " + Arrays.toString(EMG));
+            line = bf.readLine();
+             System.out.println(line);
              /*ArrayList <Integer> ecg_vals = new ArrayList <> ();
              ArrayList <Integer> emg_vals = new ArrayList <> ();
              boolean stopClient = false;
@@ -307,6 +310,7 @@ public class CommunicationWithClient {
          }
        
     }
+    
     private static void releaseResources(BufferedReader bufferedReader, Socket socket, ServerSocket serverSocket) {
         try {
             bufferedReader.close();

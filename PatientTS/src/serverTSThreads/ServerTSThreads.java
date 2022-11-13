@@ -54,8 +54,6 @@ public class ServerTSThreads {
             clientThread.start();
             clientsThreadsList[contadorClients] = clientThread;
             contadorClients++;
-                    
-            
         }
         //SI ES PATIENT HACER UNA COSA Y SI ES DOCTOR HACER OTRA  
                 
