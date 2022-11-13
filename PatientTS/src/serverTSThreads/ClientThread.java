@@ -107,8 +107,20 @@ public class ClientThread implements Runnable {
             while(roleUser!=0){
                 switch (roleUser){
                         case 1: 
-                            System.out.println("Inside of user 1");
-                            Utilities.CommunicationWithClient.recieveSignal(reader, printWriter);
+                            int choice;
+                            do{
+                            choice = Integer.parseInt(reader.readLine());
+
+                            switch (choice){
+                                case 1:
+                                    System.out.println("Pateint case 1");
+                                     Utilities.CommunicationWithClient.recieveSignal(reader, printWriter);
+                                     break;
+                                
+                            }
+                            }while(choice!=0);
+                            
+                            
 
                             // This for the final proyect, when we solved the problems with the db:
             //                try{
@@ -163,11 +175,11 @@ public class ClientThread implements Runnable {
                                 break;
                         case 2: 
                             System.out.println("Inside user 2");
-                            int choice;
+                            int choice2;
                             do{
-                            choice = Integer.parseInt(reader.readLine());
+                            choice2 = Integer.parseInt(reader.readLine());
 
-                            switch (choice){
+                            switch (choice2){
                                 case 1:
                                     System.out.println("Doctor case 1");
                                      Utilities.CommunicationWithClient.receiveDoctor(reader);
@@ -185,7 +197,7 @@ public class ClientThread implements Runnable {
                                     Utilities.CommunicationWithClient.sendPatientList(printWriter, reader);
                                     break;
                             }
-                            }while(choice!=0);
+                            }while(choice2!=0);
                             break;
                 }       
             }

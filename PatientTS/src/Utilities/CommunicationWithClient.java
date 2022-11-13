@@ -19,6 +19,8 @@ import java.io.ObjectInputStream;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.rmi.NotBoundException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -208,6 +210,22 @@ public class CommunicationWithClient {
     public static void sendPatient (PrintWriter printWriter,PatientTS p){
         printWriter.println(p.toString());
     }
+    public static void sendAllSignal(BufferedReader bf, PrintWriter pw){
+        System.out.println("Inside senAllSignals");
+        try {
+            String name = bf.readLine();
+            //String filename = name +".txt";
+            File[] dir = new File("../PatientTS").listFiles();
+            
+            System.out.println("after list");
+            for(int i = 0;i < dir.length; i++){
+                System.out.println("Inside for");
+                System.out.println(dir[i]);
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(CommunicationWithClient.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        }
     public static void recieveSignal(BufferedReader bf, PrintWriter pw){
         System.out.println("Inside recieve signal");
          try {
