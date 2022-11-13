@@ -109,7 +109,7 @@ public class ClientThread implements Runnable {
                         case 1: 
                             System.out.println("Inside of user 1");
                             
-                            Utilities.CommunicationWithClient.recieveSignal(br, pw);
+                            Utilities.CommunicationWithClient.recieveSignal(reader, printWriter);
 
                             // This for the final proyect, when we solved the problems with the db:
             //                try{
@@ -171,19 +171,19 @@ public class ClientThread implements Runnable {
                             switch (choice){
                                 case 1:
                                     System.out.println("Doctor case 1");
-                                     Utilities.CommunicationWithClient.receiveDoctor(br);
+                                     Utilities.CommunicationWithClient.receiveDoctor(reader);
                                      break;
                                 case 2:
                                     System.out.println("Doctor case 2");
-                                    Utilities.CommunicationWithClient.receivePatient(br);
+                                    Utilities.CommunicationWithClient.receivePatient(reader);
                                     break;
                                 case 3:
                                     System.out.println("Doctor case 3");
-                                    Utilities.CommunicationWithClient.receivePatient(br);
+                                    Utilities.CommunicationWithClient.receivePatient(reader);
                                     break;
                                 case 4:
                                     System.out.println("Doctor case 4");
-                                    Utilities.CommunicationWithClient.sendPatientList(pw, br);
+                                    Utilities.CommunicationWithClient.sendPatientList(printWriter, reader);
                                     break;
                             }
                             }while(choice!=0);
