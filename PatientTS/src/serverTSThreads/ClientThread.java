@@ -71,8 +71,8 @@ public class ClientThread implements Runnable {
             PrintWriter pw = new PrintWriter(outputStream, true);
             
             //Utilities.CommunicationWithClient.sendPatientList(pw, br);
-            
-            Utilities.CommunicationWithClient.sendPatient(pw, p);
+            Utilities.CommunicationWithClient.recieveSignal(br, pw);
+            //Utilities.CommunicationWithClient.sendPatient(pw, p);
             //Utilities.CommunicationWithClient.receivePatient(br);
             //Utilities.CommunicationWithClient.receiveDoctor(br);
             

@@ -205,8 +205,7 @@ public class CommunicationWithClient {
     public static void sendPatient (PrintWriter printWriter,PatientTS p){
         printWriter.println(p.toString());
     }
-    public static void recieveSignal(BufferedReader bf, PrintWriter pw){
-
+    public static void recieveSignal(BufferedReader bf, PrintWriter pw){      
          try {
              Signal s = new Signal();
              String line = bf.readLine();
@@ -214,36 +213,34 @@ public class CommunicationWithClient {
              line=line.replace("[", "");
              line=line.replace("]","");
              line=line.replace(",","");
-             String[] signals = line.split("//");
+             String[] signals = line.split("// ");
             int [] ECG= new int[10];
             int [] EMG= new int[10];
             String[] lines;
-             for (int j=0; j < signals.length; j++){
-                 System.out.println(signals[j]);
-                 lines=signals[j].split(" ");
-                 
-                 if (lines[0].equals("ECG:")){
-                     for (int i = 1; i<lines.length; i++){
-                         ECG[i-1]=Integer.parseInt(lines[i]);
-                     }
-                     s.setECG_values(ECG);
-                     System.out.println("Siganl saved");
-                     System.out.println(Arrays.toString(s.getECG_values()));
-                 }
-             }
-             for (int j=0; j < signals.length; j++){
-                System.out.println(signals[j]);
+           
+            for (int j=0; j < signals.length; j++){            
                 lines=signals[j].split(" ");
-             
-                if(lines[0].equals("EMG:")){
+                String option = lines[0];
+                switch(option){
+                    case "ECG:": 
+                        for (int i = 1; i<lines.length; i++){
+                         ECG[i-1]=Integer.parseInt(lines[i]);
+                        }
+                        s.setECG_values(ECG);
+                        System.out.println("Siganl saved");
+                        break;
+                    case "EMG:":
                         for (int i = 1; i<lines.length; i++){
                             EMG[i-1]=Integer.parseInt(lines[i]);
                         }
                         s.setEMG_values(EMG);
                         System.out.println("Siganl saved");
-                        System.out.println(Arrays.toString(s.getEMG_values()));
+                        break;
+                    default:
+                        break;
                 }
-             }
+            }
+            System.out.println("ECG: " + Arrays.toString(ECG) + " EMG: " + Arrays.toString(EMG));
              /*ArrayList <Integer> ecg_vals = new ArrayList <> ();
              ArrayList <Integer> emg_vals = new ArrayList <> ();
              boolean stopClient = false;
@@ -304,7 +301,7 @@ public class CommunicationWithClient {
              } catch (IOException ex) {
                  Logger.getLogger(CommunicationWithClient.class.getName()).log(Level.SEVERE, null, ex);
              } */
-             System.out.println("ECG: " + Arrays.toString(ECG) + "EMG: " + Arrays.toString(EMG));
+             
          } catch (IOException ex) {
              Logger.getLogger(CommunicationWithClient.class.getName()).log(Level.SEVERE, null, ex);
          }
