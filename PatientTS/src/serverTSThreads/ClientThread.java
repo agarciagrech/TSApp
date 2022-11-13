@@ -108,7 +108,6 @@ public class ClientThread implements Runnable {
                 switch (roleUser){
                         case 1: 
                             System.out.println("Inside of user 1");
-                            
                             Utilities.CommunicationWithClient.recieveSignal(reader, printWriter);
 
                             // This for the final proyect, when we solved the problems with the db:
@@ -179,7 +178,7 @@ public class ClientThread implements Runnable {
                                     break;
                                 case 3:
                                     System.out.println("Doctor case 3");
-                                    Utilities.CommunicationWithClient.receivePatient(reader);
+                                    //Utilities.CommunicationWithClient.receivePatient(reader);
                                     break;
                                 case 4:
                                     System.out.println("Doctor case 4");

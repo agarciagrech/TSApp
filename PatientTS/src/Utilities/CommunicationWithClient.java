@@ -90,7 +90,7 @@ public class CommunicationWithClient {
     // ToDo : Al final de los métodos deberían de insertarse en la db 
     public static void sendPatientList (PrintWriter pw,BufferedReader bf) throws NotBoundException{
         List<PatientTS> patientList = new ArrayList<>();
-        // DO HERE: Get arrayList from db
+        // DO HERE: Get arrayList from db, till db works we create a list to try the method
         Date dob = new Date("1/2/2000");
         PatientTS p1 = new PatientTS (123,"paquito","perez",dob,"Calle 1","p@gamil.com","diabetes","lala","male");
         PatientTS p2 = new PatientTS (456,"pepe","perez",dob,"Calle 1","p@gamil.com","diabetes","lala","male");
