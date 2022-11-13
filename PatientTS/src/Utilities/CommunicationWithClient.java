@@ -194,8 +194,9 @@ public class CommunicationWithClient {
              String[] signals = line.split("//");
             int [] ECG= new int[10];
             int [] EMG= new int[10];
+            String[] lines;
              for (int j=0; j < signals.length; j++){
-                 String[] lines;
+                 System.out.println(signals[j]);
                  lines=signals[j].split(" ");
                  
                  if (lines[0].equals("ECG:")){
@@ -206,16 +207,19 @@ public class CommunicationWithClient {
                      System.out.println("Siganl saved");
                      System.out.println(Arrays.toString(s.getECG_values()));
                  }
-                 if(lines[0].equals("EMG:")){
-                     for (int i = 1; i<lines.length; i++){
-                         EMG[i-1]=Integer.parseInt(lines[i]);
-                     }
-                     s.setEMG_values(EMG);
-                     System.out.println("Siganl saved");
-                     System.out.println(Arrays.toString(s.getEMG_values()));
-                 }
-                 
-                 
+             }
+             for (int j=0; j < signals.length; j++){
+                System.out.println(signals[j]);
+                lines=signals[j].split(" ");
+             
+                if(lines[0].equals("EMG:")){
+                        for (int i = 1; i<lines.length; i++){
+                            EMG[i-1]=Integer.parseInt(lines[i]);
+                        }
+                        s.setEMG_values(EMG);
+                        System.out.println("Siganl saved");
+                        System.out.println(Arrays.toString(s.getEMG_values()));
+                }
              }
              /*ArrayList <Integer> ecg_vals = new ArrayList <> ();
              ArrayList <Integer> emg_vals = new ArrayList <> ();
