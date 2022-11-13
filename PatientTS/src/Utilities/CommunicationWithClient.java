@@ -22,6 +22,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -87,9 +88,27 @@ public class CommunicationWithClient {
         
     }
     // ToDo : Al final de los métodos deberían de insertarse en la db 
-    public static boolean recievePatient(BufferedReader bufferReader){
+    public static void sendPatientList (PrintWriter pw,BufferedReader bf) throws NotBoundException{
+        List<PatientTS> patientList = new ArrayList<>();
+        // DO HERE: Get arrayList from db
+        Date dob = new Date("1/2/2000");
+        PatientTS p1 = new PatientTS (123,"paquito","perez",dob,"Calle 1","p@gamil.com","diabetes","lala","male");
+        PatientTS p2 = new PatientTS (456,"pepe","perez",dob,"Calle 1","p@gamil.com","diabetes","lala","male");
+        PatientTS p3 = new PatientTS (789,"Juan","perez",dob,"Calle 1","p@gamil.com","diabetes","lala","male");
+        patientList.add(p1);
+        patientList.add(p2);
+        patientList.add(p3);
+        for (PatientTS p : patientList){
+            System.out.println("Patient:"+p.getPatientName()+"/"+p.getPatientSurname()+"/"+p.getMedCardId());
+           pw.println("Patient:"+p.getPatientName()+"/"+p.getPatientSurname()+"/"+p.getMedCardId());
+            
+        }
+        pw.println("End of list");
+    }
+    public static boolean receivePatient(BufferedReader bufferReader){
         boolean recieved = true; 
         PatientTS p = new PatientTS();
+        
         try{
             String line = bufferReader.readLine();
             line=line.replace("{", "");
@@ -134,7 +153,7 @@ public class CommunicationWithClient {
                 }
                 
              }
-        System.out.println("Patient recieved:");
+        System.out.println("Patient received:");
         System.out.println(p.toString());
         
         
@@ -145,7 +164,7 @@ public class CommunicationWithClient {
          }
         return recieved; 
     }
-        public static boolean recieveDoctor(BufferedReader bufferReader){
+        public static boolean receiveDoctor(BufferedReader bufferReader){
         boolean recieved = true; 
         Doctor d= new Doctor();
         try{
@@ -158,20 +177,21 @@ public class CommunicationWithClient {
                 for (int j =0;j <data2.length - 1; j++){
                     data2[j]=data2[j].replace(" ", "");
                     switch(data2[j]){
-                         case "name":d.setDoctorName(data2[j+1]); 
-                                     break;
-                        case "surname":d.setDoctorSurname(data2[j+1]);
+                        case "doctorId":d.setDoctorId(Integer.parseInt(data2[j+1]));
                                         break;
-                        case "email": d.setDoctorEmail(data2[j+1]); 
+                        case "dname":d.setDoctorName(data2[j+1]); 
                                      break;
-                        case "id":d.setDoctorId(Integer.parseInt(data2[j+1]));
+                        case "dsurname":d.setDoctorSurname(data2[j+1]);
                                         break;
+                        case "demail": d.setDoctorEmail(data2[j+1]); 
+                                     break;
+                        
                     }
  
                 }
                 
              }
-        System.out.println("Doctor recieved:");
+        System.out.println("Doctor received:");
         System.out.println(d.toString());
         
         
@@ -181,6 +201,9 @@ public class CommunicationWithClient {
              Logger.getLogger(CommunicationWithClient.class.getName()).log(Level.SEVERE, null, ex);
          }
         return recieved; 
+    }
+    public static void sendPatient (PrintWriter printWriter,PatientTS p){
+        printWriter.println(p.toString());
     }
     public static void recieveSignal(BufferedReader bf, PrintWriter pw){
 

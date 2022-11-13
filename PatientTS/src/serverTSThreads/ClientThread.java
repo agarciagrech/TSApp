@@ -23,6 +23,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import pojos.users.User;
 import Utilities.*;
+import db.pojos.PatientTS;
+import java.rmi.NotBoundException;
+import java.util.Date;
 /**
  *
  * @author agarc
@@ -48,116 +51,135 @@ public class ClientThread implements Runnable {
        
         //User u = new User();
         //jdbc.connect();
-       
+        
+        int medcard =123;
+        String name = "paquito";
+        String surname = "perez";
+        Date dob = new Date(1/1/2000);
+        String address = "Calle luna";
+        String email = "paquito@gmail.com";
+        String diagnosis = "sm";
+        String allergies = "oarng";
+        String gender = "Male";
+        String mac = "135413";
+        PatientTS p = new PatientTS (medcard,name,surname,dob,address,email,diagnosis,allergies,gender,mac);
         
         try{
             inputStream = socket.getInputStream();
             outputStream = socket.getOutputStream();
             BufferedReader br = new BufferedReader (new InputStreamReader(inputStream));
             PrintWriter pw = new PrintWriter(outputStream, true);
-            Utilities.CommunicationWithClient.recieveSignal(br, pw);
+            
+            //Utilities.CommunicationWithClient.sendPatientList(pw, br);
+            
+            Utilities.CommunicationWithClient.sendPatient(pw, p);
+            //Utilities.CommunicationWithClient.receivePatient(br);
+            //Utilities.CommunicationWithClient.receiveDoctor(br);
+            
+            
+            //Utilities.CommunicationWithClient.recievePatient(br);
             //byteRead = br.readLine();
             /*String line = br.readLine();
             line=line.replace("{", "");
             line=line.replace("User", "");
             String[] atribute = line.split(",");
-        
+            
             for (int i =0;i <atribute.length; i++){
-                String[] data2 = atribute[i].split("=");
-                for (int j =0;j <data2.length - 1; j++){
-                    data2[j]=data2[j].replace(" ", "");
-                    switch(data2[j]){
-                        case "username": u.setUsername((data2[j+1])); 
-                                                     break;
-                        case "password":u.setPassword(data2[j+1].getBytes()); 
-                                     break;
-                        case "role":  u.setRole(Integer.parseInt(data2[j+1])); // 1 patient, 2 doctor 
-                         
-                        
-                   }
-                }
+            String[] data2 = atribute[i].split("=");
+            for (int j =0;j <data2.length - 1; j++){
+            data2[j]=data2[j].replace(" ", "");
+            switch(data2[j]){
+            case "username": u.setUsername((data2[j+1]));
+            break;
+            case "password":u.setPassword(data2[j+1].getBytes());
+            break;
+            case "role":  u.setRole(Integer.parseInt(data2[j+1])); // 1 patient, 2 doctor
+            
+            
+            }
+            }
             }
             String s;
             Integer roleUser = Integer.parseInt(br.readLine());
             if(roleUser == 1 || roleUser == 2){
-                s = "Connection stablished";
-                pw.println(s);
+            s = "Connection stablished";
+            pw.println(s);
             }else{
-                s = "Invalid option";
-                pw.println(s);
+            s = "Invalid option";
+            pw.println(s);
             }
             if(roleUser == 1){
-                //userman.newUser(u);
-                //PatientsMenu(socket, u.getUserId());
-                while(true){
-                    
-               BufferedReader reader;
-               reader = new BufferedReader(new InputStreamReader(inputStream));
-               PrintWriter printWriter = new PrintWriter(outputStream,true);
-               try{
-               
-               
-               int choice = Integer.parseInt(reader.readLine());
-               
-               switch(choice){
-                   case 1:
-                      String m;
-                      String line = reader.readLine();
-                      line=line.replace("{", "");
-                      line=line.replace("User", "");
-                      String[] atribute = line.split(",");
-        
-                    for (int i =0;i <atribute.length; i++){
-                    String[] data2 = atribute[i].split("=");
-                    for (int j =0;j <data2.length - 1; j++){
-                    data2[j]=data2[j].replace(" ", "");
-                    switch(data2[j]){
-                        case "username": u.setUsername((data2[j+1])); 
-                                                     break;
-                        case "password":u.setPassword(data2[j+1].getBytes()); 
-                                     break;
-                      
-          
-                        
-                           }
-                        }
-                     }
-                    User user_correct = new User();
-                    String password = new String (u.getPassword());
-                    user_correct = userman.checkPassword(u.getUsername(), password);
-                    if(user_correct != null){
-                        m = "Correct login";
-                        pw.println(m);
-                    }else{
-                        m = "Incorrect username or password";
-                        pw.println(m);
-                    }
-                    
-                    
-                       
-                       break;
-                   case 2: 
-                       String message = "Start your recording and send the data to the server";
-                       printWriter.println(message);
-                       
-                       ArrayList<Integer> signalValues = new ArrayList<Integer>();
-                       String byteRead = reader.readLine();
-                       if(byteRead !=null){
-                           Integer value = Integer.parseInt(byteRead);
-                           signalValues.add(value);
-                       }
-                               
-                       
-                       //recordSignal
-                       break;
-                   case 3: 
-                       //view signal
-                       break;
-               }*/
-               
-           }catch(Exception e){
-               System.out.println("An error has occured");
-           }
+            //userman.newUser(u);
+            //PatientsMenu(socket, u.getUserId());
+            while(true){
+            
+            BufferedReader reader;
+            reader = new BufferedReader(new InputStreamReader(inputStream));
+            PrintWriter printWriter = new PrintWriter(outputStream,true);
+            try{
+            
+            
+            int choice = Integer.parseInt(reader.readLine());
+            
+            switch(choice){
+            case 1:
+            String m;
+            String line = reader.readLine();
+            line=line.replace("{", "");
+            line=line.replace("User", "");
+            String[] atribute = line.split(",");
+            
+            for (int i =0;i <atribute.length; i++){
+            String[] data2 = atribute[i].split("=");
+            for (int j =0;j <data2.length - 1; j++){
+            data2[j]=data2[j].replace(" ", "");
+            switch(data2[j]){
+            case "username": u.setUsername((data2[j+1]));
+            break;
+            case "password":u.setPassword(data2[j+1].getBytes());
+            break;
+            
+            
+            
+            }
+            }
+            }
+            User user_correct = new User();
+            String password = new String (u.getPassword());
+            user_correct = userman.checkPassword(u.getUsername(), password);
+            if(user_correct != null){
+            m = "Correct login";
+            pw.println(m);
+            }else{
+            m = "Incorrect username or password";
+            pw.println(m);
+            }
+            
+            
+            
+            break;
+            case 2:
+            String message = "Start your recording and send the data to the server";
+            printWriter.println(message);
+            
+            ArrayList<Integer> signalValues = new ArrayList<Integer>();
+            String byteRead = reader.readLine();
+            if(byteRead !=null){
+            Integer value = Integer.parseInt(byteRead);
+            signalValues.add(value);
+            }
+            
+            
+            //recordSignal
+            break;
+            case 3:
+            //view signal
+            break;
+            }*/
+            
+        }catch(Exception e){
+            System.out.println("An error has occured");
+        }
         }
                    
             /*}else if(roleUser == 2){
