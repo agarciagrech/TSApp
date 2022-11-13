@@ -31,62 +31,62 @@ import java.util.logging.Logger;
  * @author albic
  */
 public class CommunicationWithClient {
-     public static void main(String args[]) throws IOException, NotBoundException {
-        ServerSocket serverSocket = new ServerSocket(9009);
-        Socket socket = serverSocket.accept();
-        System.out.println("Connection client created");
-        BufferedReader bufferedReader = new BufferedReader(
-        new InputStreamReader(socket.getInputStream()));
-        System.out.println("Text Received:\n");
-        String line;
-       
-        while ((line = bufferedReader.readLine()) != null) {
-            if (line.toLowerCase().contains("stop")) {
-                System.out.println("Stopping the server");
-                releaseResources(bufferedReader, socket, serverSocket);
-                System.exit(0);
-            }
-            System.out.println(line);
-           Signal s = new Signal();
-           
-           
-           line=line.replace("[", "");
-           line=line.replace("]","");
-           line=line.replace(",","");
-           String[] signals = line.split("/n");
-           for (int j=0; j < signals.length;j++){
-              String[] lines;
-              lines=signals[j].split(" ");
-              
-           
-            int [] ECG= new int[10];
-            int [] EMG= new int[10];
-            if (lines[0].equals("ECG")){
-
-                for (int i = 1; i<lines.length; i++){
-                     ECG[i-1]=Integer.parseInt(lines[i]);
-                }
-               s.setECG_values(ECG);
-               System.out.println("Siganl saved");
-                System.out.println(Arrays.toString(s.getECG_values())); 
-            } else{
-                for (int i = 1; i<lines.length; i++){
-                     EMG[i-1]=Integer.parseInt(lines[i]);
-                }
-               s.setEMG_values(EMG);
-               System.out.println("Siganl saved");
-               System.out.println(Arrays.toString(s.getEMG_values())); 
-                
-            }
-
-
-            }
-           
-            
-        }
-        
-        
-    }
+//     public static void main(String args[]) throws IOException, NotBoundException {
+//        ServerSocket serverSocket = new ServerSocket(9009);
+//        Socket socket = serverSocket.accept();
+//        System.out.println("Connection client created");
+//        BufferedReader bufferedReader = new BufferedReader(
+//        new InputStreamReader(socket.getInputStream()));
+//        System.out.println("Text Received:\n");
+//        String line;
+//       
+//        while ((line = bufferedReader.readLine()) != null) {
+//            if (line.toLowerCase().contains("stop")) {
+//                System.out.println("Stopping the server");
+//                releaseResources(bufferedReader, socket, serverSocket);
+//                System.exit(0);
+//            }
+//            System.out.println(line);
+//           Signal s = new Signal();
+//           
+//           
+//           line=line.replace("[", "");
+//           line=line.replace("]","");
+//           line=line.replace(",","");
+//           String[] signals = line.split("/n");
+//           for (int j=0; j < signals.length;j++){
+//              String[] lines;
+//              lines=signals[j].split(" ");
+//              
+//           
+//            int [] ECG= new int[10];
+//            int [] EMG= new int[10];
+//            if (lines[0].equals("ECG")){
+//
+//                for (int i = 1; i<lines.length; i++){
+//                     ECG[i-1]=Integer.parseInt(lines[i]);
+//                }
+//               s.setECG_values(ECG);
+//               System.out.println("Siganl saved");
+//                System.out.println(Arrays.toString(s.getECG_values())); 
+//            } else{
+//                for (int i = 1; i<lines.length; i++){
+//                     EMG[i-1]=Integer.parseInt(lines[i]);
+//                }
+//               s.setEMG_values(EMG);
+//               System.out.println("Siganl saved");
+//               System.out.println(Arrays.toString(s.getEMG_values())); 
+//                
+//            }
+//
+//
+//            }
+//           
+//            
+//        }
+//        
+//        
+//    }
     // ToDo : Al final de los métodos deberían de insertarse en la db 
     public static void sendPatientList (PrintWriter pw,BufferedReader bf) throws NotBoundException{
         List<PatientTS> patientList = new ArrayList<>();
@@ -170,7 +170,7 @@ public class CommunicationWithClient {
         try{
             String line = bufferReader.readLine();
             line=line.replace("{", "");
-            line=line.replace("Patient", "");
+            line=line.replace("Doctor", "");
             String[] atribute = line.split(",");
             for (int i =0;i <atribute.length; i++){
                 String[] data2 = atribute[i].split("=");
@@ -205,7 +205,8 @@ public class CommunicationWithClient {
     public static void sendPatient (PrintWriter printWriter,PatientTS p){
         printWriter.println(p.toString());
     }
-    public static void recieveSignal(BufferedReader bf, PrintWriter pw){      
+    public static void recieveSignal(BufferedReader bf, PrintWriter pw){
+        System.out.println("Inside recieve signal");
          try {
             Signal s = new Signal();
             String line = bf.readLine();
