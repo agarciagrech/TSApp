@@ -17,6 +17,8 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.rmi.NotBoundException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -24,6 +26,9 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.bluetooth.RemoteDevice;
+import javax.persistence.NoResultException;
+import javax.persistence.Query;
+import pojos.users.User;
 
 /**
  *
@@ -49,7 +54,7 @@ public class SQLitePatientTSManager implements PatientTSManager {
     @Override
     public void addPatient(PatientTS p) throws SQLException{
         if (p.getPatientAllergies()==null) {
-                String sq1 = "INSERT INTO patient ( medical_card_number, name, surname, dob, address, email, diagnosis, gender, macAddress) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                String sq1 = "INSERT INTO patient ( medical_card_number, name, surname, dob, address, email, diagnosis, gender, macAddress,password,role) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
                 try {
                     PreparedStatement preparedStatement = c.prepareStatement(sq1);
                     preparedStatement.setInt(1, p.getMedCardId());
@@ -61,13 +66,15 @@ public class SQLitePatientTSManager implements PatientTSManager {
                     preparedStatement.setString(7, p.getPatientDiagnosis());
                     preparedStatement.setString(8, p.getPatientGender());
                     preparedStatement.setString(9, p.getMacAddress());
+                    preparedStatement.setString(10, p.getPassword());
+                    preparedStatement.setString(11, p.getRole());
                     preparedStatement.executeUpdate();
                     preparedStatement.close();
                 } catch (SQLException ex) {
                 Logger.getLogger(SQLitePatientTSManager.class.getName()).log(Level.SEVERE, null, ex);
             }
         }else {
-                String sq1 = "INSERT INTO patient ( medical_card_number, name, surname, dob, address, email, diagnosis, allergies, gender, macAddress) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                String sq1 = "INSERT INTO patient ( medical_card_number, name, surname, dob, address, email, diagnosis, allergies, gender, macAddress, password, role) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
                 try {
                     PreparedStatement preparedStatement = c.prepareStatement(sq1);
                     preparedStatement.setInt(1, p.getMedCardId());
@@ -80,6 +87,8 @@ public class SQLitePatientTSManager implements PatientTSManager {
                     preparedStatement.setString(8, p.getPatientAllergies());
                     preparedStatement.setString(9, p.getPatientGender());
                     preparedStatement.setString(10, p.getMacAddress());
+                    preparedStatement.setString(11, p.getPassword());
+                    preparedStatement.setString(12, p.getRole());
                     preparedStatement.executeUpdate();
                     preparedStatement.close();
                 } catch (SQLException ex) {
@@ -104,9 +113,8 @@ public class SQLitePatientTSManager implements PatientTSManager {
      * @return
      * TODO edit signal
      */
-    @Override
 	public boolean editPatient(Integer medCardNum, String name, String surname, Date dob, String address, 
-                String email, String diagnosis, String allergies, String gender, String macAd) {
+                String email, String diagnosis, String allergies, String gender, String macAd, String password) {
 
 		String sql;
 		PreparedStatement pStatement;
@@ -178,6 +186,13 @@ public class SQLitePatientTSManager implements PatientTSManager {
 			sql = "UPDATE patient SET macAddress = ? WHERE medical_card_number = ?";
 			pStatement = c.prepareStatement(sql);
 			pStatement.setString(1, macAd);
+			pStatement.setInt(2, medCardNum);
+			pStatement.executeUpdate();
+		}
+                if (password != null) {
+			sql = "UPDATE patient SET password = ? WHERE medical_card_number = ?";
+			pStatement = c.prepareStatement(sql);
+			pStatement.setString(1, password);
 			pStatement.setInt(2, medCardNum);
 			pStatement.executeUpdate();
 		}
@@ -256,104 +271,6 @@ public class SQLitePatientTSManager implements PatientTSManager {
 		return pList;
     }
     
-    /**
-     * Record an ECG and EMG signals form the patient using BITalino.
-     * @param p - [PatientTS] Patient that is recording the signal
-     * @param sname - [String] Name of the recorded signal.
-     */
-    @Override
-    public void recordSignal(PatientTS p, String sname) {
-        Frame[] frame;
-        BITalino bitalino = null;
-        Signal s = new Signal();
-        int[] ecg_values = new int[1000000];
-        int[] emg_values = new int[100];
-        try {
-            bitalino = new BITalino();
-            // Code to find Devices
-            //Only works on some OS
-            Vector<RemoteDevice> devices = bitalino.findDevices();
-            System.out.println(devices);
-
-           
-            String macAddress = p.getMacAddress(); 
-            
-            //Sampling rate, should be 10, 100 or 1000
-            int SamplingRate = 10; //PONER COMO PARAMETRO?
-            bitalino.open(macAddress, SamplingRate);
-
-            // Start acquisition on analog channels A2 and A6
-            // For example, If you want A1, A3 and A4 you should use {0,2,3}
-            int[] channelsToAcquire = {1,2}; //for ECG and EMG
-            bitalino.start(channelsToAcquire);
-
-            //Read in total 10000000 times --> por que elegimos este num
-            for (int j = 0; j < 10000000; j++) {
-
-                //Each time read a block of 10 samples --> por que elegimos este num
-                int block_size=10;
-                frame = bitalino.read(block_size);
-
-                System.out.println("size block: " + frame.length);
-
-                for (int i = 0; i < frame.length; i++) {
-                    ecg_values[i]=frame[i].analog[0];
-                    emg_values[i]=frame[i].analog[1];
-                    System.out.println(" seq: " + frame[i].seq + " "
-                            + frame[i].analog[0] + " ");
-                }
-                s.setECG_values(ecg_values);
-                s.setEMG_values(emg_values);
-                 
-            }
-            //stop acquisition
-            bitalino.stop();
-        } catch (BITalinoException ex) {
-            Logger.getLogger(BitalinoDemo.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (Throwable ex) {
-            Logger.getLogger(BitalinoDemo.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            try {
-                //close bluetooth connection
-                if (bitalino != null) {
-                    bitalino.close();
-                }
-            } catch (BITalinoException ex) {
-                Logger.getLogger(BitalinoDemo.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        try {
-            //Type of signal + date ".txt"
-            Calendar c = Calendar.getInstance();
-            String day=Integer.toString(c.get(Calendar.DATE));
-            String month=Integer.toString(c.get(Calendar.MONTH));
-            String year=Integer.toString(c.get(Calendar.YEAR));
-            String ruta = "../TSApp/ECG"+day+month+year+".txt";
-            String ruta2 = "../TSApp/EMG"+day+month+year+".txt";
-            String contenido = Arrays.toString(s.getECG_values());
-            String contenido2 = Arrays.toString(s.getEMG_values());
-            File file = new File(ruta);
-            File file2 = new File(ruta2);
-            // Si el archivo no existe es creado
-            if (!file.exists()) {
-                file.createNewFile();
-            }
-            if (!file2.exists()) {
-                file2.createNewFile();
-            }
-            FileWriter fwECG = new FileWriter(file);
-            FileWriter fwEMG = new FileWriter(file2);
-            BufferedWriter bwECG = new BufferedWriter(fwECG);
-            BufferedWriter bwEMG = new BufferedWriter(fwEMG);
-            bwECG.write(contenido);
-            bwEMG.write(contenido2);
-            bwECG.close();
-            bwEMG.close();
-            System.out.println("Ok");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
     
     /**
      * Deletes any patient with a medical card number that matches the given medical card number.
@@ -368,6 +285,8 @@ public class SQLitePatientTSManager implements PatientTSManager {
         pStatement.executeUpdate();
         pStatement.close();
     }
+    
+    
 
     /**
      * Associates a doctor with a patient
@@ -384,7 +303,6 @@ public class SQLitePatientTSManager implements PatientTSManager {
         pStatement.executeUpdate();
         pStatement.close();
     }
-
     /**
      * Associates a patient with a user of the application
      * @param userId
@@ -400,4 +318,7 @@ public class SQLitePatientTSManager implements PatientTSManager {
         pStatement.executeUpdate();
         pStatement.close();
     }
+
+    
+   
 }

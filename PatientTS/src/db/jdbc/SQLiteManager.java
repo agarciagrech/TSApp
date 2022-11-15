@@ -90,7 +90,7 @@ public class SQLiteManager implements DBManager {
                   + "allergies TEXT, "
                   + "gender TEXT NOT NULL, "
                   + "macAddress TEXT NOT NULL"
-                  + "userId INTEGER REFERENCES users(USERID) ON UPDATE CASCADE ON DELETE SET NULL)";
+                  + "userId INTEGER REFERENCES users(userid) ON UPDATE CASCADE ON DELETE SET NULL)";
           stmt1.executeUpdate(sql1);
           stmt1.close();
           Statement stmt2 = c.createStatement();
@@ -110,19 +110,38 @@ public class SQLiteManager implements DBManager {
                   + "(doctorId INTEGER PRIMARY KEY, " 
                   + "dname TEXT NOT NULL, " 
                   + "dsurname TEXT NOT NULL, "
-                  + "demail TEXT NOT NULL, " 
-                  + "userId INTEGER REFERENCES users(USERID) ON UPDATE CASCADE ON DELETE SET NULL)";
+                  + "demail TEXT NOT NULL, "
+                  + "userId INTEGER REFERENCES users(userid) ON UPDATE CASCADE ON DELETE SET NULL)";
           stmt3.executeUpdate(sql3);
           stmt3.close();
           
           Statement stmt4 = c.createStatement();
-		String sql4 = "CREATE TABLE doctor_patient "
+          String sql4 = "CREATE TABLE users " 
+                  + "(userid INTEGER PRIMARY KEY, " 
+                  + "userName TEXT NOT NULL, " 
+                  + "userPassword TEXT NOT NULL"
+                  + "userRoleid TEXT REFERENCES role(roleid) ON UPDATE CASCADE ON DELETE SET NULL) ";
+          stmt4.executeUpdate(sql4);
+          stmt4.close();
+          
+          Statement stmt5 = c.createStatement();
+          String sql5 = "CREATE TABLE role " 
+                  + "(roleid INTEGER PRIMARY KEY, " 
+                  + "Type TEXT NOT NULL, "; 
+          stmt5.executeUpdate(sql5);
+          stmt5.close();
+          
+          Statement stmt6 = c.createStatement();
+		String sql6 = "CREATE TABLE doctor_patient "
 				   + "(patient_id     INTEGER  REFERENCES patient(medical_card_number) ON UPDATE CASCADE ON DELETE SET NULL,"
 				   + " doctor_id   INTEGER  REFERENCES doctor(doctorId) ON UPDATE CASCADE ON DELETE SET NULL,"
 				   + " PRIMARY KEY (patient_id,doctor_id))";
-		stmt4.executeUpdate(sql4);
-		stmt4.close();
-          
+		stmt6.executeUpdate(sql6);
+		stmt6.close();
+                
+               
+            
+                
           return true;
       }catch(SQLException tables_error){
           if (tables_error.getMessage().contains("already exists")) {

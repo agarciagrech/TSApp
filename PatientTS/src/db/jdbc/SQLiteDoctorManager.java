@@ -10,6 +10,9 @@ import db.interfaces.DoctorManager;
 import java.sql.*;
 import java.util.*;
 import java.rmi.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import pojos.users.User;
 
 /**
  *
@@ -32,7 +35,7 @@ public class SQLiteDoctorManager implements DoctorManager{
      */
     @Override
     public void addDoctor(Doctor d) throws SQLException {
-        String sq1 = "INSERT INTO doctor (dname, dsurname, demail) VALUES (?, ?, ?)";
+        String sq1 = "INSERT INTO doctor (dname, dsurname, demail,dusername,dpassword,drole) VALUES (?, ?, ?,?,?,?)";
 			PreparedStatement preparedStatement = c.prepareStatement(sq1);
 			preparedStatement.setString(1, d.getDoctorName());
 			preparedStatement.setString(2, d.getDoctorSurname());
@@ -75,7 +78,7 @@ public class SQLiteDoctorManager implements DoctorManager{
      */
     @Override
     public Doctor selectDoctorByUserId(Integer userID) throws Exception {
-        String sql = "SELECT * FROM workers WHERE userId = ? ";
+        String sql = "SELECT * FROM doctor WHERE userId = ? ";
         PreparedStatement pStatement = c.prepareStatement(sql);
         pStatement.setInt(1, userID);
         ResultSet rs = pStatement.executeQuery();
@@ -97,7 +100,7 @@ public class SQLiteDoctorManager implements DoctorManager{
      */
     @Override
     public Doctor selectDoctor(Integer doctorId) throws SQLException, NotBoundException {
-        String sql = "SELECT * FROM workers WHERE workerId = ? AND typeWorker = ?";
+        String sql = "SELECT * FROM doctor WHERE doctorId = ?";
         PreparedStatement p = c.prepareStatement(sql);
         p.setInt(1,doctorId);
         ResultSet rs = p.executeQuery();
@@ -123,7 +126,24 @@ public class SQLiteDoctorManager implements DoctorManager{
         pStatement.executeUpdate();
         pStatement.close();
     }
-
+    
+    public void checkPassword(String dusername, String dpassword) {
+            User user = null;
+            try {   String sql = "SELECT * FROM docotr WHERE dusername = ? AND dpassword = ? LIMIT 1";
+                    PreparedStatement pStatement = c.prepareStatement(sql);
+                    byte[] hash;
+                    pStatement.setString(1, dusername);
+                    pStatement.setString(2, dpassword);
+                    pStatement.executeUpdate();
+                    pStatement.close();
+                   
+            
+            } catch (SQLException ex) {
+            Logger.getLogger(SQLitePatientTSManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+           
+    }
+    
     /**
      * Associates a doctor with a user of the application
      * @param userId
@@ -139,5 +159,7 @@ public class SQLiteDoctorManager implements DoctorManager{
         pStatement.executeUpdate();
         pStatement.close();
     }
+
+    
      
 }

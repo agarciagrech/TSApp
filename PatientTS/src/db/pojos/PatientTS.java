@@ -30,6 +30,31 @@ public class PatientTS implements Serializable {
     private Signal signal;
     private Integer userId;
     private String macAddress; 
+    private String password;
+    private String role;
+    
+    
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+    
+
+    public PatientTS(Integer medical_card_number, String password) {
+        this.medical_card_number = medical_card_number;
+        this.password = password;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
     
     public PatientTS() {
     }

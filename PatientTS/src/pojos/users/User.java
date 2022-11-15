@@ -8,31 +8,19 @@ import java.io.*;
 import java.util.Objects;
 import javax.persistence.*;
 
-@Entity
-@Table(name =  "users")
+
 
 public class User implements Serializable {
     
     private static final long serialVersionUID = -8462818311128616934L;
-	@Id
-	@GeneratedValue(generator="users")
-	@TableGenerator(name="users", table="sqlite_sequence",
-	    pkColumnName="name", valueColumnName="seq", pkColumnValue="users")
 	private Integer userId;
 	private String username;
         private Integer userRole;
-
-    public Integer getUserRole() {
-        return userRole;
-    }
+        private String password;
+        private Role role;
 
     
-	@Lob
-	private byte[] password;
-        @ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "role_id")
-	private Role role;
-	
+
         public User() {
             super();
 	}
@@ -43,7 +31,7 @@ public class User implements Serializable {
      * @param password - password assocated with the user (byte[]).
      * @param role - - role assocated with the user (Role).
      */
-    public User(String username, byte[] password, Role role) {
+    public User(String username, String password, Role role) {
 		super();
 		this.username = username;
 		this.password = password;
@@ -57,11 +45,6 @@ public class User implements Serializable {
     public Integer getUserId() {
         return userId;
     }
-    
-    public void setRole(Integer userRole) {
-        this.userRole = userRole;
-    }
-
     /**
      * Used to set the user Id associated to the user.
      * @param userId - user Id associated to the user (Integer).
@@ -70,6 +53,16 @@ public class User implements Serializable {
             this.userId = userId;
     }
 
+    
+    public Integer getUserRole() {
+        return userRole;
+    }
+    
+    public void setRole(Integer userRole) {
+        this.userRole = userRole;
+    }
+
+    
     /**
      * Used to get the username associated to the user.
      * @return username
@@ -90,7 +83,7 @@ public class User implements Serializable {
      * Used to get the password associated to the user.
      * @return password
      */
-    public byte[] getPassword() {
+    public String getPassword() {
             return password;
     }
 
@@ -98,7 +91,7 @@ public class User implements Serializable {
      * Used to set the password associated to the user.
      * @param password
      */
-    public void setPassword(byte[] password) {
+    public void setPassword(String password) {
             this.password = password;
     }
 

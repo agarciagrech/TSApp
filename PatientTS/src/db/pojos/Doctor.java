@@ -17,6 +17,30 @@ public class Doctor {
     private String dsurname;
     private String demail;
     private Integer userId;
+    private String dusername;
+    private String dpassword;
+    private String drole;
+
+    public Doctor(String username, String password) {
+        this.dusername = username;
+        this.dpassword = password;
+    }
+
+    public String getDsurname() {
+        return dsurname;
+    }
+
+    public void setDsurname(String dsurname) {
+        this.dsurname = dsurname;
+    }
+
+    public String getPassword() {
+        return dpassword;
+    }
+
+    public void setPassword(String password) {
+        this.dpassword = password;
+    }
 
     public Doctor() {
     }

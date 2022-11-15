@@ -22,5 +22,5 @@ public interface DoctorManager {
     public Doctor selectDoctor(Integer doctorId) throws SQLException, NotBoundException;
     public void deleteDoctorById(Integer doctorId) throws SQLException;
     public void createLinkUserDoctor(Integer userId, Integer doctorId) throws Exception;
-	
+    
 }

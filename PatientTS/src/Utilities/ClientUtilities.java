@@ -5,7 +5,6 @@
 package Utilities;
 
 import db.jdbc.*;
-import db.jpa.JPAUserManager;
 import db.pojos.*;
 import java.security.*;
 import java.util.*;
@@ -18,7 +17,6 @@ import pojos.users.*;
 public class ClientUtilities {
     
     private static Scanner sc = new Scanner(System.in);
-    private static JPAUserManager userman = new JPAUserManager();
     private static SQLitePatientTSManager patientman = new SQLitePatientTSManager();
     private static SQLiteDoctorManager doctorman = new SQLiteDoctorManager();
     public static String trashcan;
