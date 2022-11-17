@@ -52,7 +52,7 @@ public class SQLiteManager implements DBManager {
     public void connect() {
         try {
             Class.forName("org.sqlite.JDBC");
-            this.c = DriverManager.getConnection("jdbc:sqlite:./db/DSS.db");
+            this.c = DriverManager.getConnection("jdbc:sqlite:./db/TSApp");
             c.createStatement().execute("PRAGMA foreign_keys=ON");
             patient = new SQLitePatientTSManager(c);
             doctor = new SQLiteDoctorManager(c);

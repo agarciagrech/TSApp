@@ -16,6 +16,7 @@ import BITalino.Frame;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.rmi.NotBoundException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -51,6 +52,7 @@ public class SQLitePatientTSManager implements PatientTSManager {
      * @param p - [PatientTS] Patient that is added to the database
      * @throws SQLException
      */
+      
     @Override
     public void addPatient(PatientTS p) throws SQLException{
         if (p.getPatientAllergies()==null) {

@@ -117,6 +117,22 @@ public class PatientTS implements Serializable {
         this.macAddress = macAddress;
     }
 
+    public PatientTS(Integer medical_card_number, String name, String surname, Date dob, String address, String email, String diagnosis, String gender, String macAddress, String password, String role) {
+        this.medical_card_number = medical_card_number;
+        this.name = name;
+        this.surname = surname;
+        this.dob = dob;
+        this.address = address;
+        this.email = email;
+        this.diagnosis = diagnosis;
+        this.gender = gender;
+        this.macAddress = macAddress;
+        this.password = password;
+        this.role = role;
+    }
+    
+    
+
     /**
      *
      * @param medCardId - The medical card id of the patient (int) [Cannot be changed once it's created]
