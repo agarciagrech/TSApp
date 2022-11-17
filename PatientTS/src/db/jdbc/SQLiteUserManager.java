@@ -7,6 +7,7 @@ package db.jdbc;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -28,7 +29,7 @@ public class SQLiteUserManager {
      
     // TO DO: 
      public void checkPassword(String medCardNumber, String password) {
-            User user = null;
+            
             try {   String sql = "SELECT * FROM user WHERE username = ? AND password = ? LIMIT 1";
                     PreparedStatement pStatement = c.prepareStatement(sql);
                     pStatement.setString(1, medCardNumber);
@@ -43,7 +44,7 @@ public class SQLiteUserManager {
            
     }
     
-    public void addUser(User u) throws SQLException{
+    public void addUser(User u){
        
                 String sq1 = "INSERT INTO user ( userName, userPassword) VALUES (?, ?)";
                 try {
@@ -58,19 +59,46 @@ public class SQLiteUserManager {
     
     }
     
+    
+    
      /**
      * Deletes any user with a userid that matches the given userid.
      * @param userid - [Integer] Medical card number from the patient that will be deleted.
-     * @throws SQLException
+     
      */
    
-    public void deleteUserByUserid(Integer userid) throws SQLException{
-        String sql = "DELETE FROM users WHERE userid = ?";
-        PreparedStatement pStatement = c.prepareStatement(sql);
-        pStatement.setInt(1, userid);
-        pStatement.executeUpdate();
-        pStatement.close();
+    public void deleteUserByUserid(Integer userid){
+        try {
+            String sql = "DELETE FROM users WHERE userid = ?";
+            PreparedStatement pStatement = c.prepareStatement(sql);
+            pStatement.setInt(1, userid);
+            pStatement.executeUpdate();
+            pStatement.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(SQLiteUserManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
+    /**
+     * Checks if it exists a username in the database
+     * @param username - [String] 
+     
+     */
+   
+    public boolean existingUserName(String username){
+        try {
+            String sql = "SELECT * FROM doctor WHERE username = ?";
+            PreparedStatement p = c.prepareStatement(sql);
+            p.setString(1,username);
+            ResultSet rs = p.executeQuery();
+            while(rs.next()){
+                return false;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(SQLiteUserManager.class.getName()).log(Level.SEVERE, null, ex);
+            
+        }
+        return false;
+     }
     
     
 }

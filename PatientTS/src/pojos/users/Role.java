@@ -12,13 +12,9 @@ import javax.persistence.*;
 public class Role implements Serializable{
     
     private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(generator="roles")
-    @TableGenerator(name="roles", table="sqite_sequence",
-            pkColumnName="name", valueColumnName="seq", pkColumnValue="roles")
     private Integer id;
     private String type;
-    @OneToMany(mappedBy = "role")
+    
     private List<User> users;
     
     
@@ -37,6 +33,12 @@ public class Role implements Serializable{
         this.users = new ArrayList<User>();
     }
 
+    public Role(Integer id, String type) {
+        this.id = id;
+        this.type = type;
+    }
+
+    
     /**
      * Used to get the ID of the role (1-patient, 2-doctor).
      * @return id

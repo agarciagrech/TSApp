@@ -127,7 +127,7 @@ public class SQLiteManager implements DBManager {
           Statement stmt5 = c.createStatement();
           String sql5 = "CREATE TABLE role " 
                   + "(roleid INTEGER PRIMARY KEY, " 
-                  + "Type TEXT NOT NULL, "; 
+                  + "type TEXT NOT NULL, "; 
           stmt5.executeUpdate(sql5);
           stmt5.close();
           

@@ -4,17 +4,17 @@
  */
 package db.interfaces;
 
+import java.rmi.NotBoundException;
 import java.sql.SQLException;
-import pojos.users.User;
+import java.util.List;
+import pojos.users.Role;
 
 /**
  *
  * @author albic
  */
-public interface UserManager {
-    public void checkPassword(String medCardNumber, String password);
-    public void addUser(User u);
-    public void deleteUserByUserid(Integer userid);
-    public boolean existingUserName(String username);
-    
-}
+public interface RoleManager {
+    public void addRole(Role r);
+     public Role selectRoleById(Integer roleid);
+     public List<Role> selectAllRoles();
+}   
