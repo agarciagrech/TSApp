@@ -5,6 +5,7 @@
 package db.jdbc;
 
 
+import db.interfaces.RoleManager;
 import java.rmi.NotBoundException;
 import java.sql.*;
 import java.util.ArrayList;
@@ -17,7 +18,7 @@ import pojos.users.Role;
  *
  * @author albic
  */
-public class SQLiteRoleManager {
+public class SQLiteRoleManager implements RoleManager {
     private Connection c;
     
     public SQLiteRoleManager(Connection c){

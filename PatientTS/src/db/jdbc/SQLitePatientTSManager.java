@@ -4,32 +4,19 @@
  * and open the template in the editor.
  */
 package db.jdbc;
-import db.pojos.Signal;
 import db.pojos.PatientTS;
-import BITalino.BITalino;
-import BITalino.BITalinoException;
 import db.interfaces.PatientTSManager;
 //import java.sql.*;
 import java.util.*;
-import BITalino.BitalinoDemo;
-import BITalino.Frame;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.rmi.NotBoundException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.bluetooth.RemoteDevice;
-import javax.persistence.NoResultException;
-import javax.persistence.Query;
-import pojos.users.User;
+import java.util.Date;
+
 
 /**
  *
@@ -56,7 +43,7 @@ public class SQLitePatientTSManager implements PatientTSManager {
     @Override
     public void addPatient(PatientTS p) throws SQLException{
         if (p.getPatientAllergies()==null) {
-                String sq1 = "INSERT INTO patient ( medical_card_number, name, surname, dob, address, email, diagnosis, gender, macAddress,password,role) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                String sq1 = "INSERT INTO patient ( medical_card_number, name, surname, dob, address, email, diagnosis, gender, macAddress) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
                 try {
                     PreparedStatement preparedStatement = c.prepareStatement(sq1);
                     preparedStatement.setInt(1, p.getMedCardId());
@@ -76,7 +63,7 @@ public class SQLitePatientTSManager implements PatientTSManager {
                 Logger.getLogger(SQLitePatientTSManager.class.getName()).log(Level.SEVERE, null, ex);
             }
         }else {
-                String sq1 = "INSERT INTO patient ( medical_card_number, name, surname, dob, address, email, diagnosis, allergies, gender, macAddress, password, role) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                String sq1 = "INSERT INTO patient ( medical_card_number, name, surname, dob, address, email, diagnosis, allergies, gender, macAddress) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
                 try {
                     PreparedStatement preparedStatement = c.prepareStatement(sq1);
                     preparedStatement.setInt(1, p.getMedCardId());
@@ -89,8 +76,6 @@ public class SQLitePatientTSManager implements PatientTSManager {
                     preparedStatement.setString(8, p.getPatientAllergies());
                     preparedStatement.setString(9, p.getPatientGender());
                     preparedStatement.setString(10, p.getMacAddress());
-                    preparedStatement.setString(11, p.getPassword());
-                    preparedStatement.setString(12, p.getRole());
                     preparedStatement.executeUpdate();
                     preparedStatement.close();
                 } catch (SQLException ex) {

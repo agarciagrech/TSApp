@@ -5,6 +5,7 @@
 package db.jdbc;
 
 
+import db.interfaces.UserManager;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -17,7 +18,7 @@ import pojos.users.User;
  *
  * @author albic
  */
-public class SQLiteUserManager {
+public class SQLiteUserManager implements UserManager {
     
     private Connection c;
      public SQLiteUserManager(Connection c){

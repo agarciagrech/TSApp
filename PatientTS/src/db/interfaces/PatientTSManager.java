@@ -7,6 +7,7 @@ package db.interfaces;
 
 import db.pojos.PatientTS;
 import java.rmi.NotBoundException;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;

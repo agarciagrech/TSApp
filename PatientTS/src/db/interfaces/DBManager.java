@@ -5,6 +5,8 @@
  */
 package db.interfaces;
 
+import java.sql.Connection;
+
 /**
  *
  * @author agarc
@@ -16,6 +18,7 @@ public interface DBManager {
     public PatientTSManager getPatientManager(); 
     public DoctorManager getDoctorManager();
     public SignalManager getSignalManager();
+    public Connection getConnection();
     public boolean createTables();
     
 }
