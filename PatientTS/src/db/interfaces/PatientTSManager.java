@@ -18,14 +18,14 @@ import java.util.List;
  */
 public interface PatientTSManager {
     
-    public void addPatient(PatientTS p) throws SQLException;
-    public PatientTS selectPatient(Integer medCard) throws SQLException, NotBoundException;
-    public PatientTS selectPatientByUserId( Integer userId) throws SQLException, NotBoundException;
-    public List<PatientTS> selectAllPatients() throws SQLException, NotBoundException;
-    public boolean editPatient(Integer medCardNum, String name, String surname, Date dob, String address, String email, String diagnosis, String allergies, String gender, String macAd, String password);
-    public void deletePatientByMedicalCardId(Integer medCardNumber) throws SQLException;
-    public void createLinkDoctorPatient( int medCardNumber, int doctorId) throws SQLException;
-    public void createLinkUserPatient(int userId, int medCardNumber) throws Exception;
+    public void addPatient(PatientTS p);
+    public PatientTS selectPatient(Integer medCard);
+    public PatientTS selectPatientByUserId( Integer userId);
+    public List<PatientTS> selectAllPatients();
+    public boolean editPatient(Integer medCardNum, String name, String surname, Date dob, String address, String email, String diagnosis, String allergies, String gender, String macAd);
+    public void deletePatientByMedicalCardId(Integer medCardNumber);
+    public void createLinkDoctorPatient( int medCardNumber, int doctorId);
+    public void createLinkUserPatient(int userId, int medCardNumber);
     
 
 }

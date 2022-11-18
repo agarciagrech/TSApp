@@ -5,6 +5,7 @@
  */
 package db.pojos;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class Signal {
@@ -284,6 +285,11 @@ public class Signal {
         for (int i=0; i<EMG_values.length; i++){
             System.out.println(EMG_values[i]);
         } 
+    }
+    
+    public String formatDate (Date startDate){
+        SimpleDateFormat  formato = new SimpleDateFormat("YYYY/MM/dd");
+        return formato.format(startDate);
     }
 
 }

@@ -13,6 +13,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.Date;
@@ -41,7 +42,7 @@ public class SQLitePatientTSManager implements PatientTSManager {
      */
       
     @Override
-    public void addPatient(PatientTS p) throws SQLException{
+    public void addPatient(PatientTS p) {
         if (p.getPatientAllergies()==null) {
                 String sq1 = "INSERT INTO patient ( medical_card_number, name, surname, dob, address, email, diagnosis, gender, macAddress) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
                 try {
@@ -49,14 +50,12 @@ public class SQLitePatientTSManager implements PatientTSManager {
                     preparedStatement.setInt(1, p.getMedCardId());
                     preparedStatement.setString(2, p.getPatientName());
                     preparedStatement.setString(3, p.getPatientSurname());
-                    preparedStatement.setDate(4, (java.sql.Date) p.getPatientDob());
+                    preparedStatement.setString(4, p.formatDate(p.getPatientDob()));
                     preparedStatement.setString(5, p.getPatientAddress());
                     preparedStatement.setString(6, p.getPatientEmail());
                     preparedStatement.setString(7, p.getPatientDiagnosis());
                     preparedStatement.setString(8, p.getPatientGender());
                     preparedStatement.setString(9, p.getMacAddress());
-                    preparedStatement.setString(10, p.getPassword());
-                    preparedStatement.setString(11, p.getRole());
                     preparedStatement.executeUpdate();
                     preparedStatement.close();
                 } catch (SQLException ex) {
@@ -69,7 +68,7 @@ public class SQLitePatientTSManager implements PatientTSManager {
                     preparedStatement.setInt(1, p.getMedCardId());
                     preparedStatement.setString(2, p.getPatientName());
                     preparedStatement.setString(3, p.getPatientSurname());
-                    preparedStatement.setDate(4, (java.sql.Date) p.getPatientDob());
+                    preparedStatement.setString(4,  p.formatDate(p.getPatientDob()));
                     preparedStatement.setString(5, p.getPatientAddress());
                     preparedStatement.setString(6, p.getPatientEmail());
                     preparedStatement.setString(7, p.getPatientDiagnosis());
@@ -101,7 +100,7 @@ public class SQLitePatientTSManager implements PatientTSManager {
      * TODO edit signal
      */
 	public boolean editPatient(Integer medCardNum, String name, String surname, Date dob, String address, 
-                String email, String diagnosis, String allergies, String gender, String macAd, String password) {
+                String email, String diagnosis, String allergies, String gender, String macAd) {
 
 		String sql;
 		PreparedStatement pStatement;
@@ -124,7 +123,7 @@ public class SQLitePatientTSManager implements PatientTSManager {
                 if (dob != null) {
 			sql = "UPDATE patient SET dob = ? WHERE medical_card_number = ?";
 			pStatement = c.prepareStatement(sql);
-			pStatement.setDate(1, (java.sql.Date) dob);
+			pStatement.setString(1,formatDate(dob));
 			pStatement.setInt(2, medCardNum);
 			pStatement.executeUpdate();
 		}
@@ -176,13 +175,7 @@ public class SQLitePatientTSManager implements PatientTSManager {
 			pStatement.setInt(2, medCardNum);
 			pStatement.executeUpdate();
 		}
-                if (password != null) {
-			sql = "UPDATE patient SET password = ? WHERE medical_card_number = ?";
-			pStatement = c.prepareStatement(sql);
-			pStatement.setString(1, password);
-			pStatement.setInt(2, medCardNum);
-			pStatement.executeUpdate();
-		}
+                
 		
 		   return true;
             } catch (SQLException update_patient_error) {
@@ -199,19 +192,25 @@ public class SQLitePatientTSManager implements PatientTSManager {
      * @throws NotBoundException
      */
     @Override
-    public PatientTS selectPatientByUserId(Integer userId) throws SQLException, NotBoundException {
-        String sql = "SELECT * FROM patient WHERE userId = ?";
-        PreparedStatement p = c.prepareStatement(sql);
-        p.setInt(1,userId);
-        ResultSet rs = p.executeQuery();
-        PatientTS patient = null;
-        if(rs.next()){
-                patient = new PatientTS(rs.getInt("medical_card_number"),rs.getString("name"),rs.getString("surname"),rs.getDate("dob"), 
-                rs.getString("address"),rs.getString("email"),rs.getString("diagnosis"),rs.getString("allergies"),rs.getString("gender"));
+    public PatientTS selectPatientByUserId(Integer userId){
+        try {
+            Date date;
+            String sql = "SELECT * FROM patient WHERE userId = ?";
+            PreparedStatement p = c.prepareStatement(sql);
+            p.setInt(1,userId);
+            ResultSet rs = p.executeQuery();
+            PatientTS patient = null;
+            if(rs.next()){
+                patient = new PatientTS(rs.getInt("medical_card_number"),rs.getString("name"),rs.getString("surname"),date = new Date(rs.getString("dob")),
+                        rs.getString("address"),rs.getString("email"),rs.getString("diagnosis"),rs.getString("allergies"),rs.getString("gender"));
+            }
+            p.close();
+            rs.close();
+            return patient;
+        } catch (SQLException ex) {
+            Logger.getLogger(SQLitePatientTSManager.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
         }
-        p.close();
-        rs.close();
-        return patient;	
     }
     
     /**
@@ -222,19 +221,26 @@ public class SQLitePatientTSManager implements PatientTSManager {
      * @throws NotBoundException
      */
     @Override
-    public PatientTS selectPatient(Integer medCard) throws SQLException, NotBoundException {
-        String sql = "SELECT * FROM patients WHERE medical_card_number = ?";
-        PreparedStatement p = c.prepareStatement(sql);
-        p.setInt(1,medCard);
-        ResultSet rs = p.executeQuery();
-        PatientTS patient = null;
-        if(rs.next()){
-                patient = new PatientTS(rs.getInt("medical_card_number"),rs.getString("name"),rs.getString("surname"),rs.getDate("dob"), 
-                rs.getString("address"),rs.getString("email"),rs.getString("diagnosis"),rs.getString("allergies"),rs.getString("gender"));
+    public PatientTS selectPatient(Integer medCard){
+        try {
+            Date date;
+            String sql = "SELECT * FROM patient WHERE medical_card_number = ?";
+            PreparedStatement p = c.prepareStatement(sql);
+            p.setInt(1,medCard);
+            ResultSet rs = p.executeQuery();
+            PatientTS patient = null;
+            if(rs.next()){
+                patient = new PatientTS(rs.getInt("medical_card_number"),rs.getString("name"),rs.getString("surname"),date = new Date(rs.getString("dob")),
+                        rs.getString("address"),rs.getString("email"),rs.getString("diagnosis"),rs.getString("allergies"),rs.getString("gender"));
+            }
+            p.close();
+            rs.close();
+            return patient;
+        } catch (SQLException ex) {
+            Logger.getLogger(SQLitePatientTSManager.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
         }
-        p.close();
-        rs.close();
-        return patient;	
+        
     }
 
     /**
@@ -244,18 +250,27 @@ public class SQLitePatientTSManager implements PatientTSManager {
      * @throws NotBoundException
      */
     @Override
-    public List<PatientTS> selectAllPatients() throws SQLException, NotBoundException {
-    String sql = "SELECT * FROM patient";
-		PreparedStatement p = c.prepareStatement(sql);
-		ResultSet rs = p.executeQuery();
-		List <PatientTS> pList = new ArrayList<PatientTS>();
-		while(rs.next()){
-			pList.add(  new PatientTS(rs.getInt("medical_card_number"),rs.getString("name"),rs.getString("surname"),rs.getDate("dob"), 
-                        rs.getString("address"),rs.getString("email"),rs.getString("diagnosis"),rs.getString("allergies"),rs.getString("gender")));
+    public List<PatientTS> selectAllPatients(){
+        try {
+            String sql = "SELECT * FROM patient";
+            PreparedStatement p = c.prepareStatement(sql);
+            ResultSet rs = p.executeQuery();
+            List <PatientTS> pList = new ArrayList<PatientTS>();
+            Date date;
+            while(rs.next()){ 
+            
+                pList.add(  new PatientTS(rs.getInt("medical_card_number"),rs.getString("name"),rs.getString("surname"),date = new Date(rs.getString("dob")),
+                          rs.getString("address"),rs.getString("email"),rs.getString("diagnosis"),rs.getString("allergies"),rs.getString("gender"),rs.getString("macAddress")));
+                
+            }
+            p.close();
+            rs.close();
+            return pList;
+        } catch (SQLException ex) {
+            Logger.getLogger(SQLitePatientTSManager.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
         }
-		p.close();
-		rs.close();
-		return pList;
+        
     }
     
     
@@ -265,12 +280,16 @@ public class SQLitePatientTSManager implements PatientTSManager {
      * @throws SQLException
      */
     @Override
-    public void deletePatientByMedicalCardId(Integer medCardNumber) throws SQLException{
-        String sql = "DELETE FROM patient WHERE medical_card_number = ?";
-        PreparedStatement pStatement = c.prepareStatement(sql);
-        pStatement.setInt(1, medCardNumber);
-        pStatement.executeUpdate();
-        pStatement.close();
+    public void deletePatientByMedicalCardId(Integer medCardNumber){
+        try {
+            String sql = "DELETE FROM patient WHERE medical_card_number = ?";
+            PreparedStatement pStatement = c.prepareStatement(sql);
+            pStatement.setInt(1, medCardNumber);
+            pStatement.executeUpdate();
+            pStatement.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(SQLitePatientTSManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     
@@ -282,13 +301,17 @@ public class SQLitePatientTSManager implements PatientTSManager {
      * @throws SQLException
      */
     @Override
-    public void createLinkDoctorPatient(int medCardNumber, int doctorId) throws SQLException {
-        String sql = "INSERT INTO doctor_patient (patient_id, doctor_id) VALUES (?,?)";
-        PreparedStatement pStatement = c.prepareStatement(sql);
-        pStatement.setInt(1, medCardNumber);
-        pStatement.setInt(2, doctorId);
-        pStatement.executeUpdate();
-        pStatement.close();
+    public void createLinkDoctorPatient(int medCardNumber, int doctorId){
+        try {
+            String sql = "INSERT INTO doctor_patient (patient_id, doctor_id) VALUES (?,?)";
+            PreparedStatement pStatement = c.prepareStatement(sql);
+            pStatement.setInt(1, medCardNumber);
+            pStatement.setInt(2, doctorId);
+            pStatement.executeUpdate();
+            pStatement.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(SQLitePatientTSManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     /**
      * Associates a patient with a user of the application
@@ -297,15 +320,23 @@ public class SQLitePatientTSManager implements PatientTSManager {
      * @throws Exception
      */
     @Override
-    public void createLinkUserPatient(int userId, int medCardNumber) throws Exception {
-        String sql1 = "UPDATE patient SET userId = ? WHERE medical_card_number = ? ";
-        PreparedStatement pStatement = c.prepareStatement(sql1);
-        pStatement.setInt(1, userId);
-        pStatement.setInt(2, medCardNumber);
-        pStatement.executeUpdate();
-        pStatement.close();
+    public void createLinkUserPatient(int userId, int medCardNumber){
+        try {
+            String sql1 = "UPDATE patient SET userId = ? WHERE medical_card_number = ? ";
+            PreparedStatement pStatement = c.prepareStatement(sql1);
+            pStatement.setInt(1, userId);
+            pStatement.setInt(2, medCardNumber);
+            pStatement.executeUpdate();
+            pStatement.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(SQLitePatientTSManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
+    public String formatDate (Date dob){
+        SimpleDateFormat  formato = new SimpleDateFormat("YYYY/MM/dd");
+        return formato.format(dob);
+    }
     
    
 }

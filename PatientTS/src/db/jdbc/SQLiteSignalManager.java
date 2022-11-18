@@ -14,15 +14,17 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.rmi.NotBoundException;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.Date;
+        
 
 /**
  *
@@ -50,7 +52,7 @@ public class SQLiteSignalManager implements SignalManager{
         try {
             template = c.prepareStatement(sq1);
             template.setInt(1, s.getSignalId());
-			template.setDate(2, (Date) s.getSignalStartDate());
+			template.setString(2, formatDate(s.getSignalStartDate()));
                         template.setString(3, s.getSignalname());
                         template.setInt(4, s.getSignalSamplingRate());
                         template.setString(5, s.getSignalfileName());
@@ -82,7 +84,7 @@ public class SQLiteSignalManager implements SignalManager{
             if (startDate != null) {
                     sql = "UPDATE signal SET startDate = ? WHERE signalid = ?";
                     pStatement = c.prepareStatement(sql);
-                    pStatement.setDate(1, (Date) startDate);
+                    pStatement.setString(1, formatDate(startDate));
                     pStatement.setInt(2,signalid );
                     pStatement.executeUpdate();	
             } 
@@ -160,10 +162,10 @@ public class SQLiteSignalManager implements SignalManager{
             Signal s= new Signal();
             String cadena;
             int[] values = new int[10];
-                        
+            Date date;           
             ResultSet result_set = template.executeQuery();
             result_set.next();
-            s.setSignalStartDate(result_set.getDate("startDate"));
+            s.setSignalStartDate(date = new Date(result_set.getString("startDate")));
             s.setSignalname(result_set.getString("sname"));
             s.setSignalSamplingRate(result_set.getInt("samplingRate"));
             s.setSignalfileName(result_set.getString("fileName"));
@@ -210,10 +212,10 @@ public class SQLiteSignalManager implements SignalManager{
             Signal s= new Signal();
             String cadena;
             int[] values = new int[10];
-
+            Date date;
             ResultSet result_set = template.executeQuery();
             result_set.next();
-            s.setSignalStartDate(result_set.getDate("startDate"));
+            s.setSignalStartDate(date = new Date(result_set.getString("startDate")));
             s.setSignalname(result_set.getString("sname"));
             s.setSignalSamplingRate(result_set.getInt("samplingRate"));
             s.setSignalfileName(result_set.getString("fileName"));
@@ -257,6 +259,7 @@ public class SQLiteSignalManager implements SignalManager{
         List<Signal> signals = new LinkedList();
         String cadena;
         int[] values = new int[10];
+        Date date;
         try {
             Statement statement = this.c.createStatement();
             String SQL_code = "SELECT * FROM signal WHERE id_patient LIKE ?";
@@ -265,7 +268,7 @@ public class SQLiteSignalManager implements SignalManager{
             ResultSet rs = statement.executeQuery(SQL_code);
             while(rs.next()) {
                 Integer signalId = rs.getInt("signalId");
-                Date startDate = rs.getDate("sartDate");
+                Date startDate = (date = new Date(rs.getString("sartDate")));
                 String sname = rs.getString("sname");
                 Integer samplingRate = rs.getInt("samplingRate");
                 String fileName = rs.getString("fileName");
@@ -311,6 +314,7 @@ public class SQLiteSignalManager implements SignalManager{
        List<Signal> signals = new LinkedList();
        String cadena;
        int[] values = new int[10];
+       Date date;
        try {
             Statement statement = this.c.createStatement();
             String SQL_code = "SELECT * FROM signal WHERE id_patient LIKE ?";
@@ -319,7 +323,7 @@ public class SQLiteSignalManager implements SignalManager{
             ResultSet rs = statement.executeQuery(SQL_code);
             while(rs.next()) {
                 Integer signalId = rs.getInt("signalId");
-                Date startDate = rs.getDate("sartDate");
+                Date startDate = (date = new Date(rs.getString("sartDate")));
                 String sname = rs.getString("sname");
                 Integer samplingRate = rs.getInt("samplingRate");
                 String fileName = rs.getString("fileName");
@@ -366,6 +370,7 @@ public class SQLiteSignalManager implements SignalManager{
         List<Signal> signals = new LinkedList();
         String cadena;
         int[] values = new int[10];
+        Date date;
         try {
             Statement statement = this.c.createStatement();
             String SQL_code = "SELECT * FROM signal WHERE id_patient LIKE ?";
@@ -374,7 +379,7 @@ public class SQLiteSignalManager implements SignalManager{
             ResultSet rs = statement.executeQuery(SQL_code);
             while(rs.next()) {
                 Integer signalId = rs.getInt("signalId");
-                Date startDate = rs.getDate("sartDate");
+                Date startDate = (date = new Date(rs.getString("sartDate")));
                 String sname = rs.getString("sname");
                 Integer samplingRate = rs.getInt("samplingRate");
                 String fileName = rs.getString("fileName");
@@ -408,5 +413,10 @@ public class SQLiteSignalManager implements SignalManager{
             Logger.getLogger(SQLiteSignalManager.class.getName()).log(Level.SEVERE, null, ex);
             return null;
         }
+    }
+    
+    public String formatDate (java.util.Date dob){
+        SimpleDateFormat  formato = new SimpleDateFormat("YYYY/MM/dd");
+        return formato.format(dob);
     }
 }
