@@ -94,5 +94,37 @@ public class SQLiteRoleManager implements RoleManager {
         }
     }
     
+    public int getId (String type){
+        String sql1 = "SELECT * FROM role WHERE type = ?";
+        int id=0;
+                try {
+                    PreparedStatement preparedStatement = c.prepareStatement(sql1);
+                    PreparedStatement p = c.prepareStatement(sql1);
+                    p.setString(1,type);
+                    ResultSet rs = p.executeQuery();
+                    id = rs.getInt("roleid");
+                } catch (SQLException ex) {
+                Logger.getLogger(SQLitePatientTSManager.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        return id;
+    }
+    
+     public boolean existingRoleType(String type){
+        try {
+            String sql = "SELECT * FROM role WHERE type = ?";
+            PreparedStatement p = c.prepareStatement(sql);
+            p.setString(1,type);
+            ResultSet rs = p.executeQuery();
+            while(rs.next()){
+                return true;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(SQLiteUserManager.class.getName()).log(Level.SEVERE, null, ex);
+            
+        }
+        return false;
+     }
+    
+    
 
 }

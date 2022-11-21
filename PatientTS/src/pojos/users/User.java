@@ -37,6 +37,16 @@ public class User implements Serializable {
 		this.password = password;
                 this.role = role;
 	}
+     /**
+     *
+     * @param username - username assocated with the user (String).
+     * @param password - password assocated with the user (byte[]).
+     */
+    public User(String username, String password) {
+		super();
+		this.username = username;
+		this.password = password;
+    }
 
     /**
      * Used to get the user Id associated to the user.

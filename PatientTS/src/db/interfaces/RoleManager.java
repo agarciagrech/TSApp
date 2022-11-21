@@ -17,4 +17,5 @@ public interface RoleManager {
     public void addRole(Role r);
      public Role selectRoleById(Integer roleid);
      public List<Role> selectAllRoles();
+     public int getId (String type);
 }   

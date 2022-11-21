@@ -16,5 +16,6 @@ public interface UserManager {
     public void addUser(User u);
     public void deleteUserByUserid(Integer userid);
     public boolean existingUserName(String username);
+    public int getId (String username);
     
 }

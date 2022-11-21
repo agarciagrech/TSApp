@@ -47,7 +47,7 @@ public class SQLiteUserManager implements UserManager {
     
     public void addUser(User u){
        
-                String sq1 = "INSERT INTO user ( userName, userPassword) VALUES (?, ?)";
+                String sq1 = "INSERT INTO users ( userName, userPassword) VALUES (?, ?)";
                 try {
                     PreparedStatement preparedStatement = c.prepareStatement(sq1);
                     preparedStatement.setString(1, u.getUsername());
@@ -58,6 +58,20 @@ public class SQLiteUserManager implements UserManager {
                 Logger.getLogger(SQLitePatientTSManager.class.getName()).log(Level.SEVERE, null, ex);
             }
     
+    }
+    public int getId (String username){
+        String sql1 = "SELECT * FROM users WHERE username = ?";
+        int id=0;
+                try {
+                    PreparedStatement preparedStatement = c.prepareStatement(sql1);
+                    PreparedStatement p = c.prepareStatement(sql1);
+                    p.setString(1,username);
+                    ResultSet rs = p.executeQuery();
+                    id = rs.getInt("userid");
+                } catch (SQLException ex) {
+                Logger.getLogger(SQLitePatientTSManager.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        return id;
     }
     
     
@@ -79,6 +93,24 @@ public class SQLiteUserManager implements UserManager {
             Logger.getLogger(SQLiteUserManager.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    /**
+     * Deletes any user with a userid that matches the given userid.
+     * @param userid - [Integer] Medical card number from the patient that will be deleted.
+     
+     */
+   
+    public void deleteUserByUserName(String userName){
+        try {
+            String sql = "DELETE FROM users WHERE userName = ?";
+            PreparedStatement pStatement = c.prepareStatement(sql);
+            pStatement.setString(1, userName);
+            pStatement.executeUpdate();
+            pStatement.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(SQLiteUserManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     /**
      * Checks if it exists a username in the database
      * @param username - [String] 
@@ -87,12 +119,12 @@ public class SQLiteUserManager implements UserManager {
    
     public boolean existingUserName(String username){
         try {
-            String sql = "SELECT * FROM doctor WHERE username = ?";
+            String sql = "SELECT * FROM users WHERE username = ?";
             PreparedStatement p = c.prepareStatement(sql);
             p.setString(1,username);
             ResultSet rs = p.executeQuery();
             while(rs.next()){
-                return false;
+                return true;
             }
         } catch (SQLException ex) {
             Logger.getLogger(SQLiteUserManager.class.getName()).log(Level.SEVERE, null, ex);
@@ -100,6 +132,25 @@ public class SQLiteUserManager implements UserManager {
         }
         return false;
      }
+    
+  /**
+     * Associates a user with a role of the application
+     * @param userId
+     * @param roleId
+     */
+    
+    public void createLinkUserPatient(int roleId, int userId){
+        try {
+            String sql1 = "UPDATE users SET userRoleid = ? WHERE userid = ? ";
+            PreparedStatement pStatement = c.prepareStatement(sql1);
+            pStatement.setInt(1, roleId);
+            pStatement.setInt(2, userId);
+            pStatement.executeUpdate();
+            pStatement.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(SQLitePatientTSManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     
     
 }

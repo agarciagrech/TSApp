@@ -14,6 +14,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import pojos.users.Role;
+import pojos.users.User;
 
 /**
  *
@@ -34,6 +36,8 @@ public class menuDBPrueba {
         SQLiteDoctorManager doctorman = new SQLiteDoctorManager(manager.getConnection());
         boolean createTables = manager.createTables();
         
+        String username="1234";
+        String password="lalala";
         
         Integer medCard = 1234;
         String name = "paco";
@@ -46,8 +50,8 @@ public class menuDBPrueba {
         String gender = "male";
         String macAddres = "20:50:13:22";
         String allergies = "fruta";
-        String password = "paco123";
-        String role = "Patient";
+        
+        String roleType = "Patient";
         
         String date2 = "2000/11/18";
         Date dob2 = new Date(date2);
@@ -59,13 +63,63 @@ public class menuDBPrueba {
         PatientTS p2 = new PatientTS(5678,"pepe","martin",dob2,"calle 1","pepe@gmail.com","diabetes","male","25:30:11:22");
         PatientTS p3 = new PatientTS(9013,"maria","martin",dob3,"calle 2","mm@gmail.com","epilepsia","female","22:80:50:31");
         
-        System.out.println(p1.getPatientAllergies());
-        System.out.println(p1.getPatientGender());
-        System.out.println(p1.formatDate(dob));
+        User u = new User(username,password);
         
         
-        patientman.addPatient(p1);
-        System.out.println("pateint 1 added");
+        Role role = new Role(roleType);
+        boolean exist1 = roleman.existingRoleType(role.getRole());
+        if (exist1== false){
+          roleman.addRole(role);
+          System.out.println("Added role to db");  
+          role.setId(roleman.getId(role.getRole()));
+          u.setRole(role.getId());
+        }
+        
+        
+        
+        boolean exist2 = userman.existingUserName(username);
+        if (exist2== false){
+          userman.addUser(u);
+          System.out.println("Added user to db");
+          u.setUserId(userman.getId(username));
+          userman.createLinkUserPatient(role.getId(), u.getUserId());
+          patientman.addPatient(p1);
+          System.out.println("pateint 1 added");
+          patientman.createLinkUserPatient(u.getUserId(), p1.getMedCardId());
+          System.out.println("Link created");
+        }
+        
+        boolean exist4 = roleman.existingRoleType(role.getRole());
+        if (exist4== false){
+          roleman.addRole(role);
+          System.out.println("Added role to db");  
+          role.setId(roleman.getId(role.getRole()));
+          u.setRole(role.getId());
+        }
+        User u2 = new User(Integer.toString(p2.getMedCardId()),"qryihpu");
+        boolean exist3 = userman.existingUserName(u2.getUsername());
+        if (exist2== false){
+          userman.addUser(u2);
+          System.out.println("Added user to db");
+          u2.setUserId(userman.getId(u2.getUsername()));
+          userman.createLinkUserPatient(role.getId(), u2.getUserId());
+          patientman.addPatient(p2);
+          System.out.println("pateint 2 added");
+          patientman.createLinkUserPatient(u2.getUserId(), p2.getMedCardId());
+          System.out.println("Link created");
+        }
+        userman.deleteUserByUserName(Integer.toString(medCard));
+        System.out.println("p1 deleted");
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        /*
         patientman.addPatient(p2);
         System.out.println("patient 2 added");
         patientman.addPatient(p3);
@@ -90,7 +144,7 @@ public class menuDBPrueba {
         System.out.println("p1 edited");
         PatientTS p5 = patientman.selectPatient(medCard);
         System.out.println(p5.toString());
-        
+        */
     }
     
 }
