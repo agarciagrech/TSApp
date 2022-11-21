@@ -17,30 +17,9 @@ public class Doctor {
     private String dsurname;
     private String demail;
     private Integer userId;
-    private String dusername;
     private String dpassword;
-    private String drole;
+   
 
-    public Doctor(String username, String password) {
-        this.dusername = username;
-        this.dpassword = password;
-    }
-
-    public String getDsurname() {
-        return dsurname;
-    }
-
-    public void setDsurname(String dsurname) {
-        this.dsurname = dsurname;
-    }
-
-    public String getPassword() {
-        return dpassword;
-    }
-
-    public void setPassword(String password) {
-        this.dpassword = password;
-    }
 
     public Doctor() {
     }
@@ -54,7 +33,7 @@ public class Doctor {
      * @param userId - [Integer] User Id associated to the doctor
      * @throws java.rmi.NotBoundException
      */
-    public Doctor(Integer id, String name, String surname, String email, Integer userId) throws NotBoundException{
+    public Doctor(Integer id, String name, String surname, String email, Integer userId){
         this.doctorId = id;
         this.dname = name;
         this.dsurname = surname;
@@ -70,7 +49,7 @@ public class Doctor {
      * @param email - [String] The professional email of the doctor
      * @throws java.rmi.NotBoundException
      */
-    public Doctor(Integer id, String name, String surname, String email) throws NotBoundException{
+    public Doctor(Integer id, String name, String surname, String email){
         this.doctorId = id;
         this.dname = name;
         this.dsurname = surname;
@@ -84,10 +63,23 @@ public class Doctor {
      * @param userId - [Integer] User Id associated to the doctor
      * @throws java.rmi.NotBoundException
      */
-    public Doctor(String name, String surname, Integer userId) throws NotBoundException{
+    public Doctor(String name, String surname, Integer userId){
         this.dname = name;
         this.dsurname = surname;
         this.userId = userId;
+    }
+    
+    /**
+     * @param name - [String] The name of the doctor
+     * @param surname - [String] The surname of the doctor
+     * @param email - [String] The professional email of the doctor
+    
+     */
+    public Doctor( String name, String surname, String email){
+        this.dname = name;
+        this.dsurname = surname;
+        this.demail = email;
+        
     }
     
     /**

@@ -246,14 +246,14 @@ public class SQLitePatientTSManager implements PatientTSManager {
     /**
      * Select every patient related to the doctor
      * @return - [List] List of all the patients.
-     * @throws SQLException
-     * @throws NotBoundException
+    
      */
     @Override
     public List<PatientTS> selectAllPatients(){
         try {
             String sql = "SELECT * FROM patient";
             PreparedStatement p = c.prepareStatement(sql);
+            
             ResultSet rs = p.executeQuery();
             List <PatientTS> pList = new ArrayList<PatientTS>();
             Date date;
@@ -262,6 +262,34 @@ public class SQLitePatientTSManager implements PatientTSManager {
                 pList.add(  new PatientTS(rs.getInt("medical_card_number"),rs.getString("name"),rs.getString("surname"),date = new Date(rs.getString("dob")),
                           rs.getString("address"),rs.getString("email"),rs.getString("diagnosis"),rs.getString("allergies"),rs.getString("gender"),rs.getString("macAddress")));
                 
+            }
+            p.close();
+            rs.close();
+            return pList;
+        } catch (SQLException ex) {
+            Logger.getLogger(SQLitePatientTSManager.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+        
+    }
+    
+    /**
+     * Select every patient related to the doctor
+     * @param doctorId
+     * @return - [List] List of all the patients.
+     
+     */
+    
+    public List<PatientTS> selectPatientsByDoctorId(int doctorId){
+        try {
+            String sql = "SELECT * FROM doctor_patient WHERE doctor_id = ?";
+            PreparedStatement p = c.prepareStatement(sql);
+            p.setInt(1,doctorId);
+            ResultSet rs = p.executeQuery();
+            List <PatientTS> pList = new ArrayList<PatientTS>();
+            
+            while(rs.next()){ 
+                pList.add(selectPatient(rs.getInt("patient_id")));
             }
             p.close();
             rs.close();

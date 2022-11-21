@@ -30,6 +30,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import pojos.users.User;
 
 /**
  *
@@ -110,7 +111,7 @@ public class CommunicationWithClient {
         }
         pw.println("End of list");
     }
-    public static boolean receivePatient(BufferedReader bufferReader){
+    public static PatientTS receivePatient(BufferedReader bufferReader){
         boolean recieved = true; 
         PatientTS p = new PatientTS();
         
@@ -161,16 +162,17 @@ public class CommunicationWithClient {
         System.out.println("Patient received:");
         System.out.println(p.toString());
         
-        
+        return p;
         }catch(IOException exception){
-            recieved = false;
+            return null;
         } catch (NotBoundException ex) {
              Logger.getLogger(CommunicationWithClient.class.getName()).log(Level.SEVERE, null, ex);
+             return null;
          }
-        return recieved; 
+       
     }
-        public static boolean receiveDoctor(BufferedReader bufferReader){
-        boolean recieved = true; 
+        public static Doctor receiveDoctor(BufferedReader bufferReader){
+       
         Doctor d= new Doctor();
         try{
             String line = bufferReader.readLine();
@@ -198,17 +200,21 @@ public class CommunicationWithClient {
              }
         System.out.println("Doctor received:");
         System.out.println(d.toString());
-        
+        return d;
         
         }catch(IOException exception){
-            recieved = false;
+            return null;
         } catch (NotBoundException ex) {
              Logger.getLogger(CommunicationWithClient.class.getName()).log(Level.SEVERE, null, ex);
+             return null;
          }
-        return recieved; 
+         
     }
     public static void sendPatient (PrintWriter printWriter,PatientTS p){
         printWriter.println(p.toString());
+    }
+    public static void sendUser (PrintWriter printWriter,User u){
+        printWriter.println(u.toString());
     }
     public static void sendAllSignal(BufferedReader bf, PrintWriter pw){
         System.out.println("Inside senAllSignals");
@@ -300,6 +306,39 @@ public class CommunicationWithClient {
              Logger.getLogger(CommunicationWithClient.class.getName()).log(Level.SEVERE, null, ex);
          }
        
+    }
+    
+    public static User receiveUser (BufferedReader br){
+        User u = new User();
+        try {
+        String line = br.readLine();
+        line=line.replace("{", "");
+        line=line.replace("User", "");
+        String[] atribute = line.split(",");
+        for (int i =0;i <atribute.length; i++){
+            String[] data2 = atribute[i].split("=");
+            for (int j =0;j <data2.length - 1; j++){
+                data2[j]=data2[j].replace(" ", "");
+                switch(data2[j]){
+                    case "username":
+                        u.setUsername(data2[j+1]);
+                        break;
+                    case "password":
+                        u.setPassword(data2[j+1]);
+                        break;
+                    case "role":
+                        u.setRole(Integer.parseInt(data2[j+1]));
+                        break;
+                    case "userId":
+                        u.setUserId(Integer.parseInt(data2[j+1]));
+                        break;
+                }
+            }
+        }
+        } catch (IOException ex) {
+            Logger.getLogger(CommunicationWithClient.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return u;
     }
     
     private static void releaseResources(BufferedReader bufferedReader, Socket socket, ServerSocket serverSocket) {

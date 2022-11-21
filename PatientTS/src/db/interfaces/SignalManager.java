@@ -16,8 +16,8 @@ import java.util.List;
  * @author agarc
  */
 public interface SignalManager {
-    public void insertSignal(Signal s, PatientTS p);
-    public boolean editSignal(Integer signalid, java.util.Date startDate,String sname,int samplingRate,String fileName,String comment);
+    public void addSignal(Signal s, PatientTS p);
+    public boolean editSignal(Integer signalid, java.util.Date startDate,String sname,int samplingRate,String ECGFilename,String EMGFilename,String comment);
     public Signal selectSignalByName (String name);
     public boolean deleteSignalById(Integer signalid);
     public Signal selectSignalById (Integer id);

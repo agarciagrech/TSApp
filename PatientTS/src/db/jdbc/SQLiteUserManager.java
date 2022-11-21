@@ -139,7 +139,7 @@ public class SQLiteUserManager implements UserManager {
      * @param roleId
      */
     
-    public void createLinkUserPatient(int roleId, int userId){
+    public void createLinkUserRole(int roleId, int userId){
         try {
             String sql1 = "UPDATE users SET userRoleid = ? WHERE userid = ? ";
             PreparedStatement pStatement = c.prepareStatement(sql1);

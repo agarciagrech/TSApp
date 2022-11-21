@@ -136,7 +136,8 @@ public class SQLiteManager implements DBManager {
                   + "startDate TEXT NOT NULL, " 
                   + "sname TEXT NOT NULL, " 
                   + "samplingRate INTEGER NOT NULL, " 
-                  + "fileName STRING NOT NULL, "
+                  + "ECGFilename STRING NOT NULL, "
+                  + "EMGFilename STRING NOT NULL, "
                   + "comment STRING, "
                   + "id_patient FOREING KEY REFERENCES patient(medical_card_number) ON UPDATE CASCADE ON DELETE SET NULL)";
           stmt4.executeUpdate(sql4);

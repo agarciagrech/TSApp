@@ -17,10 +17,10 @@ import java.util.*;
 public interface DoctorManager {
     
     public void addDoctor(Doctor d) throws SQLException;
-    public List<PatientTS> searchPatient(String surname) throws SQLException, NotBoundException;
-    public Doctor selectDoctorByUserId(Integer userID) throws Exception;
-    public Doctor selectDoctor(Integer doctorId) throws SQLException, NotBoundException;
-    public void deleteDoctorById(Integer doctorId) throws SQLException;
-    public void createLinkUserDoctor(Integer userId, Integer doctorId) throws Exception;
+    public List<PatientTS> searchPatient(String surname);
+    public Doctor selectDoctorByUserId(Integer userID) ;
+    public Doctor selectDoctor(Integer doctorId) ;
+    public void deleteDoctorById(Integer doctorId) ;
+    public void createLinkUserDoctor(Integer userId, Integer doctorId);
     
 }

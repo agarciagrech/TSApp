@@ -5,8 +5,14 @@
  */
 package db.pojos;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Signal {
     
@@ -17,7 +23,8 @@ public class Signal {
     private Date startDate;
     private String sname;
     private int samplingRate;
-    private String fileName;
+    private String ECGFilename;
+    private String EMGFilename;
     private String comment;
 
 
@@ -70,13 +77,30 @@ public class Signal {
      * @param comment - The comments included by the doctor about the signal (String)
      * @throws Exception
      */
-     public Signal(Integer signalId, Date startDate, String sname, int samplingRate, String fileName, String comment) throws Exception{
+     public Signal(Integer signalId, Date startDate, String sname, int samplingRate, String ECGFileName,String EMGFileName, String comment) throws Exception{
         this.signalId = signalId;
         this.startDate = startDate;
         this.sname = sname;
         this.samplingRate = samplingRate;
-        this.fileName = fileName;
+        this.ECGFilename = ECGFileName;
+        this.EMGFilename = EMGFileName;
         this.comment = comment;
+    }
+
+    public String getECGFilename() {
+        return ECGFilename;
+    }
+
+    public void setECGFilename(String ECGFilename) {
+        this.ECGFilename = ECGFilename;
+    }
+
+    public String getEMGFilename() {
+        return EMGFilename;
+    }
+
+    public void setEMGFilename(String EMGFilename) {
+        this.EMGFilename = EMGFilename;
     }
      
     /**
@@ -86,9 +110,9 @@ public class Signal {
      * @param sDate - The date and hour when the signal starts recording (Date)
      * @param sname - The name of the signal (String)
      * @param sr - The sampling rate of the signal recorded.
-     * @throws Exception
+     
      */
-    public Signal(int[] ECG_values, int[] EMG_values, Date sDate, String sname, int sr) throws Exception{
+    public Signal(int[] ECG_values, int[] EMG_values, Date sDate, String sname, int sr){
         this.ECG_values = ECG_values;
         this.EMG_values = EMG_values;
         this.startDate = sDate;
@@ -102,12 +126,13 @@ public class Signal {
      * @param ECG_values - Values of the ECG signal (int[])
      * @param EMG_values - Values of the EMG signal (int[])
      * @param sname - The name of the signal (String)
-     * @throws Exception
+     
      */
-    public Signal(int[] ECG_values, int[] EMG_values, String sname) throws Exception{
+    public Signal(int[] ECG_values, int[] EMG_values, String sname,int sr){
         this.ECG_values = ECG_values;
         this.EMG_values = EMG_values;
         this.sname = sname;
+        this.samplingRate = sr;
     }
 
     /**
@@ -206,21 +231,9 @@ public class Signal {
         this.samplingRate = samplingRate;
     }
     
-    /**
-     * Used to get the file name where the signal is stored.
-     * @return [String] the file name where the signal is stored
-     */
-    public String getSignalfileName() {
-        return fileName;
-    }
     
-    /**
-     * Used to set the file name where the signal is stored.
-     * @param SignalfileName
-     */
-    public void setSignalfileName(String SignalfileName) {
-        this.fileName = SignalfileName;
-    }
+    
+    
    
     /**
      * Used to get the comments includfed by the doctor about the signal.
@@ -240,7 +253,7 @@ public class Signal {
 
     @Override
     public String toString() {
-       return "Signal{" + "signalId=" + signalId + ", startDate=" + startDate + ", sname=" + sname + '}';
+       return "Signal{" + "signalId=" + signalId + ", startDate=" + startDate + ", sname=" + sname +", ECGfilename="+ ECGFilename +", EMGFilename="+ EMGFilename+'}';
     }
 
     @Override
@@ -269,10 +282,10 @@ public class Signal {
      * Used to print the values of the ECG signal recorded one by one
      * @param ECG_values
      */
-    public void ImprimirECG (int[] ECG_values){
+    public void ImprimirECG (){
          System.out.println("ECG");
-        for (int i=0; i<ECG_values.length; i++){
-            System.out.println(ECG_values[i]);
+        for (int i=0; i<this.ECG_values.length; i++){
+            System.out.println(this.ECG_values[i]);
         } 
     }
     
@@ -280,10 +293,10 @@ public class Signal {
      * Used to print the values of the EMG signal recorded one by one
      * @param EMG_values
      */
-    public void ImprimirEMG (int[] EMG_values){
+    public void ImprimirEMG (){
          System.out.println("EMG");
-        for (int i=0; i<EMG_values.length; i++){
-            System.out.println(EMG_values[i]);
+        for (int i=0; i<this.EMG_values.length; i++){
+            System.out.println(this.EMG_values[i]);
         } 
     }
     
@@ -291,5 +304,92 @@ public class Signal {
         SimpleDateFormat  formato = new SimpleDateFormat("YYYY/MM/dd");
         return formato.format(startDate);
     }
+    
+    public void CreateECGFilename (String patientName){
+        Calendar c = Calendar.getInstance();
+         String day=Integer.toString(c.get(Calendar.DATE));
+         String month=Integer.toString(c.get(Calendar.MONTH));
+         String year=Integer.toString(c.get(Calendar.YEAR));
+         String hour = Integer.toString(c.get(Calendar.HOUR));
+         String minute = Integer.toString(c.get(Calendar.MINUTE));
+         String second = Integer.toString(c.get(Calendar.SECOND));
+         String millisecond = Integer.toString(c.get(Calendar.MILLISECOND));
+         this.ECGFilename=patientName+"ECG"+day+month+year+"_"+hour+minute+second+millisecond+".txt";     
+    }
+    public void CreateEMGFilename (String patientName){
+        Calendar c = Calendar.getInstance();
+         String day=Integer.toString(c.get(Calendar.DATE));
+         String month=Integer.toString(c.get(Calendar.MONTH));
+         String year=Integer.toString(c.get(Calendar.YEAR));
+         String hour = Integer.toString(c.get(Calendar.HOUR));
+         String minute = Integer.toString(c.get(Calendar.MINUTE));
+         String second = Integer.toString(c.get(Calendar.SECOND));
+         String millisecond = Integer.toString(c.get(Calendar.MILLISECOND));
+         this.EMGFilename=patientName+"EMG"+day+month+year+"_"+hour+minute+second+millisecond+".txt";     
+    }
+    
+    public void StartDate(){
+        Calendar c = Calendar.getInstance();
+         String day=Integer.toString(c.get(Calendar.DATE));
+         String month=Integer.toString(c.get(Calendar.MONTH));
+         String year=Integer.toString(c.get(Calendar.YEAR));
+         String date =year+"/"+month+"/"+day; 
+         this.startDate= new Date (date);
+    }
+    
+   public void StoreECGinFile(String patientName){
+       FileWriter fw = null;
+        BufferedWriter bw = null;
+        try {
+            CreateECGFilename(patientName);
+            String ruta = "../PatientTS/"+this.ECGFilename;
+            String contenido = Arrays.toString(this.ECG_values);
+            File file = new File(ruta);
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+            fw = new FileWriter(file);
+            bw = new BufferedWriter(fw);
+            bw.write(contenido);
+            
+        } catch (IOException ex) {
+            Logger.getLogger(Signal.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                bw.close();
+                fw.close();
+            } catch (IOException ex) {
+                Logger.getLogger(Signal.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+   } 
+   
+   public void StoreEMGinFile(String patientName){
+       FileWriter fw = null;
+        BufferedWriter bw = null;
+        try {
+            CreateEMGFilename(patientName);
+            String ruta = "../PatientTS/"+this.EMGFilename;
+            String contenido = Arrays.toString(this.EMG_values);
+            File file = new File(ruta);
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+            fw = new FileWriter(file);
+            bw = new BufferedWriter(fw);
+            bw.write(contenido);
+            
+        } catch (IOException ex) {
+            Logger.getLogger(Signal.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                bw.close();
+                fw.close();
+            } catch (IOException ex) {
+                Logger.getLogger(Signal.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+   }
+   
 
 }

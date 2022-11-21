@@ -12,7 +12,6 @@ import java.util.*;
 import java.rmi.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import pojos.users.User;
 
 /**
  *
@@ -34,37 +33,45 @@ public class SQLiteDoctorManager implements DoctorManager{
      * @throws SQLException
      */
     @Override
-    public void addDoctor(Doctor d) throws SQLException {
-        String sq1 = "INSERT INTO doctor (dname, dsurname, demail,dusername,dpassword,drole) VALUES (?, ?, ?,?,?,?)";
-			PreparedStatement preparedStatement = c.prepareStatement(sq1);
-			preparedStatement.setString(1, d.getDoctorName());
-			preparedStatement.setString(2, d.getDoctorSurname());
-			preparedStatement.setString(3, d.getDoctorEmail());
-			preparedStatement.executeUpdate();
-			preparedStatement.close();	
+    public void addDoctor(Doctor d)  {
+        try {
+            String sq1 = "INSERT INTO doctor (dname, dsurname, demail) VALUES (?, ?, ?)";
+            PreparedStatement preparedStatement = c.prepareStatement(sq1);
+            preparedStatement.setString(1, d.getDoctorName());
+            preparedStatement.setString(2, d.getDoctorSurname());
+            preparedStatement.setString(3, d.getDoctorEmail());
+            preparedStatement.executeUpdate();	
+            preparedStatement.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(SQLiteDoctorManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
      * Searches patients with the given surname.
      * @param surname - [String] Surname of the patient the doctor is looking for
      * @return - List of patients with the same surname that the docotr has been looking for
-     * @throws SQLException
-     * @throws NotBoundException
      */
     @Override
-    public List<PatientTS> searchPatient(String surname) throws SQLException, NotBoundException {
-        String sql = "SELECT * FROM patient WHERE surname LIKE ?";
-        PreparedStatement p = c.prepareStatement(sql);
-        p.setString(1,"%" + surname + "%");
-        ResultSet rs = p.executeQuery();
-        List <PatientTS> pList = new ArrayList<PatientTS>();
-        while(rs.next()){
-                pList.add(new PatientTS(rs.getInt("medical_card_number"),rs.getString("name"),rs.getString("surname"),rs.getDate("dob"), 
+    public List<PatientTS> searchPatient(String surname){
+        try {
+            String sql = "SELECT * FROM patient WHERE surname LIKE ?";
+            PreparedStatement p = c.prepareStatement(sql);
+            p.setString(1,"%" + surname + "%");
+            ResultSet rs = p.executeQuery();
+            List <PatientTS> pList = new ArrayList<PatientTS>();
+            while(rs.next()){ 
+                pList.add(new PatientTS(rs.getInt("medical_card_number"),rs.getString("name"),rs.getString("surname"),rs.getDate("dob"),
                         rs.getString("address"),rs.getString("email"),rs.getString("diagnosis"),rs.getString("allergies"),rs.getString("gender")));
+            }
+            p.close();
+            rs.close();
+            return pList;
+        } catch (SQLException ex) {
+            Logger.getLogger(SQLiteDoctorManager.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
         }
-        p.close();
-        rs.close();
-        return pList;
+        
     }
 
 
@@ -73,22 +80,26 @@ public class SQLiteDoctorManager implements DoctorManager{
      * Selects a dctor by using the doctor's userId.
      * @param userID - [Integer] User Id of the doctor.
      * @return - [Doctor] The doctor to whom the inserted user Id corresponds.
-     * @throws SQLException
-     * @throws NotBoundException
-     */
+    */
     @Override
-    public Doctor selectDoctorByUserId(Integer userID) throws Exception {
-        String sql = "SELECT * FROM doctor WHERE userId = ? ";
-        PreparedStatement pStatement = c.prepareStatement(sql);
-        pStatement.setInt(1, userID);
-        ResultSet rs = pStatement.executeQuery();
-        Doctor doctor = null;
-        if(rs.next()){
+    public Doctor selectDoctorByUserId(Integer userID) {
+        try {
+            String sql = "SELECT * FROM doctor WHERE userId = ? ";
+            PreparedStatement pStatement = c.prepareStatement(sql);
+            pStatement.setInt(1, userID);
+            ResultSet rs = pStatement.executeQuery();
+            Doctor doctor = null;
+            if(rs.next()){
                 doctor = new Doctor(rs.getInt("doctorId"), rs.getString("dname"), rs.getString("dsurname"), rs.getString("demail"));
+            }
+            pStatement.close();
+            rs.close();
+            return doctor;
+        } catch (SQLException ex) {
+            Logger.getLogger(SQLiteDoctorManager.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
         }
-        pStatement.close();
-        rs.close();
-        return doctor;
+        
     }
 
     /**
@@ -99,18 +110,23 @@ public class SQLiteDoctorManager implements DoctorManager{
      * @throws NotBoundException
      */
     @Override
-    public Doctor selectDoctor(Integer doctorId) throws SQLException, NotBoundException {
-        String sql = "SELECT * FROM doctor WHERE doctorId = ?";
-        PreparedStatement p = c.prepareStatement(sql);
-        p.setInt(1,doctorId);
-        ResultSet rs = p.executeQuery();
-        Doctor doctor = null;
-        if(rs.next()){
+    public Doctor selectDoctor(Integer doctorId) {
+        try {
+            String sql = "SELECT * FROM doctor WHERE doctorId = ?";
+            PreparedStatement p = c.prepareStatement(sql);
+            p.setInt(1,doctorId);
+            ResultSet rs = p.executeQuery();
+            Doctor doctor = null;
+            if(rs.next()){
                 doctor = new Doctor(rs.getInt("doctorId"), rs.getString("dname"), rs.getString("dsurname"), rs.getString("demail"));
+            }
+            p.close();
+            rs.close();
+            return doctor;
+        } catch (SQLException ex) {
+            Logger.getLogger(SQLiteDoctorManager.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
         }
-        p.close();
-        rs.close();
-        return doctor;	
     }
     
     /**
@@ -119,47 +135,57 @@ public class SQLiteDoctorManager implements DoctorManager{
      * @throws SQLException
      */
     @Override
-    public void deleteDoctorById(Integer doctorId) throws SQLException {
-        String sql = "DELETE FROM doctor WHERE doctorId = ?";
-        PreparedStatement pStatement = c.prepareStatement(sql);
-        pStatement.setInt(1, doctorId);
-        pStatement.executeUpdate();
-        pStatement.close();
+    public void deleteDoctorById(Integer doctorId) {
+        try {
+            String sql = "DELETE FROM doctor WHERE doctorId = ?";
+            PreparedStatement pStatement = c.prepareStatement(sql);
+            pStatement.setInt(1, doctorId);
+            pStatement.executeUpdate();
+            pStatement.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(SQLiteDoctorManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
-    public void checkPassword(String dusername, String dpassword) {
-            User user = null;
-            try {   String sql = "SELECT * FROM docotr WHERE dusername = ? AND dpassword = ? LIMIT 1";
-                    PreparedStatement pStatement = c.prepareStatement(sql);
-                    byte[] hash;
-                    pStatement.setString(1, dusername);
-                    pStatement.setString(2, dpassword);
-                    pStatement.executeUpdate();
-                    pStatement.close();
-                   
-            
-            } catch (SQLException ex) {
-            Logger.getLogger(SQLitePatientTSManager.class.getName()).log(Level.SEVERE, null, ex);
-        }
-           
-    }
+    
     
     /**
      * Associates a doctor with a user of the application
      * @param userId
      * @param doctorId
-     * @throws Exception
+     
      */
     @Override
-    public void createLinkUserDoctor(Integer userId, Integer doctorId) throws Exception {
-        String sql1 = "UPDATE doctor SET userId = ? WHERE doctorId = ? ";
-        PreparedStatement pStatement = c.prepareStatement(sql1);
-        pStatement.setInt(1, userId);
-        pStatement.setInt(2, doctorId);
-        pStatement.executeUpdate();
-        pStatement.close();
+    public void createLinkUserDoctor(Integer userId, Integer doctorId) {
+        try {
+            String sql1 = "UPDATE doctor SET userId = ? WHERE doctorId = ? ";
+            PreparedStatement pStatement = c.prepareStatement(sql1);
+            pStatement.setInt(1, userId);
+            pStatement.setInt(2, doctorId);
+            pStatement.executeUpdate();
+            pStatement.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(SQLiteDoctorManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
+    
+    public int getId (String dname){
+        String sql1 = "SELECT * FROM doctor WHERE dname = ?";
+        int id=0;
+                try {
+                    PreparedStatement preparedStatement = c.prepareStatement(sql1);
+                    PreparedStatement p = c.prepareStatement(sql1);
+                    p.setString(1,dname);
+                    ResultSet rs = p.executeQuery();
+                    id = rs.getInt("doctorid");
+                    return id;
+                } catch (SQLException ex) {
+                Logger.getLogger(SQLitePatientTSManager.class.getName()).log(Level.SEVERE, null, ex);
+                return 0;
+            }
+        
+    }
+}
 
     
      
-}
