@@ -19,6 +19,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
@@ -48,7 +49,7 @@ public class SQLiteSignalManager implements SignalManager{
     @Override
     public void addSignal(Signal s, PatientTS p ) {
         String sq1 = "INSERT INTO signal (startDate, samplingRate, sname, ECGFilename, EMGFilename, comment, id_patient) VALUES (?, ?, ?, ?, ?, ?, ?)";
-			PreparedStatement template;
+	PreparedStatement template;
         try {
             template = c.prepareStatement(sq1);
             template.setString(1, formatDate(s.getSignalStartDate()));
@@ -263,7 +264,7 @@ public class SQLiteSignalManager implements SignalManager{
         BufferedReader b = null;
         BufferedReader b2 = null;
         try {
-            String SQL_code = "SELECT * FROM signal WHERE sname LIKE ?";
+            String SQL_code = "SELECT * FROM signal WHERE sname = ?";
             PreparedStatement template = this.c.prepareStatement(SQL_code);
             template.setString(1, name);
            
@@ -336,26 +337,28 @@ public class SQLiteSignalManager implements SignalManager{
     @Override
     public List<Signal> listSignalsByPatient(Integer patient_medcard) {
         List<Signal> signals = new LinkedList();
-        String cadena1;
-        String cadena2;
-        int[] values = new int[10];
-        int[] values2 = new int[10];
+        
         Date date;
-        String ruta1;
-        String ruta2;
-        FileReader f = null;
-        FileReader f2 = null;
-        BufferedReader b = null;
-        BufferedReader b2 = null;
+        
         try {
-            Statement statement = this.c.createStatement();
-            String SQL_code = "SELECT * FROM signal WHERE id_patient LIKE ?";
+            String SQL_code = "SELECT * FROM signal WHERE id_patient = ?";
             PreparedStatement template = this.c.prepareStatement(SQL_code);
             template.setInt(1,patient_medcard);
-            ResultSet rs = statement.executeQuery(SQL_code);
+            ResultSet rs = template.executeQuery();
             while(rs.next()) {
+                int[] values = new int[10];
+                int[] values2 = new int[10];
+                String ruta1;
+                String ruta2;
+                FileReader f = null;
+                FileReader f2 = null;
+                BufferedReader b = null;
+                BufferedReader b2 = null;
+                String cadena1;
+                String cadena2;
+        
                 Integer signalId = rs.getInt("signalId");
-                Date startDate = (date = new Date(rs.getString("sartDate")));
+                Date startDate = (date = new Date(rs.getString("startDate")));
                 String sname = rs.getString("sname");
                 Integer samplingRate = rs.getInt("samplingRate");
                 String ECGFilename = rs.getString("ECGFilename");
@@ -386,7 +389,8 @@ public class SQLiteSignalManager implements SignalManager{
                  }
                 
                 signals.add(s);
-             }
+               
+            }
             
             template.close();
             return signals;
@@ -412,21 +416,22 @@ public class SQLiteSignalManager implements SignalManager{
     @Override
     public List<Signal> listECGSignals(Integer patient_medcard) {
        List<Signal> signals = new LinkedList();
-       String cadena;
-       int[] values = new int[10];
        Date date;
-       String ruta1;
-       FileReader f = null;
-       BufferedReader b = null;
+       
        try {
-            Statement statement = this.c.createStatement();
-            String SQL_code = "SELECT * FROM signal WHERE id_patient LIKE ?";
+           String SQL_code = "SELECT * FROM signal WHERE id_patient = ?";
             PreparedStatement template = this.c.prepareStatement(SQL_code);
             template.setInt(1,patient_medcard);
-            ResultSet rs = statement.executeQuery(SQL_code);
+            ResultSet rs = template.executeQuery();
             while(rs.next()) {
+                String cadena;
+                int[] values = new int[10];
+                String ruta1;
+                FileReader f = null;
+                BufferedReader b = null;
+                
                 Integer signalId = rs.getInt("signalId");
-                Date startDate = (date = new Date(rs.getString("sartDate")));
+                Date startDate = (date = new Date(rs.getString("startDate")));
                 String sname = rs.getString("sname");
                 Integer samplingRate = rs.getInt("samplingRate");
                 String ECGFilename = rs.getString("ECGFilename");
@@ -448,7 +453,7 @@ public class SQLiteSignalManager implements SignalManager{
                 signals.add(s);
             }
             template.close();
-            
+            return signals;
         } catch (SQLException listECGSignals_error) {
             listECGSignals_error.printStackTrace(); 
             return null;
@@ -461,17 +466,7 @@ public class SQLiteSignalManager implements SignalManager{
         } catch (Exception ex) {
             Logger.getLogger(SQLiteSignalManager.class.getName()).log(Level.SEVERE, null, ex);
             return null;
-        } finally{
-            try {
-                b.close();
-                f.close();
-                return signals;
-            } catch (IOException ex) {
-                Logger.getLogger(SQLiteSignalManager.class.getName()).log(Level.SEVERE, null, ex);
-                return null;
-            }
-            
-        }
+        } 
     }
          
     
@@ -483,21 +478,21 @@ public class SQLiteSignalManager implements SignalManager{
     @Override
     public List<Signal> listEMGSignals(Integer patient_medcard) {
         List<Signal> signals = new LinkedList();
-        String cadena;
-        int[] values = new int[10];
         Date date;
-        String ruta1;
-        FileReader f = null;
-        BufferedReader b = null;
+        
         try {
-            Statement statement = this.c.createStatement();
-            String SQL_code = "SELECT * FROM signal WHERE id_patient LIKE ?";
+            String SQL_code = "SELECT * FROM signal WHERE id_patient = ?";
             PreparedStatement template = this.c.prepareStatement(SQL_code);
             template.setInt(1,patient_medcard);
-            ResultSet rs = statement.executeQuery(SQL_code);
+            ResultSet rs = template.executeQuery();
             while(rs.next()) {
+                String cadena;
+                int[] values = new int[10];
+                String ruta1;
+                FileReader f = null;
+                BufferedReader b = null;
                 Integer signalId = rs.getInt("signalId");
-                Date startDate = (date = new Date(rs.getString("sartDate")));
+                Date startDate = (date = new Date(rs.getString("startDate")));
                 String sname = rs.getString("sname");
                 Integer samplingRate = rs.getInt("samplingRate");
                 String ECGFilename = rs.getString("ECGFilename");
@@ -519,7 +514,7 @@ public class SQLiteSignalManager implements SignalManager{
                 signals.add(s);
             }
             template.close();
-            
+            return signals;
         } catch (SQLException listECGSignals_error) {
             listECGSignals_error.printStackTrace(); 
             return null;
@@ -532,16 +527,6 @@ public class SQLiteSignalManager implements SignalManager{
         } catch (Exception ex) {
             Logger.getLogger(SQLiteSignalManager.class.getName()).log(Level.SEVERE, null, ex);
             return null;
-        }finally{
-            try {
-                b.close();
-                f.close();
-                return signals;
-            } catch (IOException ex) {
-                Logger.getLogger(SQLiteSignalManager.class.getName()).log(Level.SEVERE, null, ex);
-                return null;
-            }
-            
         }
     }
     public int getId (String filename){

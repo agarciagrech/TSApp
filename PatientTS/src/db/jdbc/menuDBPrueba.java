@@ -68,17 +68,18 @@ public class menuDBPrueba {
         Date dob3 = new Date(date3);
         
         PatientTS p1 = new PatientTS(medCard,name,surname,dob,address,email,diagnosis,allergies,gender,macAddres);
-        /*
+        
         PatientTS p2 = new PatientTS(5678,"pepe","martin",dob2,"calle 1","pepe@gmail.com","diabetes","male","25:30:11:22");
-        PatientTS p3 = new PatientTS(9013,"maria","martin",dob3,"calle 2","mm@gmail.com","epilepsia","female","22:80:50:31");
+        /*PatientTS p3 = new PatientTS(9013,"maria","martin",dob3,"calle 2","mm@gmail.com","epilepsia","female","22:80:50:31");
         
         User u = new User("doctorJuan","ivbrhal");
         User u2 = new User("doctorPepe","qryihpu");
         */
         User u3 = new User(Integer.toString(p1.getMedCardId()),"pfygb");
-       /*
+       
         User u4 = new User (Integer.toString(p2.getMedCardId()),"vpbubr");
-        User u5 = new User (Integer.toString(p3.getMedCardId()),"uqfbpu");
+        
+        /*User u5 = new User (Integer.toString(p3.getMedCardId()),"uqfbpu");
         
         Doctor d = new Doctor("juan","perez","j@gmail.com");
         Doctor d2 = new Doctor ("pepe","flores","p@gmail.com");
@@ -163,7 +164,7 @@ public class menuDBPrueba {
            // System.out.println("Doctor Link created");
           
         }
-        /*
+        
         boolean existpatient2 = userman.existingUserName(u4.getUsername());
         if (existpatient2== false){
           userman.addUser(u4);
@@ -174,11 +175,11 @@ public class menuDBPrueba {
           System.out.println("Patient 2 added");
           patientman.createLinkUserPatient(u4.getUserId(), p2.getMedCardId());
           System.out.println("User Link created");
-          patientman.createLinkDoctorPatient(p2.getMedCardId(),d.getDoctorId());
-            System.out.println("Doctor Link created");
+          //patientman.createLinkDoctorPatient(p2.getMedCardId(),d.getDoctorId());
+           // System.out.println("Doctor Link created");
           
         }
-        
+        /*
         boolean existpatient3 = userman.existingUserName(u5.getUsername());
         if (existpatient3== false){
           userman.addUser(u5);
@@ -256,12 +257,16 @@ public class menuDBPrueba {
         int[] EMG = {5,6,7,8};
         int[] ECG2 = {9,10,11,12};
         int[] EMG2 = {13,14,15,16};
+        int[] ECG3 = {4,3,2,1};
+        int[] EMG3 = {10,9,8,7};
         
         Signal s1 = new Signal(ECG,EMG,"name",10);
         Signal s2 = new Signal (ECG2,EMG2,"name2",10);
-       
+        Signal s3 = new Signal (ECG3,EMG3,"name3",10);
+        
         s1.StartDate();
         s2.StartDate();
+        s3.StartDate();
         
         s1.StoreECGinFile(p1.getPatientName());
         s1.StoreEMGinFile(p1.getPatientName());
@@ -269,27 +274,52 @@ public class menuDBPrueba {
         s2.StoreECGinFile(p1.getPatientName());
         s2.StoreEMGinFile(p1.getPatientName());
         
+        s3.StoreECGinFile(p2.getPatientName());
+        s3.StoreEMGinFile(p2.getPatientName());
+        
         signalman.addSignal(s1, p1);
         System.out.println("Signal 1 added ");
         signalman.addSignal(s2, p1);
         System.out.println("Signal 2 added ");
+        signalman.addSignal(s3, p2);
+        System.out.println("Signal 3 added ");
+        
         s1.setSignalId(signalman.getId(s1.getSignalname()));
         s2.setSignalId(signalman.getId(s2.getSignalname()));
+        s3.setSignalId(signalman.getId(s3.getSignalname()));
         
             
 
         
         
-        Signal s3 = signalman.selectSignalById(s1.getSignalId());
-        System.out.println(s3.toString());
-        System.out.println("ECG:"+Arrays.toString(s3.getECG_values()));
-        System.out.println("EMG:"+Arrays.toString(s3.getEMG_values()));
+        Signal s4 = signalman.selectSignalById(s1.getSignalId());
+        System.out.println(s4.toString());
+        System.out.println("ECG:"+Arrays.toString(s4.getECG_values()));
+        System.out.println("EMG:"+Arrays.toString(s4.getEMG_values()));
         
+        System.out.println("before list by patient");
+        System.out.println("\n\n Signals List:");
         List<Signal> signalList = signalman.listSignalsByPatient(p1.getMedCardId());
         for(Signal s : signalList){
             System.out.println(s.toString());
             System.out.println("ECG:"+Arrays.toString(s.getECG_values()));
             System.out.println("EMG:"+Arrays.toString(s.getEMG_values()));
+        }
+        
+        
+        System.out.println("\n\n EMG list:");
+        List<Signal> EMGList = signalman.listEMGSignals(p1.getMedCardId());
+        for(Signal s : EMGList){
+            System.out.println(s.toString());
+            System.out.println("EMG:"+Arrays.toString(s.getEMG_values()));
+        }
+        
+        
+        System.out.println("\n\n ECG List: ");
+        List<Signal> ECGList = signalman.listECGSignals(p1.getMedCardId());
+        for(Signal s : ECGList){
+            System.out.println(s.toString());
+            System.out.println("ECG:"+Arrays.toString(s.getECG_values()));
         }
         signalman.deleteSignalById(s1.getSignalId());
         System.out.println("Signal 1 deleted");
