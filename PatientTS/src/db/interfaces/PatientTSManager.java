@@ -26,6 +26,7 @@ public interface PatientTSManager {
     public void deletePatientByMedicalCardId(Integer medCardNumber);
     public void createLinkDoctorPatient( int medCardNumber, int doctorId);
     public void createLinkUserPatient(int userId, int medCardNumber);
+    public List<PatientTS> selectPatientsByDoctorId(int doctorId);
     
 
 }

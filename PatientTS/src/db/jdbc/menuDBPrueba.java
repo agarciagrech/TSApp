@@ -284,9 +284,9 @@ public class menuDBPrueba {
         signalman.addSignal(s3, p2);
         System.out.println("Signal 3 added ");
         
-        s1.setSignalId(signalman.getId(s1.getSignalname()));
-        s2.setSignalId(signalman.getId(s2.getSignalname()));
-        s3.setSignalId(signalman.getId(s3.getSignalname()));
+        s1.setSignalId(signalman.getId(s1.getECGFilename()));
+        s2.setSignalId(signalman.getId(s2.getECGFilename()));
+        s3.setSignalId(signalman.getId(s3.getECGFilename()));
         
             
 

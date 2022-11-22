@@ -22,5 +22,6 @@ public interface DoctorManager {
     public Doctor selectDoctor(Integer doctorId) ;
     public void deleteDoctorById(Integer doctorId) ;
     public void createLinkUserDoctor(Integer userId, Integer doctorId);
+    public int getId (String dname);
     
 }

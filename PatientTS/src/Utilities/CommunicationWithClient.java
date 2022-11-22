@@ -94,16 +94,7 @@ public class CommunicationWithClient {
 //        
 //    }
     // ToDo : Al final de los métodos deberían de insertarse en la db 
-    public static void sendPatientList (PrintWriter pw,BufferedReader bf) throws NotBoundException{
-        List<PatientTS> patientList = new ArrayList<>();
-        // DO HERE: Get arrayList from db, till db works we create a list to try the method
-        Date dob = new Date("1/2/2000");
-        PatientTS p1 = new PatientTS (123,"paquito","perez",dob,"Calle 1","p@gamil.com","diabetes","lala","male");
-        PatientTS p2 = new PatientTS (456,"pepe","perez",dob,"Calle 1","p@gamil.com","diabetes","lala","male");
-        PatientTS p3 = new PatientTS (789,"Juan","perez",dob,"Calle 1","p@gamil.com","diabetes","lala","male");
-        patientList.add(p1);
-        patientList.add(p2);
-        patientList.add(p3);
+    public static void sendPatientList (List<PatientTS> patientList,PrintWriter pw,BufferedReader bf){
         for (PatientTS p : patientList){
             System.out.println("Patient:"+p.getPatientName()+"/"+p.getPatientSurname()+"/"+p.getMedCardId());
            pw.println("Patient:"+p.getPatientName()+"/"+p.getPatientSurname()+"/"+p.getMedCardId());
@@ -232,11 +223,11 @@ public class CommunicationWithClient {
             Logger.getLogger(CommunicationWithClient.class.getName()).log(Level.SEVERE, null, ex);
         }
         }
-    public static void recieveSignal(BufferedReader bf, PrintWriter pw){
+    public static Signal recieveSignal(BufferedReader bf, PrintWriter pw){
         System.out.println("Inside recieve signal");
+        Signal s = new Signal();
          try {
-            Signal s = new Signal();
-            String line = bf.readLine();
+             String line = bf.readLine();
             System.out.println(line);
             line=line.replace("[", "");
             line=line.replace("]","");
@@ -279,33 +270,14 @@ public class CommunicationWithClient {
             String filenames1[] = line2.split("=");
             String filenames2[] = line3.split("=");
             
-             String ruta = "../PatientTS/"+filenames1[1]+".txt";
-             String ruta2 = "../PatientTS/"+filenames2[1]+".txt";
-                String contenido = Arrays.toString(ECG);
-                String contenido2 = Arrays.toString(EMG);
-                File file = new File(ruta);
-                File file2 = new File(ruta2);
-                if (!file.exists()) {
-                    file.createNewFile();
-                }
-                if (!file2.exists()) {
-                    file2.createNewFile();
-                }
-                FileWriter fwECG = new FileWriter(file);
-                FileWriter fwEMG = new FileWriter(file2);
-                BufferedWriter bwECG = new BufferedWriter(fwECG);
-                BufferedWriter bwEMG = new BufferedWriter(fwEMG);
-                bwECG.write(contenido);
-                bwEMG.write(contenido2);
-                bwECG.close();
-                bwEMG.close();
-                
-                System.out.println("Ok");
-             
+            s.StoreECGinFile(filenames1[1]);
+            s.StoreEMGinFile(filenames2[2]);
+            System.out.println("Ok");
+            return s;
          } catch (IOException ex) {
              Logger.getLogger(CommunicationWithClient.class.getName()).log(Level.SEVERE, null, ex);
+             return null;
          }
-       
     }
     
     public static User receiveUser (BufferedReader br){
@@ -341,7 +313,7 @@ public class CommunicationWithClient {
         return u;
     }
     
-    private static void releaseResources(BufferedReader bufferedReader, Socket socket, ServerSocket serverSocket) {
+    public static void releaseResources(BufferedReader bufferedReader, Socket socket, ServerSocket serverSocket) {
         try {
             bufferedReader.close();
         } catch (IOException ex) {
@@ -358,6 +330,8 @@ public class CommunicationWithClient {
             Logger.getLogger(CommunicationWithClient.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    
 
 }
     

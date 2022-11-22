@@ -17,13 +17,15 @@ import java.util.List;
  */
 public interface SignalManager {
     public void addSignal(Signal s, PatientTS p);
-    public boolean editSignal(Integer signalid, java.util.Date startDate,String sname,int samplingRate,String ECGFilename,String EMGFilename,String comment);
+    public boolean editSignal(Integer signalid, java.util.Date startDate,int samplingRate,String ECGFilename,String EMGFilename);
     public Signal selectSignalByName (String name);
     public boolean deleteSignalById(Integer signalid);
     public Signal selectSignalById (Integer id);
     public List<Signal> listSignalsByPatient(Integer patient_medcard);
     public List<Signal> listECGSignals(Integer patient_medcard);
     public List<Signal> listEMGSignals(Integer patient_medcard);
+    public List<String> ListSignalsFilenamesByPatient(Integer patient_medcard);
+    
 }
 
 
