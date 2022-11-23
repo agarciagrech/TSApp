@@ -51,7 +51,7 @@ public class ClientUtilities {
             User user = new User(username, hash, 2);
             userman.addUser(user);
             Utilities.CommunicationWithClient.sendUser(pw, user);
-            doctorman.createLinkUserDoctor(user.getUserId(), d.getUserId());
+            doctorman.createLinkUserDoctor(user.getUserId(), d.getDoctorId());
         } catch (NoSuchAlgorithmException ex) {
             Logger.getLogger(ClientUtilities.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -112,7 +112,8 @@ public class ClientUtilities {
                 ex.printStackTrace();
         }
     }
-    
+    /*
+    // Al final damos esta opcion?
     public static void changePassword() {
         sc = new Scanner (System.in);
         try{
@@ -128,7 +129,9 @@ public class ClientUtilities {
             System.out.println("Confirm your new password: ");
             String newPassword2 = sc.next();
             if(newPassword1.equals(newPassword2)) {
-                    //TO DO ENCRIPTAR CONTRASEÑA
+                    MessageDigest md = MessageDigest.getInstance("MD5");
+                    md.update(password.getBytes());
+                    byte[] hash = md.digest();
                     userman.updateUser(user, hash);
                     System.out.println("Password updated");
             } else {
@@ -138,4 +141,5 @@ public class ClientUtilities {
                 ex.printStackTrace();
         }
     }
+    */
 }

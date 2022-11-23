@@ -158,7 +158,15 @@ public class ClientThread implements Runnable {
                     break;
                 case 4:
                     // Consult filenames of patients dignals
-                    
+                    int medcard = Utilities.CommunicationWithClient.sendAllSignal(br, pw);
+                    if (medcard==0){
+                        pw.println("Error with macAddres");
+                    }else{
+                        List<String> signalsFilenames=signalman.ListSignalsFilenamesByPatient(medcard);
+                        for (int i=0; i<signalsFilenames.size();i++){
+                            pw.println(signalsFilenames.get(i));
+                        }
+                    }
                     
                     break;
                 

@@ -12,7 +12,7 @@ import pojos.users.User;
  * @author albic
  */
 public interface UserManager {
-    public void checkPassword(String medCardNumber, String password);
+    public User checkPassword(String medCardNumber, String password);
     public void addUser(User u);
     public void deleteUserByUserid(Integer userid);
     public boolean existingUserName(String username);

@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -37,63 +38,6 @@ import pojos.users.User;
  * @author albic
  */
 public class CommunicationWithClient {
-//     public static void main(String args[]) throws IOException, NotBoundException {
-//        ServerSocket serverSocket = new ServerSocket(9009);
-//        Socket socket = serverSocket.accept();
-//        System.out.println("Connection client created");
-//        BufferedReader bufferedReader = new BufferedReader(
-//        new InputStreamReader(socket.getInputStream()));
-//        System.out.println("Text Received:\n");
-//        String line;
-//       
-//        while ((line = bufferedReader.readLine()) != null) {
-//            if (line.toLowerCase().contains("stop")) {
-//                System.out.println("Stopping the server");
-//                releaseResources(bufferedReader, socket, serverSocket);
-//                System.exit(0);
-//            }
-//            System.out.println(line);
-//           Signal s = new Signal();
-//           
-//           
-//           line=line.replace("[", "");
-//           line=line.replace("]","");
-//           line=line.replace(",","");
-//           String[] signals = line.split("/n");
-//           for (int j=0; j < signals.length;j++){
-//              String[] lines;
-//              lines=signals[j].split(" ");
-//              
-//           
-//            int [] ECG= new int[10];
-//            int [] EMG= new int[10];
-//            if (lines[0].equals("ECG")){
-//
-//                for (int i = 1; i<lines.length; i++){
-//                     ECG[i-1]=Integer.parseInt(lines[i]);
-//                }
-//               s.setECG_values(ECG);
-//               System.out.println("Siganl saved");
-//                System.out.println(Arrays.toString(s.getECG_values())); 
-//            } else{
-//                for (int i = 1; i<lines.length; i++){
-//                     EMG[i-1]=Integer.parseInt(lines[i]);
-//                }
-//               s.setEMG_values(EMG);
-//               System.out.println("Siganl saved");
-//               System.out.println(Arrays.toString(s.getEMG_values())); 
-//                
-//            }
-//
-//
-//            }
-//           
-//            
-//        }
-//        
-//        
-//    }
-    // ToDo : Al final de los métodos deberían de insertarse en la db 
     public static void sendPatientList (List<PatientTS> patientList,PrintWriter pw,BufferedReader bf){
         for (PatientTS p : patientList){
             System.out.println("Patient:"+p.getPatientName()+"/"+p.getPatientSurname()+"/"+p.getMedCardId());
@@ -207,77 +151,93 @@ public class CommunicationWithClient {
     public static void sendUser (PrintWriter printWriter,User u){
         printWriter.println(u.toString());
     }
-    public static void sendAllSignal(BufferedReader bf, PrintWriter pw){
+    
+    public static int sendAllSignal(BufferedReader bf, PrintWriter pw){
         System.out.println("Inside senAllSignals");
+        String line;
+        int medcard;
         try {
-            String name = bf.readLine();
-            //String filename = name +".txt";
-            File[] dir = new File("../PatientTS").listFiles();
+        if (bf.readLine().equalsIgnoreCase("Send signals")){
             
-            System.out.println("after list");
-            for(int i = 0;i < dir.length; i++){
-                System.out.println("Inside for");
-                System.out.println(dir[i]);
-            }
-        } catch (IOException ex) {
-            Logger.getLogger(CommunicationWithClient.class.getName()).log(Level.SEVERE, null, ex);
+                medcard = bf.read();
+                return medcard;
+           
+           }else{
+            pw.println("error");
+            return 0;
         }
+         } catch (IOException ex) {
+                Logger.getLogger(CommunicationWithClient.class.getName()).log(Level.SEVERE, null, ex);
+                pw.println("error");
+                return 0;
+         }
         }
     public static Signal recieveSignal(BufferedReader bf, PrintWriter pw){
         System.out.println("Inside recieve signal");
-        Signal s = new Signal();
-         try {
-             String line = bf.readLine();
-            System.out.println(line);
-            line=line.replace("[", "");
-            line=line.replace("]","");
-            line=line.replace(",","");
-            String[] signals = line.split("// ");
-            int [] ECG= new int[10];
-            int [] EMG= new int[10];
-            String[] lines;
-           
-            for (int j=0; j < signals.length; j++){            
-                lines=signals[j].split(" ");
-                String option = lines[0];
-                switch(option){
-                    case "ECG:": 
-                        for (int i = 1; i<lines.length; i++){
-                         ECG[i-1]=Integer.parseInt(lines[i]);
-                        }
-                        s.setECG_values(ECG);
-                        System.out.println("Siganl saved");
-                        break;
-                    case "EMG:":
-                        for (int i = 1; i<lines.length; i++){
-                            EMG[i-1]=Integer.parseInt(lines[i]);
-                        }
-                        s.setEMG_values(EMG);
-                        System.out.println("Siganl saved");
-                        break;
-                    default:
-                        break;
+       
+        try {
+            Signal s = new Signal();
+
+            //System.out.println(line);
+            //line=line.replace("[", "");
+            //line=line.replace("]","");
+            //line=line.replace(",","");
+            //String[] signals = line.split("// ");
+            int[] ECG = new int[16];
+            int[] EMG = new int[16];
+
+            List<Integer> ecgVals = new ArrayList<>();
+            List<Integer> emgVals = new ArrayList<>();
+
+            boolean endECG = false;
+            while (!endECG) {
+                String line = bf.readLine();
+                if (line != null) {
+                    if (line.equals("END OF ECG")) {
+                        endECG = true;
+                    } else {
+
+                        Integer ecg_val = Integer.parseInt(line);
+                        ecgVals.add(ecg_val);
+                    }
+
+                } else {
+                    System.out.println("Error");
                 }
             }
-            
-            System.out.println("ECG: " + Arrays.toString(ECG) + " EMG: " + Arrays.toString(EMG));
-            String line2 = bf.readLine();
-            String line3 = bf.readLine();
-            
-            System.out.println(line2);
-            System.out.println(line3);
-             
-            String filenames1[] = line2.split("=");
-            String filenames2[] = line3.split("=");
-            
-            s.StoreECGinFile(filenames1[1]);
-            s.StoreEMGinFile(filenames2[2]);
-            System.out.println("Ok");
+            for (int i = 0; i < ecgVals.size(); i++) {
+                ECG[i] = ecgVals.get(i);
+            }
+
+            boolean endEMG = false;
+            while (!endEMG) {
+                String line2 = bf.readLine();
+                if (line2 != null) {
+                    if (line2.equals("END OF EMG")) {
+                        endEMG = true;
+                    } else {
+                        Integer emg_val = Integer.parseInt(line2);
+                        emgVals.add(emg_val);
+                    }
+                } else {
+                    System.out.println("Error");
+                }
+            }
+
+            for (int j = 0; j < emgVals.size(); j++) {
+                EMG[j] = emgVals.get(j);
+            }
+
+            System.out.println("ECG: " + ecgVals.toString() + "EMG: " + emgVals.toString());
+            s.setECG_values(ECG);
+            s.setEMG_values(EMG);
             return s;
-         } catch (IOException ex) {
-             Logger.getLogger(CommunicationWithClient.class.getName()).log(Level.SEVERE, null, ex);
-             return null;
-         }
+        } catch (IOException ex) {
+            Logger.getLogger(CommunicationWithClient.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+
+    
     }
     
     public static User receiveUser (BufferedReader br){

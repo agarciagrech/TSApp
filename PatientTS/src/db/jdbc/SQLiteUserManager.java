@@ -6,12 +6,16 @@ package db.jdbc;
 
 
 import db.interfaces.UserManager;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.persistence.NoResultException;
+import javax.persistence.Query;
 import pojos.users.User;
 
 /**
@@ -28,21 +32,30 @@ public class SQLiteUserManager implements UserManager {
         super();
     }
      
-    // TO DO: 
-     public void checkPassword(String medCardNumber, String password) {
-            
-            try {   String sql = "SELECT * FROM user WHERE username = ? AND password = ? LIMIT 1";
-                    PreparedStatement pStatement = c.prepareStatement(sql);
-                    pStatement.setString(1, medCardNumber);
-                    pStatement.setString(2, password);
-                    pStatement.executeUpdate();
-                    pStatement.close();
+    // TO CHECK: 
+    @Override
+     public User checkPassword(String username, String password) {
+            User user = null;
+            try {
+                    MessageDigest md = MessageDigest.getInstance("MD5");
+                    md.update(password.getBytes());
+                    byte[] hash = md.digest();
+                    String sql = "SELECT * FROM users WHERE username = ? AND password = ? ";
+                    PreparedStatement preparedStatement = c.prepareStatement(sql);
+                    preparedStatement.setString(1, username);
+                    preparedStatement.setString(2, password);
                    
-            
+                    preparedStatement.executeUpdate();
+                    preparedStatement.close();
+                    user = new User(username,password);
+            } catch (NoSuchAlgorithmException e) {
+                    e.printStackTrace();
+            } catch(NoResultException e) {
+                    user=null;
             } catch (SQLException ex) {
-            Logger.getLogger(SQLitePatientTSManager.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(SQLiteUserManager.class.getName()).log(Level.SEVERE, null, ex);
         }
-           
+            return user;
     }
     
     public void addUser(User u){

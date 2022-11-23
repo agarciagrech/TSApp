@@ -18,6 +18,13 @@ public class User implements Serializable {
         private Integer userRole;
         private String password;
         private Role role;
+        private byte[] hash;//check: tema encriptacion
+
+    public User(String username, byte[] hash, int userRole) {
+        this.username = username;
+        this.userRole= userRole;
+        this.hash = hash;
+    }
 
     
 
