@@ -193,7 +193,7 @@ public class SQLiteUserManager implements UserManager {
                 u.setPassword(rs.getString("userPassword"));
                 u.setRole(rs.getInt("userRoleid"));
                 u.setUserId(userId);
-                u.setUsername("userName");
+                u.setUsername(rs.getString("userName"));
             }
             p.close();
             rs.close();

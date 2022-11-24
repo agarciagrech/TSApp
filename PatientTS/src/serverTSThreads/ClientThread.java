@@ -107,10 +107,18 @@ public class ClientThread implements Runnable {
                     
                     System.out.println();
                     if (user.getRole()==1){
+                        System.out.println("the user is a patient");
                         pw.println("patient");
+                        System.out.println("after pw");
+                        PatientTS p = patientman.selectPatientByUserId(user.getUserId());
+                        Utilities.CommunicationWithClient.sendPatient(pw, p);
                         patientMenu(user,br,pw,userman,patientman,signalman);
                     }else if (user.getRole()==2){
+                        System.out.println("the user is a doctor");
                         pw.println("doctor");
+                        System.out.println("after pw");
+                        Doctor d = doctorman.selectDoctorByUserId(user.getUserId());
+                        Utilities.CommunicationWithClient.sendDoctor(pw, d);
                         doctorMenu(user,br,pw,userman,patientman,signalman,doctorman);
                     }
                     break;
@@ -126,10 +134,11 @@ public class ClientThread implements Runnable {
     
     
     public static void patientMenu (User u,BufferedReader br, PrintWriter pw,UserManager userman, PatientTSManager patientman,SignalManager signalman){
+        System.out.println("Inside patient Menu");
         int option =1;
         do{
         try {
-            option = br.read();
+            option = Integer.parseInt(br.readLine());
             switch (option){
                 case 0:
                     // Exit
@@ -163,21 +172,26 @@ public class ClientThread implements Runnable {
     }
     
     public static void doctorMenu (User u,BufferedReader br, PrintWriter pw,UserManager userman, PatientTSManager patientman,SignalManager signalman, DoctorManager doctorman){
+        System.out.println("inside doctor menu");
         int option = 1;
         do{
         try {
-            option = br.read();
+            option = Integer.parseInt(br.readLine());
+            System.out.println(option);
             switch (option){
                 case 0: 
                     // Exit
+                    
                     ServerTSThreads.releaseClientResources(br, socket);
                     break;
                 case 1:
                     // Register a doctor
+                    System.out.println("case1 doctor menu");
                     Utilities.ClientUtilities.registerDoctor(br,pw,userman,doctorman);
                     break;
                 case 2:
                     // See all patients of the doctor
+                    System.out.println("case 2 doctor menu");
                     int userid = userman.getId(u.getUsername());
                     Doctor d = doctorman.selectDoctorByUserId(userid);
                     List<PatientTS> patientList = patientman.selectPatientsByDoctorId(doctorman.getId(d.getDoctorName()));
@@ -185,11 +199,13 @@ public class ClientThread implements Runnable {
                     break;
                 case 3:
                     // Update patient information
+                    System.out.println("case 3 doctor menu");
                     PatientTS updatep= Utilities.CommunicationWithClient.receivePatient(br);
                     patientman.editPatient(updatep.getMedCardId(),updatep.getPatientName(),updatep.getPatientSurname(),updatep.getPatientDob(),updatep.getPatientAddress(), updatep.getPatientEmail(),updatep.getPatientDiagnosis(), updatep.getPatientAllergies(),updatep.getPatientGender(),updatep.getMacAddress());
                     break;
                 case 4:
                     // Consult filenames of patients dignals
+                    System.out.println("case 4 doctor menu");
                     int medcard = Utilities.CommunicationWithClient.sendAllSignal(br, pw);
                     if (medcard==0){
                         pw.println("Error with macAddres");

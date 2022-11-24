@@ -109,10 +109,11 @@ public class CommunicationWithClient {
        
     }
         public static Doctor receiveDoctor(BufferedReader bufferReader){
-       
+        System.out.println("in receive doctor");
         Doctor d= new Doctor();
         try{
             String line = bufferReader.readLine();
+            System.out.println(line);
             line=line.replace("{", "");
             line=line.replace("}", "");
             line=line.replace("Doctor", "");
@@ -122,13 +123,13 @@ public class CommunicationWithClient {
                 for (int j =0;j <data2.length - 1; j++){
                     data2[j]=data2[j].replace(" ", "");
                     switch(data2[j]){
-                        case "doctorId":d.setDoctorId(Integer.parseInt(data2[j+1]));
+                        case "id":
                                         break;
-                        case "dname":d.setDoctorName(data2[j+1]); 
+                        case "name":d.setDoctorName(data2[j+1]); 
                                      break;
-                        case "dsurname":d.setDoctorSurname(data2[j+1]);
+                        case "surname":d.setDoctorSurname(data2[j+1]);
                                         break;
-                        case "demail": d.setDoctorEmail(data2[j+1]); 
+                        case "email": d.setDoctorEmail(data2[j+1]); 
                                      break;
                         
                     }
@@ -150,6 +151,9 @@ public class CommunicationWithClient {
     }
     public static void sendPatient (PrintWriter printWriter,PatientTS p){
         printWriter.println(p.toString());
+    }
+    public static void sendDoctor (PrintWriter printWriter, Doctor d){
+        printWriter.println(d.toString());
     }
     public static void sendUser (PrintWriter printWriter,User u){
         System.out.println("in send user");
