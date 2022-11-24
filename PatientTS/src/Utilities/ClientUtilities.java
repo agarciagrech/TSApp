@@ -81,8 +81,10 @@ public class ClientUtilities {
             userman.addUser(user);
             Utilities.CommunicationWithClient.sendUser(pw, user);
             patientman.createLinkUserPatient(user.getUserId(), p.getMedCardId());
+            pw.println("Patient successfully registered");
         } catch (NoSuchAlgorithmException ex) {
             Logger.getLogger(ClientUtilities.class.getName()).log(Level.SEVERE, null, ex);
+            pw.println("Patient not registered");
         }
     }
    

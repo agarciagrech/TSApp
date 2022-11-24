@@ -37,6 +37,7 @@ import java.sql.Connection;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
+import pojos.users.Role;
 /**
  *
  * @author agarc
@@ -62,6 +63,13 @@ public class ClientThread implements Runnable {
         PatientTSManager patientman = new SQLitePatientTSManager(c);
         DoctorManager doctorman = new SQLiteDoctorManager(c);
         SignalManager signalman = new SQLiteSignalManager(c);
+        boolean create = manager.createTables();
+        if (!create){
+            createRoles(roleman);
+            Utilities.ClientUtilities.firstlogin();
+            
+        }
+        
         String trashcan;
         InputStream inputStream;
         OutputStream outputStream;
@@ -71,7 +79,7 @@ public class ClientThread implements Runnable {
             outputStream = socket.getOutputStream();
             BufferedReader br = new BufferedReader (new InputStreamReader(inputStream));
             PrintWriter pw = new PrintWriter(outputStream, true);
-            byteRead = br.readLine();
+            first(br,pw,userman,patientman,signalman,doctorman);
             
 
         }catch(Exception e){
@@ -85,12 +93,15 @@ public class ClientThread implements Runnable {
             switch (option){
                 case 1:
                     Utilities.ClientUtilities.registerPatient(br, pw);
+                    
                     break;
                 case 2:
                     User user = Utilities.ClientUtilities.login(br, pw); 
                     if (user.getUserRole()==1){
+                        pw.println("patient");
                         patientMenu(user,br,pw,userman,patientman,signalman);
                     }else if (user.getUserRole()==2){
+                        pw.println("doctor");
                         doctorMenu(user,br,pw,userman,patientman,signalman,doctorman);
                     }
                     break;
@@ -130,6 +141,12 @@ public class ClientThread implements Runnable {
         } catch (IOException ex) {
             Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    public static void createRoles(RoleManager roleman){
+        Role role1= new Role("patient");
+        roleman.addRole(role1);
+        Role role2 = new Role("doctor");
+        roleman.addRole(role2);
     }
     
     public static void doctorMenu (User u,BufferedReader br, PrintWriter pw,UserManager userman, PatientTSManager patientman,SignalManager signalman, DoctorManager doctorman){

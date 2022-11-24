@@ -76,7 +76,7 @@ public class ServerTSThreads {
         } catch (IOException ex) {
             Logger.getLogger(CommunicationWithClient.class.getName()).log(Level.SEVERE, null, ex);
         }
-        //clientsThreadsList.;
+        clientsThreadsList.remove(socket);
         
     }
     
