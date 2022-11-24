@@ -17,5 +17,6 @@ public interface UserManager {
     public void deleteUserByUserid(Integer userid);
     public boolean existingUserName(String username);
     public int getId (String username);
-    
+    public void createLinkUserRole(int roleId, int userId);
+    public User selectUserByUserId(Integer userId);
 }

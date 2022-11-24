@@ -21,7 +21,6 @@ public class Signal {
     private int[] ECG_values; 
     private int[] EMG_values;
     private Date startDate;
-    private int samplingRate;
     private String ECGFilename;
     private String EMGFilename;
 
@@ -31,10 +30,9 @@ public class Signal {
         super();
     }
 
-    public Signal(Integer signalId, Date startDate, int samplingRate, String ECGFilename, String EMGFilename) {
+    public Signal(Integer signalId, Date startDate, String ECGFilename, String EMGFilename) {
         this.signalId = signalId;
         this.startDate = startDate;
-        this.samplingRate = samplingRate;
         this.ECGFilename = ECGFilename;
         this.EMGFilename = EMGFilename;
     }
@@ -53,20 +51,17 @@ public class Signal {
         this.ECG_values = ECG_values;
         this.EMG_values = EMG_values;
         this.startDate = sDate;
-        this.samplingRate = sr;
     }
     
     /**
      *
      * @param signalId - The id of the signal (int) [Cannot be changed once it's created]
      * @param startDate - The date and hour when the signal starts recording (Date)
-     * @param samplingRate - The sampling rate of the signal recorded (int)
      * @throws Exception
      */
-    public Signal(Integer signalId, Date startDate, int samplingRate) throws Exception{
+    public Signal(Integer signalId, Date startDate) throws Exception{
         this.signalId = signalId;
         this.startDate = startDate;
-        this.samplingRate = samplingRate;
     }
     
     /**
@@ -83,7 +78,6 @@ public class Signal {
      public Signal(Integer signalId, Date startDate, String sname, int samplingRate, String ECGFileName,String EMGFileName, String comment) throws Exception{
         this.signalId = signalId;
         this.startDate = startDate;
-        this.samplingRate = samplingRate;
         this.ECGFilename = ECGFileName;
         this.EMGFilename = EMGFileName;
     }
@@ -116,7 +110,6 @@ public class Signal {
         this.ECG_values = ECG_values;
         this.EMG_values = EMG_values;
         this.startDate = sDate;
-        this.samplingRate = sr;
     }
     
     
@@ -130,7 +123,6 @@ public class Signal {
     public Signal(int[] ECG_values, int[] EMG_values,int sr){
         this.ECG_values = ECG_values;
         this.EMG_values = EMG_values;
-        this.samplingRate = sr;
     }
 
     /**
@@ -196,23 +188,6 @@ public class Signal {
     public void setSignalStartDate(Date startDate) {
         this.startDate = startDate;
     }
-    
-    /**
-    * Used to get the sampling rate of the signal
-    * @return [int] The signal's sampling rate
-     */
-    public int getSignalSamplingRate() {
-        return samplingRate;
-    }
-
-    /**
-     * Used to set the sampling rate of the signal
-     * @param samplingRate
-     */
-    public void setSignalSamplingRate(int samplingRate) {
-        this.samplingRate = samplingRate;
-    }
-    
     
 
     @Override

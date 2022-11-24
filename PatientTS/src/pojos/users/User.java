@@ -13,16 +13,14 @@ import javax.persistence.*;
 public class User implements Serializable {
     
     private static final long serialVersionUID = -8462818311128616934L;
-	private Integer userId;
+	private int userId;
 	private String username;
-        private Integer userRole;
+        private int role;
         private String password;
-        private Role role;
         private byte[] hash;//check: tema encriptacion
 
-    public User(String username, byte[] hash, int userRole) {
+    public User(String username, byte[] hash) {
         this.username = username;
-        this.userRole= userRole;
         this.hash = hash;
     }
 
@@ -38,7 +36,7 @@ public class User implements Serializable {
      * @param password - password assocated with the user (byte[]).
      * @param role - - role assocated with the user (Role).
      */
-    public User(String username, String password, Role role) {
+    public User(String username, String password, int role) {
 		super();
 		this.username = username;
 		this.password = password;
@@ -71,13 +69,7 @@ public class User implements Serializable {
     }
 
     
-    public Integer getUserRole() {
-        return userRole;
-    }
     
-    public void setRole(Integer userRole) {
-        this.userRole = userRole;
-    }
 
     
     /**
@@ -116,7 +108,7 @@ public class User implements Serializable {
      * Used to get the role of the user (patient/doctor).
      * @return role
      */
-    public Role getRole() {
+    public int getRole() {
             return role;
     }
 
@@ -124,17 +116,16 @@ public class User implements Serializable {
      * Used to set the role of the user (patient/doctor).
      * @param role
      */
-    public void setRole(Role role) {
+    public void setRole(int role) {
             this.role = role;
     }
 
     @Override
     public String toString() {
-            String password1 = new String(this.password);
-            return "User [userId=" + userId + ", username=" + username + ", password=" + password1
-                            + ", role=" + role + "]";
+           
+            return "User{" + "username=" + username + ", password=" + password + ", role=" + role + ", userId=" + userId + '}';
     }
-
+/*
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -171,5 +162,5 @@ public class User implements Serializable {
                 return false;
         return true;
     }
-    
+  */  
 }

@@ -47,12 +47,14 @@ public class CommunicationWithClient {
         pw.println("End of list");
     }
     public static PatientTS receivePatient(BufferedReader bufferReader){
+        System.out.println("in receive patient");
         boolean recieved = true; 
         PatientTS p = new PatientTS();
         
         try{
             String line = bufferReader.readLine();
             line=line.replace("{", "");
+            line=line.replace("}", "");
             line=line.replace("Patient", "");
             String[] atribute = line.split(",");
             SimpleDateFormat  format = new SimpleDateFormat("dd/MM/yyyy"); 
@@ -112,6 +114,7 @@ public class CommunicationWithClient {
         try{
             String line = bufferReader.readLine();
             line=line.replace("{", "");
+            line=line.replace("}", "");
             line=line.replace("Doctor", "");
             String[] atribute = line.split(",");
             for (int i =0;i <atribute.length; i++){
@@ -149,6 +152,7 @@ public class CommunicationWithClient {
         printWriter.println(p.toString());
     }
     public static void sendUser (PrintWriter printWriter,User u){
+        System.out.println("in send user");
         printWriter.println(u.toString());
     }
     
@@ -241,11 +245,13 @@ public class CommunicationWithClient {
     }
     
     public static User receiveUser (BufferedReader br){
+        System.out.println("in receive user");
         User u = new User();
         try {
         String line = br.readLine();
         line=line.replace("{", "");
         line=line.replace("User", "");
+        line=line.replace("}", "");
         String[] atribute = line.split(",");
         for (int i =0;i <atribute.length; i++){
             String[] data2 = atribute[i].split("=");
@@ -267,6 +273,7 @@ public class CommunicationWithClient {
                 }
             }
         }
+            System.out.println(u.toString());
         } catch (IOException ex) {
             Logger.getLogger(CommunicationWithClient.class.getName()).log(Level.SEVERE, null, ex);
         }

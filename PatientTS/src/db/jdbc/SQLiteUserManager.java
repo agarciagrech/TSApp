@@ -6,12 +6,14 @@ package db.jdbc;
 
 
 import db.interfaces.UserManager;
+import db.pojos.PatientTS;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.NoResultException;
@@ -35,25 +37,32 @@ public class SQLiteUserManager implements UserManager {
     // TO CHECK: 
     @Override
      public User checkPassword(String username, String password) {
-            User user = null;
+            User user = new User();
             try {
-                    MessageDigest md = MessageDigest.getInstance("MD5");
-                    md.update(password.getBytes());
-                    byte[] hash = md.digest();
-                    String sql = "SELECT * FROM users WHERE username = ? AND password = ? ";
+//                    MessageDigest md = MessageDigest.getInstance("MD5");
+//                    md.update(password.getBytes());
+//                    byte[] hash = md.digest();
+                    String sql = "SELECT * FROM users WHERE userName = ? AND userPassword = ? ";
                     PreparedStatement preparedStatement = c.prepareStatement(sql);
                     preparedStatement.setString(1, username);
                     preparedStatement.setString(2, password);
                    
-                    preparedStatement.executeUpdate();
+                    ResultSet rs = preparedStatement.executeQuery();
+                    if(rs.next()){
+                        user.setPassword(rs.getString("userPassword"));
+                        user.setUsername(rs.getString("userName"));
+                    }
                     preparedStatement.close();
-                    user = new User(username,password);
-            } catch (NoSuchAlgorithmException e) {
-                    e.printStackTrace();
+                    rs.close();
+                    return user;
+//            } catch (NoSuchAlgorithmException e) {
+//                    e.printStackTrace();
             } catch(NoResultException e) {
                     user=null;
+                    
             } catch (SQLException ex) {
             Logger.getLogger(SQLiteUserManager.class.getName()).log(Level.SEVERE, null, ex);
+            user = null;
         }
             return user;
     }
@@ -73,7 +82,7 @@ public class SQLiteUserManager implements UserManager {
     
     }
     public int getId (String username){
-        String sql1 = "SELECT * FROM users WHERE username = ?";
+        String sql1 = "SELECT * FROM users WHERE userName = ?";
         int id=0;
                 try {
                     PreparedStatement preparedStatement = c.prepareStatement(sql1);
@@ -132,7 +141,7 @@ public class SQLiteUserManager implements UserManager {
    
     public boolean existingUserName(String username){
         try {
-            String sql = "SELECT * FROM users WHERE username = ?";
+            String sql = "SELECT * FROM users WHERE userName = ?";
             PreparedStatement p = c.prepareStatement(sql);
             p.setString(1,username);
             ResultSet rs = p.executeQuery();
@@ -162,6 +171,36 @@ public class SQLiteUserManager implements UserManager {
             pStatement.close();
         } catch (SQLException ex) {
             Logger.getLogger(SQLitePatientTSManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    /**
+     * Selects a patient by using the patients's user Id.
+     * @param userId - [Integer] User Id related to the patient
+     * @return - [PatientTS] The patient to whom the inserted user Id corresponds.
+    
+     */
+    @Override
+    public User selectUserByUserId(Integer userId){
+        try {
+            Date date;
+            String sql = "SELECT * FROM users WHERE userid = ?";
+            PreparedStatement p = c.prepareStatement(sql);
+            p.setInt(1,userId);
+            ResultSet rs = p.executeQuery();
+            User u = new User();
+            if(rs.next()){
+                u.setPassword(rs.getString("userPassword"));
+                u.setRole(rs.getInt("userRoleid"));
+                u.setUserId(userId);
+                u.setUsername("userName");
+            }
+            p.close();
+            rs.close();
+            return u;
+        } catch (SQLException ex) {
+            Logger.getLogger(SQLitePatientTSManager.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
         }
     }
     

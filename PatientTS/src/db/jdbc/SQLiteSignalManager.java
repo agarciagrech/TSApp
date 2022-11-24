@@ -49,12 +49,11 @@ public class SQLiteSignalManager implements SignalManager{
      */
     @Override
     public void addSignal(Signal s, PatientTS p ) {
-        String sq1 = "INSERT INTO signal (startDate, samplingRate, ECGFilename, EMGFilename, id_patient) VALUES (?, ?, ?, ?, ?)";
+        String sq1 = "INSERT INTO signal (startDate, ECGFilename, EMGFilename, id_patient) VALUES (?, ?, ?, ?, ?)";
 	PreparedStatement template;
         try {
             template = c.prepareStatement(sq1);
             template.setString(1, formatDate(s.getSignalStartDate()));
-            template.setInt(2, s.getSignalSamplingRate());
             template.setString(3, s.getECGFilename());
             template.setString(4, s.getEMGFilename());
             template.setInt(5, p.getMedCardId());
@@ -71,14 +70,13 @@ public class SQLiteSignalManager implements SignalManager{
      * @param signalid
      * @param startDate
      * @param sname
-     * @param samplingRate
      * @param ECGFilename
      * @param EMGFilename
      * @param comment
      * @return boolean
      */
     @Override
-    public boolean editSignal(Integer signalid, java.util.Date startDate,int samplingRate,String ECGFilename,String EMGFilename){
+    public boolean editSignal(Integer signalid, java.util.Date startDate,String ECGFilename,String EMGFilename){
         String sql;
         PreparedStatement pStatement;
         try {
@@ -90,15 +88,6 @@ public class SQLiteSignalManager implements SignalManager{
                     pStatement.executeUpdate();	
             } 
            
-
-            if (samplingRate != 0) {
-                    sql = "UPDATE signal SET samplingRate = ? WHERE signalid = ?";
-                    pStatement = c.prepareStatement(sql);
-                    pStatement.setInt(1, samplingRate);
-                    pStatement.setInt(2, signalid);
-                    pStatement.executeUpdate();
-            }
-
             if (ECGFilename != null) {
                     sql = "UPDATE signal SET ECGFilename = ? WHERE signalid = ?";
                     pStatement = c.prepareStatement(sql);
@@ -171,7 +160,6 @@ public class SQLiteSignalManager implements SignalManager{
             ResultSet result_set = template.executeQuery();
             result_set.next();
             s.setSignalStartDate(date = new Date(result_set.getString("startDate")));
-            s.setSignalSamplingRate(result_set.getInt("samplingRate"));
             s.setECGFilename(result_set.getString("ECGFilename"));
             s.setEMGFilename(result_set.getString("EMGFilename"));
 
@@ -257,7 +245,6 @@ public class SQLiteSignalManager implements SignalManager{
             result_set.next();
             s.setSignalId(result_set.getInt("signalId"));
             s.setSignalStartDate(date = new Date(result_set.getString("startDate")));
-            s.setSignalSamplingRate(result_set.getInt("samplingRate"));
             s.setECGFilename(result_set.getString("ECGFilename"));
             s.setEMGFilename(result_set.getString("EMGFilename"));
 
@@ -343,10 +330,9 @@ public class SQLiteSignalManager implements SignalManager{
         
                 Integer signalId = rs.getInt("signalId");
                 Date startDate = (date = new Date(rs.getString("startDate")));
-                Integer samplingRate = rs.getInt("samplingRate");
                 String ECGFilename = rs.getString("ECGFilename");
                 String EMGFilename = rs.getString("EMGFilename");
-                Signal s=new Signal(signalId,startDate,samplingRate,ECGFilename,EMGFilename);
+                Signal s=new Signal(signalId,startDate,ECGFilename,EMGFilename);
                 // Get the values of the ECG: 
                 ruta1 = "../PatientTS/"+s.getECGFilename();
                 f = new FileReader(ruta1);
@@ -446,10 +432,9 @@ public class SQLiteSignalManager implements SignalManager{
                 
                 Integer signalId = rs.getInt("signalId");
                 Date startDate = (date = new Date(rs.getString("startDate")));
-                Integer samplingRate = rs.getInt("samplingRate");
                 String ECGFilename = rs.getString("ECGFilename");
                 String EMGFilename = rs.getString("EMGFilename");
-                Signal s=new Signal(signalId,startDate,samplingRate,ECGFilename,EMGFilename);
+                Signal s=new Signal(signalId,startDate,ECGFilename,EMGFilename);
                 ruta1 = "../PatientTS/"+s.getECGFilename();
                 f = new FileReader(ruta1);
                 b = new BufferedReader(f);
@@ -505,10 +490,9 @@ public class SQLiteSignalManager implements SignalManager{
                 BufferedReader b = null;
                 Integer signalId = rs.getInt("signalId");
                 Date startDate = (date = new Date(rs.getString("startDate")));
-                Integer samplingRate = rs.getInt("samplingRate");
                 String ECGFilename = rs.getString("ECGFilename");
                 String EMGFilename = rs.getString("EMGFilename");
-                Signal s=new Signal(signalId,startDate,samplingRate,ECGFilename,EMGFilename);
+                Signal s=new Signal(signalId,startDate,ECGFilename,EMGFilename);
                 ruta1 = "../PatientTS/"+s.getEMGFilename();
                 f = new FileReader(ruta1);
                 b = new BufferedReader(f);

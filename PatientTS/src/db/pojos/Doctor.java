@@ -17,7 +17,6 @@ public class Doctor {
     private String dsurname;
     private String demail;
     private Integer userId;
-    private String dpassword;
    
 
 

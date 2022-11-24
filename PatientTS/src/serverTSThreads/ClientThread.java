@@ -64,9 +64,9 @@ public class ClientThread implements Runnable {
         DoctorManager doctorman = new SQLiteDoctorManager(c);
         SignalManager signalman = new SQLiteSignalManager(c);
         boolean create = manager.createTables();
-        if (!create){
+        if (create){
             createRoles(roleman);
-            Utilities.ClientUtilities.firstlogin();
+            Utilities.ClientUtilities.firstlogin(userman,doctorman,roleman);
             
         }
         
@@ -88,19 +88,28 @@ public class ClientThread implements Runnable {
         }
         
     public static void first (BufferedReader br, PrintWriter pw,UserManager userman, PatientTSManager patientman,SignalManager signalman,DoctorManager doctorman){
+        int option=1;
+        do{
         try {
-            int option = br.read();
+            option = Integer.parseInt(br.readLine());
+            System.out.println(option);
+            System.out.println("in first");
+            
             switch (option){
                 case 1:
-                    Utilities.ClientUtilities.registerPatient(br, pw);
+                    System.out.println("case 1");
+                    Utilities.ClientUtilities.registerPatient(br, pw,userman,patientman);
                     
                     break;
                 case 2:
-                    User user = Utilities.ClientUtilities.login(br, pw); 
-                    if (user.getUserRole()==1){
+                    System.out.println("in login");
+                    User user = Utilities.ClientUtilities.login(br, pw,userman);
+                    
+                    System.out.println();
+                    if (user.getRole()==1){
                         pw.println("patient");
                         patientMenu(user,br,pw,userman,patientman,signalman);
-                    }else if (user.getUserRole()==2){
+                    }else if (user.getRole()==2){
                         pw.println("doctor");
                         doctorMenu(user,br,pw,userman,patientman,signalman,doctorman);
                     }
@@ -111,13 +120,16 @@ public class ClientThread implements Runnable {
         } catch (Exception ex) {
             Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
         }
+        }while(option != 0);
     }
     
     
     
     public static void patientMenu (User u,BufferedReader br, PrintWriter pw,UserManager userman, PatientTSManager patientman,SignalManager signalman){
+        int option =1;
+        do{
         try {
-            int option = br.read();
+            option = br.read();
             switch (option){
                 case 0:
                     // Exit
@@ -141,6 +153,7 @@ public class ClientThread implements Runnable {
         } catch (IOException ex) {
             Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
         }
+        }while(true);
     }
     public static void createRoles(RoleManager roleman){
         Role role1= new Role("patient");
@@ -150,8 +163,10 @@ public class ClientThread implements Runnable {
     }
     
     public static void doctorMenu (User u,BufferedReader br, PrintWriter pw,UserManager userman, PatientTSManager patientman,SignalManager signalman, DoctorManager doctorman){
+        int option = 1;
+        do{
         try {
-            int option = br.read();
+            option = br.read();
             switch (option){
                 case 0: 
                     // Exit
@@ -159,7 +174,7 @@ public class ClientThread implements Runnable {
                     break;
                 case 1:
                     // Register a doctor
-                    Utilities.ClientUtilities.registerDoctor(br,pw);
+                    Utilities.ClientUtilities.registerDoctor(br,pw,userman,doctorman);
                     break;
                 case 2:
                     // See all patients of the doctor
@@ -192,6 +207,7 @@ public class ClientThread implements Runnable {
         } catch (IOException ex) {
             Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
         }
+        }while(true);
     }
     
    

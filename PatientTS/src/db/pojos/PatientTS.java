@@ -26,32 +26,10 @@ public class PatientTS implements Serializable {
     private String allergies;
     private String gender;
     //Can be either Male or Female, nothing else.
-    private Signal signal;
     private Integer userId;
     private String macAddress;
-    private String password;
-    private String role;
+    
 
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
-
-    public PatientTS(Integer medical_card_number, String password) {
-        this.medical_card_number = medical_card_number;
-        this.password = password;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
 
     public PatientTS() {
     }
@@ -74,7 +52,7 @@ public class PatientTS implements Serializable {
      * @param userID
      * @throws java.rmi.NotBoundException
      */
-    public PatientTS(Integer medCardId, String name, String surname, Date dob, String address, String email, String diagnosis, String allergies, String gender, Signal signal, Integer userID) throws NotBoundException {
+    public PatientTS(Integer medCardId, String name, String surname, Date dob, String address, String email, String diagnosis, String allergies, String gender, Integer userID) throws NotBoundException {
         this.medical_card_number = medCardId;
         this.name = name;
         this.surname = surname;
@@ -84,7 +62,6 @@ public class PatientTS implements Serializable {
         this.diagnosis = diagnosis;
         this.allergies = allergies;
         this.gender = gender;
-        this.signal = signal;
         this.userId = userID;
     }
 
@@ -149,20 +126,6 @@ public class PatientTS implements Serializable {
     }
     
 
-    public PatientTS(Integer medical_card_number, String name, String surname, Date dob, String address, String email, String diagnosis, String gender, String macAddress, String password, String role) {
-        this.medical_card_number = medical_card_number;
-        this.name = name;
-        this.surname = surname;
-        this.dob = dob;
-        this.address = address;
-        this.email = email;
-        this.diagnosis = diagnosis;
-        this.gender = gender;
-        this.macAddress = macAddress;
-        this.password = password;
-        this.role = role;
-    }
-
     
 
     public PatientTS(Integer medical_card_number, String name, String surname, Date dob, String address, String email, String diagnosis, String allergies, String gender, String macAddress) {
@@ -175,7 +138,6 @@ public class PatientTS implements Serializable {
         this.diagnosis = diagnosis;
         this.allergies = allergies;
         this.gender = gender;
-        this.signal = signal;
         this.macAddress = macAddress;
     }
 
@@ -184,6 +146,7 @@ public class PatientTS implements Serializable {
      * @param p - Object patient (PatientTS)
      * @throws java.rmi.NotBoundException
      */
+   
     public PatientTS(PatientTS p) throws NotBoundException {
         this.setMedCardId(p.medical_card_number);
         this.setPatientAddress(p.address);
@@ -298,14 +261,7 @@ public class PatientTS implements Serializable {
         return gender;
     }
 
-    /**
-     * Used to get the ECG signal of the patient.
-     *
-     * @return [Signal] The patient's ECG signal.
-     */
-    public Signal getPatientSignal() {
-        return signal;
-    }
+    
 
     /**
      * Used to set the medical card id of the patient
@@ -411,14 +367,7 @@ public class PatientTS implements Serializable {
         }
     }
 
-    /**
-     * Used to set the patient's signals.
-     *
-     * @param signal
-     */
-    public void setPatientSignal(Signal signal) {
-        this.signal = signal;
-    }
+   
 
     /**
      * Used to get the user Id associated with the patient.

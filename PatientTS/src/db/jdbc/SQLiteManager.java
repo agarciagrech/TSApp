@@ -121,7 +121,7 @@ public class SQLiteManager implements DBManager {
                   + "surname TEXT NOT NULL, "
                   + "dob TEXT NOT NULL, " 
                   + "address TEXT NOT NULL, "
-                  + "email TEXT NOT NULL, " 
+                  + "email TEXT, " 
                   + "diagnosis TEXT NOT NULL, "
                   + "allergies TEXT, "
                   + "gender TEXT NOT NULL, "
@@ -135,7 +135,6 @@ public class SQLiteManager implements DBManager {
                   + "(signalId INTEGER PRIMARY KEY AUTOINCREMENT, "
                   + "startDate TEXT NOT NULL, " 
                   + "sname TEXT NOT NULL, " 
-                  + "samplingRate INTEGER NOT NULL, " 
                   + "ECGFilename STRING NOT NULL, "
                   + "EMGFilename STRING NOT NULL, "
                   + "comment STRING, "
@@ -148,7 +147,7 @@ public class SQLiteManager implements DBManager {
                   + "(doctorId INTEGER PRIMARY KEY AUTOINCREMENT, " 
                   + "dname TEXT NOT NULL, " 
                   + "dsurname TEXT NOT NULL, "
-                  + "demail TEXT NOT NULL, "
+                  + "demail TEXT , "
                   + "userId FOREING KEY REFERENCES users(userid) ON UPDATE CASCADE ON DELETE SET NULL)";
           stmt5.execute(sql5);
           stmt5.close();
