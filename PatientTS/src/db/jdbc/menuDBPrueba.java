@@ -179,6 +179,8 @@ public class menuDBPrueba {
            // System.out.println("Doctor Link created");
           
         }
+    }
+}
         /*
         boolean existpatient3 = userman.existingUserName(u5.getUsername());
         if (existpatient3== false){
@@ -253,14 +255,14 @@ public class menuDBPrueba {
         
         // Signals:
         
-        int[] ECG = {1,2,3,4};
+        /*int[] ECG = {1,2,3,4};
         int[] EMG = {5,6,7,8};
         int[] ECG2 = {9,10,11,12};
         int[] EMG2 = {13,14,15,16};
         int[] ECG3 = {4,3,2,1};
-        int[] EMG3 = {10,9,8,7};
+        //int[] EMG3 = {10,9,8,7};
         
-        Signal s1 = new Signal(ECG,EMG,"name",10);
+        /*Signal s1 = new Signal(ECG,EMG,"name",10);
         Signal s2 = new Signal (ECG2,EMG2,"name2",10);
         Signal s3 = new Signal (ECG3,EMG3,"name3",10);
         
@@ -325,6 +327,6 @@ public class menuDBPrueba {
         System.out.println("Signal 1 deleted");
         
         
-    }
+    }*/
     
-}
+

@@ -64,8 +64,9 @@ public class CommunicationWithClient {
                 for (int j =0;j <data2.length - 1; j++){
                     data2[j]=data2[j].replace(" ", "");
                     switch(data2[j]){
-                        case "medical_card_number": p.setMedCardId(Integer.parseInt(data2[j+1])); 
-                                                     break;
+                        case "medical_card_number": 
+                            p.setMedCardId(Integer.parseInt(data2[j+1])); 
+                            break;
                         case "name":p.setPatientName(data2[j+1]); 
                                      break;
                         case "surname":  p.setPatientSurname(data2[j+1]);

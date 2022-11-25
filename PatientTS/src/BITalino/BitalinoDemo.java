@@ -64,8 +64,8 @@ public class BitalinoDemo {
                 }
                 s.setECG_values(ecg_values);
                 s.setEMG_values(emg_values);
-                s.ImprimirECG(s.getECG_values());
-                s.ImprimirEMG(s.getEMG_values());
+                //s.ImprimirECG(s.getECG_values());
+                //s.ImprimirEMG(s.getEMG_values());
             }
             //stop acquisition
             bitalino.stop();
