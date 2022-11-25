@@ -161,7 +161,8 @@ public class ClientThread implements Runnable {
                     // See all the signals files of the patient
                     int userid = userman.getId(u.getUsername());
                     PatientTS p = patientman.selectPatientByUserId(userid);
-                    signalman.ListSignalsFilenamesByPatient(p.getMedCardId());
+                    List<String> patientSignals = signalman.ListSignalsFilenamesByPatient(p.getMedCardId());
+                    
                     break;
                 case 4:
                     // Update bitalino mac
