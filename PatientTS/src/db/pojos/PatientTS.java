@@ -167,7 +167,7 @@ public class PatientTS implements Serializable {
      * @return String containing the date.
      */
     public String formatDate(Date dob) {
-        SimpleDateFormat formato = new SimpleDateFormat("YYYY/MM/dd");
+        SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
         return formato.format(dob);
     }
 
