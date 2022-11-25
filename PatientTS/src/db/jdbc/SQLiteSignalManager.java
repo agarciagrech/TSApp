@@ -224,31 +224,37 @@ public class SQLiteSignalManager implements SignalManager{
      */
     @Override
     public Signal selectSignalByName (String name) {
+        System.out.println("inside db method");
          Signal s= new Signal();
         String cadena1;
         String cadena2;
         String ruta1;
         String ruta2;
-        int[] values = new int[10];
-        int[] values2 = new int[10];
+        int[] values = new int[16];
+        int[] values2 = new int[16];
         Date date;
         FileReader f = null;
         FileReader f2 = null;
         BufferedReader b = null;
         BufferedReader b2 = null;
         try {
-            String SQL_code = "SELECT * FROM signal WHERE sname = ?";
+            String SQL_code = "SELECT * FROM signal WHERE  ECGFilename = ? OR EMGFilename = ?";
             PreparedStatement template = this.c.prepareStatement(SQL_code);
             template.setString(1, name);
+            template.setString(2, name);
            
             ResultSet result_set = template.executeQuery();
-            result_set.next();
+            System.out.println(template.toString());
+            System.out.println(result_set.toString());
+            System.out.println("after query");
+            while(result_set.next()){
             s.setSignalId(result_set.getInt("signalId"));
             s.setSignalStartDate(date = new Date(result_set.getString("startDate")));
             s.setECGFilename(result_set.getString("ECGFilename"));
             s.setEMGFilename(result_set.getString("EMGFilename"));
 
-            // Get the values of the ECG: 
+            // Get the values of the ECG:
+            if(name.contains("ECG")){
             ruta1 = "../PatientTS/"+s.getECGFilename();
             f = new FileReader(ruta1);
             b = new BufferedReader(f);
@@ -259,7 +265,7 @@ public class SQLiteSignalManager implements SignalManager{
                 }
                     s.setECG_values(values);
                 
-            }
+            }}else{
             // Get the values of the EMG: 
             ruta2 = "../PatientTS/"+s.getECGFilename();
             f2 = new FileReader(ruta2);
@@ -271,6 +277,7 @@ public class SQLiteSignalManager implements SignalManager{
                 }
                     s.setEMG_values(values2);
                 
+            }}
             }
             template.close();
             return s;
@@ -283,20 +290,8 @@ public class SQLiteSignalManager implements SignalManager{
         } catch (IOException ex) {
             Logger.getLogger(SQLiteSignalManager.class.getName()).log(Level.SEVERE, null, ex);
             return null;
-        }finally{
-            try {
-                
-                b.close();
-                b2.close();
-                f.close();
-                f2.close();
-                return s;
-            } catch (IOException ex) {
-                Logger.getLogger(SQLiteSignalManager.class.getName()).log(Level.SEVERE, null, ex);
-                return null;
-            }
-            
-        }   
+        }
+   
     }
 
 
@@ -392,8 +387,8 @@ public class SQLiteSignalManager implements SignalManager{
             while(rs.next()) {
                 String ECGFilename = rs.getString("ECGFilename");
                 String EMGFilename = rs.getString("EMGFilename");
-                signalsFilenames.add("\n"+ECGFilename);
-                signalsFilenames.add("\n"+EMGFilename);
+                signalsFilenames.add(ECGFilename);
+                signalsFilenames.add(EMGFilename);
             }
             template.close();
             return signalsFilenames;

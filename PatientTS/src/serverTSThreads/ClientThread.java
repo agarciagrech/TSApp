@@ -159,9 +159,11 @@ public class ClientThread implements Runnable {
                     break;
                 case 3:
                     // See all the signals files of the patient
-                    int userid = userman.getId(u.getUsername());
-                    PatientTS p = patientman.selectPatientByUserId(userid);
-                    List<String> patientSignals = signalman.ListSignalsFilenamesByPatient(p.getMedCardId());
+                    int userid3 = userman.getId(u.getUsername());
+                    PatientTS p3 = patientman.selectPatientByUserId(userid3);
+                    Utilities.CommunicationWithClient.sendAllSignal(br, pw,signalman,p3.getMedCardId());
+                    String filename = br.readLine();
+                    signalman.selectSignalByName(filename);
                     
                     break;
                 case 4:
@@ -216,15 +218,8 @@ public class ClientThread implements Runnable {
                 case 4:
                     // Consult filenames of patients dignals
                     System.out.println("case 4 doctor menu");
-                    int medcard = Utilities.CommunicationWithClient.sendAllSignal(br, pw);
-                    if (medcard==0){
-                        pw.println("Error with macAddres");
-                    }else{
-                        List<String> signalsFilenames=signalman.ListSignalsFilenamesByPatient(medcard);
-                        for (int i=0; i<signalsFilenames.size();i++){
-                            pw.println(signalsFilenames.get(i));
-                        }
-                    }
+                    //Utilities.CommunicationWithClient.sendAllSignal(br, pw, signalman);
+                    
                     
                     break;
                 

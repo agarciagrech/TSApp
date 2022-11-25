@@ -4,6 +4,7 @@
  */
 package Utilities;
 
+import db.interfaces.SignalManager;
 import db.jdbc.SQLiteSignalManager;
 import db.pojos.Doctor;
 import db.pojos.PatientTS;
@@ -39,7 +40,7 @@ import pojos.users.User;
  * @author albic
  */
 public class CommunicationWithClient {
-    SQLiteSignalManager sman = new SQLiteSignalManager();
+    public static SQLiteSignalManager sman = new SQLiteSignalManager();
     public static void sendPatientList (List<PatientTS> patientList,PrintWriter pw,BufferedReader bf){
         for (PatientTS p : patientList){
             System.out.println("Patient:"+p.getPatientName()+"/"+p.getPatientSurname()+"/"+p.getMedCardId());
@@ -165,25 +166,18 @@ public class CommunicationWithClient {
         printWriter.println(u.toString());
     }
     
-    public static int sendAllSignal(BufferedReader bf, PrintWriter pw){
+    public static void sendAllSignal(BufferedReader bf, PrintWriter pw, SignalManager sman, int medcard){
         System.out.println("Inside senAllSignals");
-        String line;
-        int medcard;
-        try {
-        if (bf.readLine().equalsIgnoreCase("Send signals")){
-            
-                medcard = bf.read();
-                return medcard;
-           
-           }else{
-            pw.println("error");
-            return 0;
-        }
-         } catch (IOException ex) {
-                Logger.getLogger(CommunicationWithClient.class.getName()).log(Level.SEVERE, null, ex);
-                pw.println("error");
-                return 0;
-         }
+       
+      
+        System.out.println("medcard readed");
+                List<String> filenames = sman.ListSignalsFilenamesByPatient(medcard);
+                System.out.println("after db method");
+                pw.println(filenames.size());
+                for (int i=0; i<filenames.size();i++){
+                    pw.println(filenames.get(i));
+                }
+        
         }
     public static Signal recieveSignal(BufferedReader bf, PrintWriter pw){
         System.out.println("Inside recieve signal");
