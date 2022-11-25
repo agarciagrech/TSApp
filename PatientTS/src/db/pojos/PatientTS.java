@@ -147,7 +147,7 @@ public class PatientTS implements Serializable {
      * @throws java.rmi.NotBoundException
      */
    
-    public PatientTS(PatientTS p) throws NotBoundException {
+    /*public PatientTS(PatientTS p) throws NotBoundException {
         this.setMedCardId(p.medical_card_number);
         this.setPatientAddress(p.address);
         this.setPatientAllergies(p.allergies);
@@ -157,7 +157,7 @@ public class PatientTS implements Serializable {
         this.setPatientGender(p.gender);
         this.setPatientName(p.name);
         this.setPatientSurname(p.surname);
-    }
+    }/*
 
     //ESTO IGUAL SE PUEDE METER EN UTILITIES
     /**
@@ -358,13 +358,9 @@ public class PatientTS implements Serializable {
      * @throws NotBoundException if not a correct gender
      */
     public void setPatientGender(String gender) throws NotBoundException {
-        if (gender.equalsIgnoreCase("Male")) {
+        
             this.gender = gender;
-        } else if (gender.equalsIgnoreCase("Female")) {
-            this.gender = gender;
-        } else {
-            throw new NotBoundException("Not a gender.");
-        }
+       
     }
 
    

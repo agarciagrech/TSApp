@@ -72,6 +72,8 @@ public class CommunicationWithClient {
                         case "surname":  p.setPatientSurname(data2[j+1]);
                                         break;
                          case "dob": 
+                             //Date dob = java.sql.Date.valueOf(data2[j+1]);
+                           // p.setPatientDob(dob);
                             try{
                                p.setPatientDob(format.parse(data2[j+1]));
                             }catch(ParseException ex){
