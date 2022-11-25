@@ -134,10 +134,8 @@ public class SQLiteManager implements DBManager {
           String sql4 = "CREATE TABLE signal " 
                   + "(signalId INTEGER PRIMARY KEY AUTOINCREMENT, "
                   + "startDate TEXT NOT NULL, " 
-                  + "sname TEXT NOT NULL, " 
                   + "ECGFilename STRING NOT NULL, "
                   + "EMGFilename STRING NOT NULL, "
-                  + "comment STRING, "
                   + "id_patient FOREING KEY REFERENCES patient(medical_card_number) ON UPDATE CASCADE ON DELETE SET NULL)";
           stmt4.executeUpdate(sql4);
           stmt4.close();

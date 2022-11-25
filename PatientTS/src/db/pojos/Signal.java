@@ -36,6 +36,18 @@ public class Signal {
         this.ECGFilename = ECGFilename;
         this.EMGFilename = EMGFilename;
     }
+
+    public Signal(Date startDate, String ECGFilename, String EMGFilename) {
+        this.startDate = startDate;
+        this.ECGFilename = ECGFilename;
+        this.EMGFilename = EMGFilename;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+    
+    
     
     /**
      *

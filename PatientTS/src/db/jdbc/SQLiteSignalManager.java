@@ -49,14 +49,14 @@ public class SQLiteSignalManager implements SignalManager{
      */
     @Override
     public void addSignal(Signal s, PatientTS p ) {
-        String sq1 = "INSERT INTO signal (startDate, ECGFilename, EMGFilename, id_patient) VALUES (?, ?, ?, ?, ?)";
+        String sq1 = "INSERT INTO signal (startDate, ECGFilename, EMGFilename, id_patient) VALUES (?, ?, ?, ?)";
 	PreparedStatement template;
         try {
             template = c.prepareStatement(sq1);
             template.setString(1, formatDate(s.getSignalStartDate()));
-            template.setString(3, s.getECGFilename());
-            template.setString(4, s.getEMGFilename());
-            template.setInt(5, p.getMedCardId());
+            template.setString(2, s.getECGFilename());
+            template.setString(3, s.getEMGFilename());
+            template.setInt(4, p.getMedCardId());
             template.executeUpdate();
             template.close();	
         } catch (SQLException ex) {

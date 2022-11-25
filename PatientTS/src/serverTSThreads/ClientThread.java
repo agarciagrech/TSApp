@@ -32,6 +32,7 @@ import db.jdbc.SQLiteRoleManager;
 import db.jdbc.SQLiteUserManager;
 import db.pojos.Doctor;
 import db.pojos.PatientTS;
+import db.pojos.Signal;
 import java.rmi.NotBoundException;
 import java.sql.Connection;
 import java.util.Date;
@@ -146,7 +147,15 @@ public class ClientThread implements Runnable {
                     break;
                 case 1:
                     // Record signal
-                    Utilities.CommunicationWithClient.recieveSignal(br, pw);
+                    int userid1 = userman.getId(u.getUsername());
+                    PatientTS p1 = patientman.selectPatientByUserId(userid1);
+                    Signal s = Utilities.CommunicationWithClient.recieveSignal(br, pw); 
+                    s.CreateECGFilename(p1.getPatientName());
+                    s.CreateEMGFilename(p1.getPatientName());
+                    s.StartDate();
+                    s.StoreECGinFile(p1.getPatientName());
+                    s.StoreEMGinFile(p1.getPatientName());
+                    signalman.addSignal(s, p1);
                     break;
                 case 3:
                     // See all the signals files of the patient

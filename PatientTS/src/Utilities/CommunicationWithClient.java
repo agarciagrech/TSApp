@@ -4,6 +4,7 @@
  */
 package Utilities;
 
+import db.jdbc.SQLiteSignalManager;
 import db.pojos.Doctor;
 import db.pojos.PatientTS;
 import db.pojos.Signal;
@@ -38,6 +39,7 @@ import pojos.users.User;
  * @author albic
  */
 public class CommunicationWithClient {
+    SQLiteSignalManager sman = new SQLiteSignalManager();
     public static void sendPatientList (List<PatientTS> patientList,PrintWriter pw,BufferedReader bf){
         for (PatientTS p : patientList){
             System.out.println("Patient:"+p.getPatientName()+"/"+p.getPatientSurname()+"/"+p.getMedCardId());
@@ -242,6 +244,10 @@ public class CommunicationWithClient {
             System.out.println("ECG: " + ecgVals.toString() + "EMG: " + emgVals.toString());
             s.setECG_values(ECG);
             s.setEMG_values(EMG);
+            
+            
+            //HAY QUE CONSEGUIR AQUI EL NOMBRE Y EL DATE DE LA SEÑAL Y AÑADIRLO  S
+            
             return s;
         } catch (IOException ex) {
             Logger.getLogger(CommunicationWithClient.class.getName()).log(Level.SEVERE, null, ex);
