@@ -202,7 +202,7 @@ public class SQLitePatientTSManager implements PatientTSManager {
             PatientTS patient = null;
             if(rs.next()){
                 patient = new PatientTS(rs.getInt("medical_card_number"),rs.getString("name"),rs.getString("surname"),date = new Date(rs.getString("dob")),
-                        rs.getString("address"),rs.getString("email"),rs.getString("diagnosis"),rs.getString("allergies"),rs.getString("gender"));
+                        rs.getString("address"),rs.getString("email"),rs.getString("diagnosis"),rs.getString("allergies"),rs.getString("gender"),rs.getString("macAddress"));
             }
             p.close();
             rs.close();
