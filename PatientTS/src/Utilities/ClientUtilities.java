@@ -12,6 +12,7 @@ import db.interfaces.UserManager;
 import db.jdbc.*;
 import db.pojos.*;
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.security.*;
@@ -77,7 +78,7 @@ public class ClientUtilities {
         }
     }
     
-    public static void registerPatient(BufferedReader br, PrintWriter pw, UserManager userman,PatientTSManager patientman){
+    public static void registerPatient(BufferedReader br, PrintWriter pw, UserManager userman,PatientTSManager patientman,DoctorManager doctorman){
         System.out.println("in register patient");
         try {
             //autogenerate username
@@ -110,9 +111,18 @@ public class ClientUtilities {
             System.out.println("patient added");
             patientman.createLinkUserPatient(user.getUserId(), p.getMedCardId());
             pw.println("Patient successfully registered");
+            List<Doctor> doctorl=doctorman.selectAllDoctors();
+            pw.println(doctorl.size());
+            for (int i =0; i<doctorl.size();i++){
+                   pw.println(doctorl.get(i));
+            }
+            int doctorid = Integer.parseInt(br.readLine());
+            patientman.createLinkDoctorPatient( p.getMedCardId(), doctorid);
         } catch (NoSuchAlgorithmException ex) {
             Logger.getLogger(ClientUtilities.class.getName()).log(Level.SEVERE, null, ex);
             pw.println("Patient not registered");
+        } catch (IOException ex) {
+            Logger.getLogger(ClientUtilities.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
    

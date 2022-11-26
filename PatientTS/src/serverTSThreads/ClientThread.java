@@ -99,7 +99,7 @@ public class ClientThread implements Runnable {
             switch (option){
                 case 1:
                     System.out.println("case 1");
-                    Utilities.ClientUtilities.registerPatient(br, pw,userman,patientman);
+                    Utilities.ClientUtilities.registerPatient(br, pw,userman,patientman,doctorman);
                     
                     break;
                 case 2:
@@ -204,15 +204,26 @@ public class ClientThread implements Runnable {
                     break;
                 case 2:
                     // See all patients of the doctor
+                    int a = Integer.parseInt(br.readLine());
+                    while(a!=0){
                     System.out.println("case 2 doctor menu");
                     int userid = userman.getId(u.getUsername());
                     Doctor d = doctorman.selectDoctorByUserId(userid);
                     List<PatientTS> patientList = patientman.selectPatientsByDoctorId(doctorman.getId(d.getDoctorName()));
                     Utilities.CommunicationWithClient.sendPatientList(patientList,pw, br);
+                    a = Integer.parseInt(br.readLine());
+                    }
                     break;
                 case 3:
                     // Update patient information
                     System.out.println("case 3 doctor menu");
+                    int uid = userman.getId(u.getUsername());
+                    Doctor d3 = doctorman.selectDoctorByUserId(uid);
+                    List<PatientTS> pList = patientman.selectPatientsByDoctorId(doctorman.getId(d3.getDoctorName()));
+                    Utilities.CommunicationWithClient.sendPatientList(pList,pw, br);
+                    int medcard = Integer.parseInt(br.readLine());
+                    PatientTS p = patientman.selectPatient(medcard);
+                    Utilities.CommunicationWithClient.sendPatient(pw, p);
                     PatientTS updatep= Utilities.CommunicationWithClient.receivePatient(br);
                     patientman.editPatient(updatep.getMedCardId(),updatep.getPatientName(),updatep.getPatientSurname(),updatep.getPatientDob(),updatep.getPatientAddress(), updatep.getPatientEmail(),updatep.getPatientDiagnosis(), updatep.getPatientAllergies(),updatep.getPatientGender(),updatep.getMacAddress());
                     break;

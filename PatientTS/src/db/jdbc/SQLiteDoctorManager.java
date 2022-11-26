@@ -146,6 +146,28 @@ public class SQLiteDoctorManager implements DoctorManager{
             Logger.getLogger(SQLiteDoctorManager.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    @Override
+    public List<Doctor> selectAllDoctors(){
+        try {
+            String sql = "SELECT * FROM doctor";
+            PreparedStatement p = c.prepareStatement(sql);
+            
+            ResultSet rs = p.executeQuery();
+            List <Doctor> dList = new ArrayList<Doctor>();
+            while(rs.next()){ 
+            
+                dList.add(new Doctor(rs.getInt("doctorId"),rs.getString("dname"),rs.getString("dsurname"),rs.getString("demail")));
+                
+            }
+            p.close();
+            rs.close();
+            return dList;
+        } catch (SQLException ex) {
+            Logger.getLogger(SQLitePatientTSManager.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+        
+    }
     
     
     
