@@ -22,8 +22,7 @@ public interface SignalManager {
     public boolean deleteSignalById(Integer signalid);
     public Signal selectSignalById (Integer id);
     public List<Signal> listSignalsByPatient(Integer patient_medcard);
-    public List<Signal> listECGSignals(Integer patient_medcard);
-    public List<Signal> listEMGSignals(Integer patient_medcard);
+   
     public List<String> ListSignalsFilenamesByPatient(Integer patient_medcard);
     
 }

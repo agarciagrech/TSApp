@@ -171,11 +171,11 @@ public class CommunicationWithClient {
        
       
         System.out.println("medcard readed");
-                List<String> filenames = sman.ListSignalsFilenamesByPatient(medcard);
+                List<String> filenames = sman.ListSignalsFilenamesByPatient(medcard); //ESTA LISTA TIENE LOS NOMBRES DE LOS FIKES ASOCIADOS AL PATIENT. Lo hace bien
                 System.out.println("after db method");
-                pw.println(filenames.size());
+                pw.println(filenames.size()); 
                 for (int i=0; i<filenames.size();i++){
-                    pw.println(filenames.get(i));
+                    pw.println(filenames.get(i)); //imprime la lista, esto lo hace bien. 
                 }
         
         }
@@ -236,8 +236,8 @@ public class CommunicationWithClient {
             }
 
             System.out.println("ECG: " + ecgVals.toString() + "EMG: " + emgVals.toString());
-            s.setECG_values(ECG);
-            s.setEMG_values(EMG);
+            s.setECG_values(ecgVals);
+            s.setEMG_values(emgVals);
             
             
             //HAY QUE CONSEGUIR AQUI EL NOMBRE Y EL DATE DE LA SEÑAL Y AÑADIRLO  S

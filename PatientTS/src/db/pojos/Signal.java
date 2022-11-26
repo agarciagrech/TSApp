@@ -18,8 +18,10 @@ public class Signal {
     
     
     private Integer signalId;
-    private int[] ECG_values; 
-    private int[] EMG_values;
+     
+    private List<Integer> ECG_values;
+    private List<Integer> EMG_values;
+   
     private Date startDate;
     private String ECGFilename;
     private String EMGFilename;
@@ -58,7 +60,7 @@ public class Signal {
      * @param sr - The sampling rate of the signal recorded (int)
      * @throws Exception
      */
-    public Signal(Integer signalId, int[] ECG_values, int[] EMG_values, Date sDate, int sr) throws Exception{
+    public Signal(Integer signalId, List<Integer> ECG_values, List<Integer> EMG_values, Date sDate, int sr) throws Exception{
         this.signalId = signalId;
         this.ECG_values = ECG_values;
         this.EMG_values = EMG_values;
@@ -118,7 +120,7 @@ public class Signal {
      * @param sr - The sampling rate of the signal recorded.
      
      */
-    public Signal(int[] ECG_values, int[] EMG_values, Date sDate, int sr){
+    public Signal(List<Integer> ECG_values, List<Integer> EMG_values, Date sDate, int sr){
         this.ECG_values = ECG_values;
         this.EMG_values = EMG_values;
         this.startDate = sDate;
@@ -132,7 +134,7 @@ public class Signal {
      * @param sr
      
      */
-    public Signal(int[] ECG_values, int[] EMG_values,int sr){
+    public Signal(List<Integer> ECG_values, List<Integer> EMG_values,int sr){
         this.ECG_values = ECG_values;
         this.EMG_values = EMG_values;
     }
@@ -157,7 +159,7 @@ public class Signal {
      * Used to get the values of the ECG signal
      * @return [int[]] The signal's ECG values
      */
-    public int[] getECG_values() {
+    public List<Integer> getECG_values() {
         return ECG_values;
     }
 
@@ -165,7 +167,7 @@ public class Signal {
      * Used to get the values of the EMG signal
      * @return [int[]] The signal's EMG values
      */
-    public int[] getEMG_values() {
+    public List<Integer> getEMG_values() {
         return EMG_values;
     }
 
@@ -173,7 +175,7 @@ public class Signal {
      * Used to set the values of the ECG signal
      * @param ECG_values
      */
-    public void setECG_values(int[] ECG_values) {
+    public void setECG_values(List<Integer> ECG_values) {
         this.ECG_values = ECG_values;
     }
 
@@ -181,7 +183,7 @@ public class Signal {
      * Used to set the values of the EMG signal
      * @param EMG_values
      */
-    public void setEMG_values(int[] EMG_values) {
+    public void setEMG_values(List<Integer> EMG_values) {
         this.EMG_values = EMG_values;
     }
 
@@ -204,14 +206,21 @@ public class Signal {
 
     @Override
     public String toString() {
-        System.out.println("ECG");
-        for (int i=0; i<ECG_values.length; i++){
-            System.out.println(ECG_values[i]);
+        /*System.out.println("ECG");
+        if(ECG_values.length !=0){
+             for (int i=0; i<ECG_values.length; i++){
+            //System.out.println(ECG_values[i]);
         } 
+        }
+       
         System.out.println("EMG");
-        for (int i=0; i<EMG_values.length; i++){
-            System.out.println(EMG_values[i]);
+        
+        if(EMG_values.length != 0){
+            for (int i=0; i<EMG_values.length; i++){
+            //System.out.println(EMG_values[i]);
         } 
+        }*/
+       
         return "Signal{" + "signalId=" + signalId + ", ECG_values=" + ECG_values + ", EMG_values=" + EMG_values + ", startDate=" + startDate + '}';
     }
 
@@ -240,9 +249,9 @@ public class Signal {
     /**
      * Used to print the values of the ECG signal recorded one by one
      */
-    public void ImprimirECG (){
+   /* public void ImprimirECG (){
          System.out.println("ECG");
-        for (int i=0; i<this.ECG_values.length; i++){
+        for (int i=0; i<this.ECG_values.size; i++){
             System.out.println(this.ECG_values[i]);
         } 
     }
@@ -250,12 +259,12 @@ public class Signal {
     /**
      * Used to print the values of the EMG signal recorded one by one
      */
-    public void ImprimirEMG (){
+   /* public void ImprimirEMG (){
          System.out.println("EMG");
         for (int i=0; i<this.EMG_values.length; i++){
             System.out.println(this.EMG_values[i]);
         } 
-    }
+    }*/
     
     public String formatDate (Date startDate){
         SimpleDateFormat  formato = new SimpleDateFormat("YYYY/MM/dd");
@@ -300,7 +309,7 @@ public class Signal {
         try {
             CreateECGFilename(patientName);
             String ruta = "../PatientTS/"+this.ECGFilename;
-            String contenido = Arrays.toString(this.ECG_values);
+            String contenido =ECG_values.toString();
             File file = new File(ruta);
             if (!file.exists()) {
                 file.createNewFile();
@@ -327,7 +336,7 @@ public class Signal {
         try {
             CreateEMGFilename(patientName);
             String ruta = "../PatientTS/"+this.EMGFilename;
-            String contenido = Arrays.toString(this.EMG_values);
+            String contenido = EMG_values.toString();
             File file = new File(ruta);
             if (!file.exists()) {
                 file.createNewFile();

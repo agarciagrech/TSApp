@@ -163,7 +163,8 @@ public class ClientThread implements Runnable {
                     PatientTS p3 = patientman.selectPatientByUserId(userid3);
                     Utilities.CommunicationWithClient.sendAllSignal(br, pw,signalman,p3.getMedCardId());
                     String filename = br.readLine();
-                    signalman.selectSignalByName(filename);
+                    Signal s1 = signalman.selectSignalByName(filename);
+                    pw.println(s1.toString());
                     
                     break;
                 case 4:

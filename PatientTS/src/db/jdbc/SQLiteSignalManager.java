@@ -145,8 +145,8 @@ public class SQLiteSignalManager implements SignalManager{
             String cadena2;
             String ruta1;
             String ruta2;
-            int[] values = new int[10];
-            int[] values2= new int [10];
+            List<Integer> values = new ArrayList();
+            List<Integer> values2 = new ArrayList();
             Date date;
             FileReader f = null;
             FileReader f2 = null;
@@ -170,7 +170,7 @@ public class SQLiteSignalManager implements SignalManager{
             while((cadena1 = b.readLine())!=null) {
                 String[] separatedCadena = cadena1.replaceAll("\\[", "").replaceAll("]", "").replaceAll(" ","").split(",");
                 for (int i=0; i < separatedCadena.length;i++){
-                    values[i]=Integer.parseInt(separatedCadena[i]);
+                     values.add(i, Integer.parseInt(separatedCadena[i]));
                 }
                     s.setECG_values(values);
                 
@@ -182,7 +182,7 @@ public class SQLiteSignalManager implements SignalManager{
             while((cadena2 = b2.readLine())!=null) {
                 String[] separatedCadena2 = cadena2.replaceAll("\\[", "").replaceAll("]", "").replaceAll(" ", "").split(",");
                 for (int i=0; i < separatedCadena2.length;i++){
-                    values2[i]=Integer.parseInt(separatedCadena2[i]);
+                   values2.add(i, Integer.parseInt(separatedCadena2[i]));
                 }
                     s.setEMG_values(values2);
                 
@@ -230,8 +230,9 @@ public class SQLiteSignalManager implements SignalManager{
         String cadena2;
         String ruta1;
         String ruta2;
-        int[] values = new int[16];
-        int[] values2 = new int[16];
+        List<Integer> values = new ArrayList();
+        List<Integer> values2 = new ArrayList();
+       
         Date date;
         FileReader f = null;
         FileReader f2 = null;
@@ -261,9 +262,10 @@ public class SQLiteSignalManager implements SignalManager{
             while((cadena1 = b.readLine())!=null) {
                 String[] separatedCadena = cadena1.replaceAll("\\[", "").replaceAll("]", "").replace(" ", "").split(",");
                 for (int i=0; i < separatedCadena.length;i++){
-                    values[i]=Integer.parseInt(separatedCadena[i]);
+                    values.add(i, Integer.parseInt(separatedCadena[i]));
                 }
                     s.setECG_values(values);
+                    //System.out.println(s.getECG_values());
                 
             }}else{
             // Get the values of the EMG: 
@@ -273,13 +275,15 @@ public class SQLiteSignalManager implements SignalManager{
             while((cadena2 = b2.readLine())!=null) {
                 String[] separatedCadena = cadena2.replaceAll("\\[", "").replaceAll("]", "").replace(" ", "").split(",");
                 for (int i=0; i < separatedCadena.length;i++){
-                    values2[i]=Integer.parseInt(separatedCadena[i]);
+                    values2.add(i, Integer.parseInt(separatedCadena[i]));
                 }
                     s.setEMG_values(values2);
+                    //System.out.println(s.getEMG_values());
                 
             }}
             }
             template.close();
+            
             return s;
         } catch (SQLException selectSignalByType_error) {
             selectSignalByType_error.printStackTrace();
@@ -312,8 +316,8 @@ public class SQLiteSignalManager implements SignalManager{
             template.setInt(1,patient_medcard);
             ResultSet rs = template.executeQuery();
             while(rs.next()) {
-                int[] values = new int[10];
-                int[] values2 = new int[10];
+                 List<Integer> values = new ArrayList();
+                List<Integer> values2 = new ArrayList();
                 String ruta1;
                 String ruta2;
                 FileReader f = null;
@@ -335,7 +339,7 @@ public class SQLiteSignalManager implements SignalManager{
                 while((cadena1 = b.readLine())!=null) {
                     String[] separatedCadena = cadena1.replaceAll("\\[", "").replaceAll("]", "").replace(" ", "").split(",");
                     for (int i=0; i < separatedCadena.length;i++){
-                        values[i]=Integer.parseInt(separatedCadena[i]);
+                        values.add(i, Integer.parseInt(separatedCadena[i]));
                     }
                         s.setECG_values(values);
                  }
@@ -346,7 +350,7 @@ public class SQLiteSignalManager implements SignalManager{
                 while((cadena2 = b2.readLine())!=null) {
                     String[] separatedCadena2 = cadena2.replaceAll("\\[", "").replaceAll("]", "").replace(" ", "").split(",");
                     for (int i=0; i < separatedCadena2.length;i++){
-                        values2[i]=Integer.parseInt(separatedCadena2[i]);
+                       values2.add(i, Integer.parseInt(separatedCadena2[i]));
                     }
                         s.setEMG_values(values2);
                  }
@@ -408,116 +412,7 @@ public class SQLiteSignalManager implements SignalManager{
      * @param patient_medcard - Medical card number of the patient (Integer)
      * @return signals [List of Signals].
      */
-    @Override
-    public List<Signal> listECGSignals(Integer patient_medcard) {
-       List<Signal> signals = new LinkedList();
-       Date date;
-       
-       try {
-           String SQL_code = "SELECT * FROM signal WHERE id_patient = ?";
-            PreparedStatement template = this.c.prepareStatement(SQL_code);
-            template.setInt(1,patient_medcard);
-            ResultSet rs = template.executeQuery();
-            while(rs.next()) {
-                String cadena;
-                int[] values = new int[10];
-                String ruta1;
-                FileReader f = null;
-                BufferedReader b = null;
-                
-                Integer signalId = rs.getInt("signalId");
-                Date startDate = (date = new Date(rs.getString("startDate")));
-                String ECGFilename = rs.getString("ECGFilename");
-                String EMGFilename = rs.getString("EMGFilename");
-                Signal s=new Signal(signalId,startDate,ECGFilename,EMGFilename);
-                ruta1 = "../PatientTS/"+s.getECGFilename();
-                f = new FileReader(ruta1);
-                b = new BufferedReader(f);
-                while((cadena = b.readLine())!=null) {
-                    String[] separatedCadena = cadena.replaceAll("\\[", "").replaceAll("]", "").replace(" ", "").split(",");
-                    for (int i=0; i < separatedCadena.length;i++){
-                        values[i]=Integer.parseInt(separatedCadena[i]);
-                      }
-                    
-                        s.setECG_values(values);
-                    }    
-                
-                signals.add(s);
-            }
-            template.close();
-            return signals;
-        } catch (SQLException listECGSignals_error) {
-            listECGSignals_error.printStackTrace(); 
-            return null;
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(SQLiteSignalManager.class.getName()).log(Level.SEVERE, null, ex);
-            return null;
-        } catch (IOException ex) {
-            Logger.getLogger(SQLiteSignalManager.class.getName()).log(Level.SEVERE, null, ex);
-            return null;
-        } catch (Exception ex) {
-            Logger.getLogger(SQLiteSignalManager.class.getName()).log(Level.SEVERE, null, ex);
-            return null;
-        } 
-    }
-         
     
-    /**
-     * List all the EMG signals of an specific patient.
-     * @param patient_medcard - Medical card number of the patient (Integer)
-     * @return signals [List of Signals].
-     */
-    @Override
-    public List<Signal> listEMGSignals(Integer patient_medcard) {
-        List<Signal> signals = new LinkedList();
-        Date date;
-        
-        try {
-            String SQL_code = "SELECT * FROM signal WHERE id_patient = ?";
-            PreparedStatement template = this.c.prepareStatement(SQL_code);
-            template.setInt(1,patient_medcard);
-            ResultSet rs = template.executeQuery();
-            while(rs.next()) {
-                String cadena;
-                int[] values = new int[10];
-                String ruta1;
-                FileReader f = null;
-                BufferedReader b = null;
-                Integer signalId = rs.getInt("signalId");
-                Date startDate = (date = new Date(rs.getString("startDate")));
-                String ECGFilename = rs.getString("ECGFilename");
-                String EMGFilename = rs.getString("EMGFilename");
-                Signal s=new Signal(signalId,startDate,ECGFilename,EMGFilename);
-                ruta1 = "../PatientTS/"+s.getEMGFilename();
-                f = new FileReader(ruta1);
-                b = new BufferedReader(f);
-                while((cadena = b.readLine())!=null) {
-                    String[] separatedCadena = cadena.replaceAll("\\[", "").replaceAll("]", "").replace(" ", "").split(",");
-                    for (int i=0; i < separatedCadena.length;i++){
-                        values[i]=Integer.parseInt(separatedCadena[i]);
-                    }
-                    
-                        s.setEMG_values(values);
-                         
-                }
-                signals.add(s);
-            }
-            template.close();
-            return signals;
-        } catch (SQLException listECGSignals_error) {
-            listECGSignals_error.printStackTrace(); 
-            return null;
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(SQLiteSignalManager.class.getName()).log(Level.SEVERE, null, ex);
-            return null;
-        } catch (IOException ex) {
-            Logger.getLogger(SQLiteSignalManager.class.getName()).log(Level.SEVERE, null, ex);
-            return null;
-        } catch (Exception ex) {
-            Logger.getLogger(SQLiteSignalManager.class.getName()).log(Level.SEVERE, null, ex);
-            return null;
-        }
-    }
     public int getId (String filename){
         String sql1 = "SELECT * FROM signal WHERE ECGFilename = ?";
         int id=0;
