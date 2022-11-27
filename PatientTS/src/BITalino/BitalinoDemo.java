@@ -62,8 +62,8 @@ public class BitalinoDemo {
                    // System.out.println(" seq: " + frame[i].seq + " "
                             //+ frame[i].analog[0] + " ");
                 }
-                s.setECG_values(ecg_values);
-                s.setEMG_values(emg_values);
+                //s.setECG_values(ecg_values);
+                //s.setEMG_values(emg_values);
                 //s.ImprimirECG(s.getECG_values());
                 //s.ImprimirEMG(s.getEMG_values());
             }
@@ -88,8 +88,8 @@ public class BitalinoDemo {
             //ruta + signal_name + date ".txt"
             String ruta = "C:/Users/agarc/OneDrive/Desktop/TSApp/filename.txt";
             String ruta2 = "C:/Users/   /OneDrive/Desktop/TSApp/filename2.txt";
-            String contenido = Arrays.toString(s.getECG_values());
-            String contenido2 = Arrays.toString(s.getEMG_values());
+            String contenido = "a";
+            String contenido2 = "b";
             File file = new File(ruta);
             File file2 = new File(ruta2);
             // Si el archivo no existe es creado
