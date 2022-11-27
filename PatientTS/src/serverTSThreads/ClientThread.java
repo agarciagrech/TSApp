@@ -46,17 +46,26 @@ import pojos.users.Role;
 public class ClientThread implements Runnable {
 
     public static Socket socket;
-   
+    public static UserManager userman;
+    public static  RoleManager roleman;
+    public static  PatientTSManager patientman;
+    public static DoctorManager doctorman;
+    public static  SignalManager signalman;
     
-    public ClientThread(Socket socket){
+    public ClientThread(Socket socket, UserManager userman,RoleManager roleman,PatientTSManager patientman, DoctorManager doctorman,SignalManager signalman ){
         this.socket = socket;
+        this.userman = userman;
+        this.roleman = roleman;
+        this.patientman = patientman;
+        this.doctorman = doctorman;
+        this.signalman = signalman;
     }
 
     @Override
     public void run() {
         String byteRead;
         Scanner sc = new Scanner(System.in);
-        SQLiteManager manager = new SQLiteManager();
+        /*SQLiteManager manager = new SQLiteManager();
         manager.connect();
         Connection c = manager.getConnection();
         UserManager userman = new SQLiteUserManager(c);
@@ -69,7 +78,7 @@ public class ClientThread implements Runnable {
             createRoles(roleman);
             Utilities.ClientUtilities.firstlogin(userman,doctorman,roleman);
             
-        }
+        }*/
         
         String trashcan;
         InputStream inputStream;
@@ -204,18 +213,19 @@ public class ClientThread implements Runnable {
                     break;
                 case 2:
                     // See all patients of the doctor
-                    int a = Integer.parseInt(br.readLine());
-                    while(a!=0){
+                    
+                    
                     System.out.println("case 2 doctor menu");
                     int userid = userman.getId(u.getUsername());
                     Doctor d = doctorman.selectDoctorByUserId(userid);
                     List<PatientTS> patientList = patientman.selectPatientsByDoctorId(doctorman.getId(d.getDoctorName()));
                     Utilities.CommunicationWithClient.sendPatientList(patientList,pw, br);
-                    a = Integer.parseInt(br.readLine());
-                    }
+                   
                     break;
                 case 3:
                     // Update patient information
+                    int a = Integer.parseInt(br.readLine());
+                    while(a!=0){
                     System.out.println("case 3 doctor menu");
                     int uid = userman.getId(u.getUsername());
                     Doctor d3 = doctorman.selectDoctorByUserId(uid);
@@ -226,12 +236,22 @@ public class ClientThread implements Runnable {
                     Utilities.CommunicationWithClient.sendPatient(pw, p);
                     PatientTS updatep= Utilities.CommunicationWithClient.receivePatient(br);
                     patientman.editPatient(updatep.getMedCardId(),updatep.getPatientName(),updatep.getPatientSurname(),updatep.getPatientDob(),updatep.getPatientAddress(), updatep.getPatientEmail(),updatep.getPatientDiagnosis(), updatep.getPatientAllergies(),updatep.getPatientGender(),updatep.getMacAddress());
+                    a =  Integer.parseInt(br.readLine());
+                   
+                    }
                     break;
                 case 4:
                     // Consult filenames of patients dignals
                     System.out.println("case 4 doctor menu");
-                    //Utilities.CommunicationWithClient.sendAllSignal(br, pw, signalman);
-                    
+                    int userid1 = userman.getId(u.getUsername());
+                    Doctor d1 = doctorman.selectDoctorByUserId(userid1);
+                    List<PatientTS> patientList1 = patientman.selectPatientsByDoctorId(doctorman.getId(d1.getDoctorName()));
+                    Utilities.CommunicationWithClient.sendPatientList(patientList1,pw, br);
+                    int medcard2 = Integer.parseInt(br.readLine());
+                    Utilities.CommunicationWithClient.sendAllSignal(br, pw, signalman, medcard2);
+                    String filename = br.readLine();
+                    Signal s1 = signalman.selectSignalByName(filename);
+                    pw.println(s1.toString());
                     
                     break;
                 

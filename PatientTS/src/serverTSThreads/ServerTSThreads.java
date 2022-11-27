@@ -12,16 +12,27 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import Utilities.ClientUtilities;
 import Utilities.CommunicationWithClient;
+import db.interfaces.DoctorManager;
+import db.interfaces.PatientTSManager;
+import db.interfaces.RoleManager;
+import db.interfaces.SignalManager;
+import db.interfaces.UserManager;
 import db.jdbc.SQLiteDoctorManager;
+import db.jdbc.SQLiteManager;
 import db.jdbc.SQLitePatientTSManager;
+import db.jdbc.SQLiteRoleManager;
+import db.jdbc.SQLiteSignalManager;
+import db.jdbc.SQLiteUserManager;
 import db.pojos.Doctor;
 import java.io.BufferedReader;
 import java.security.MessageDigest;
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import pojos.users.Role;
 import pojos.users.User;
+import static serverTSThreads.ClientThread.createRoles;
 
 /**
  *
@@ -42,11 +53,24 @@ public class ServerTSThreads {
     public static void main(String[] args) throws IOException{
        
         serverSocketClient = new ServerSocket(9000); //IP, PORT?
-       
+        SQLiteManager manager = new SQLiteManager();
+        manager.connect();
+        Connection c = manager.getConnection();
+        UserManager userman = new SQLiteUserManager(c);
+        RoleManager roleman = new SQLiteRoleManager(c);
+        PatientTSManager patientman = new SQLitePatientTSManager(c);
+        DoctorManager doctorman = new SQLiteDoctorManager(c);
+        SignalManager signalman = new SQLiteSignalManager(c);
+        boolean create = manager.createTables();
+        if (create){
+            createRoles(roleman);
+            Utilities.ClientUtilities.firstlogin(userman,doctorman,roleman);
+            
+        }
         while(true){
             
             socketClient = serverSocketClient.accept();
-            cThread = new ClientThread(socketClient);
+            cThread = new ClientThread(socketClient,userman,roleman,patientman,doctorman,signalman);
             Thread clientThread = new Thread(cThread);
             clientThread.start();
             clientsThreadsList.add(clientThread);
