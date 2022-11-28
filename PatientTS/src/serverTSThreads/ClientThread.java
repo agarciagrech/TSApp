@@ -256,15 +256,15 @@ public class ClientThread implements Runnable {
                     break;
                     
                 case 5:
-                    /*System.out.println("case 5 doctor menu");
+                    System.out.println("case 5 doctor menu");
                     int userid2 = userman.getId(u.getUsername());
                     Doctor d2 = doctorman.selectDoctorByUserId(userid2);
                     List<PatientTS> patientList2 = patientman.selectPatientsByDoctorId(doctorman.getId(d2.getDoctorName()));
                     Utilities.CommunicationWithClient.sendPatientList(patientList2,pw, br);
                     int medcard3 = Integer.parseInt(br.readLine());
                     PatientTS pToDelete = patientman.selectPatient(medcard3);
-                    Utilities.CommunicationWithClient.receivePatient(br);
-                    patientman.deletePatientByMedicalCardId(pToDelete.getMedCardId());*/
+                    patientman.deletePatientByMedicalCardId(pToDelete.getMedCardId());
+                    pw.println("success");
                     break;
             }
                  
