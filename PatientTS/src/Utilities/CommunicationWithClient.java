@@ -42,10 +42,8 @@ import pojos.users.User;
 public class CommunicationWithClient {
     public static SQLiteSignalManager sman = new SQLiteSignalManager();
     public static void sendPatientList (List<PatientTS> patientList,PrintWriter pw,BufferedReader bf){
-        for (PatientTS p : patientList){
-            System.out.println("Patient:"+p.getPatientName()+"/"+p.getPatientSurname()+"/"+p.getMedCardId());
-           pw.println("Patient:"+p.getPatientName()+"/"+p.getPatientSurname()+"/"+p.getMedCardId());
-            
+        for (int i =0;i<patientList.size();i++){
+          pw.println(patientList.get(i).toString());
         }
         pw.println("End of list");
     }

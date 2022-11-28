@@ -152,8 +152,8 @@ public class SQLiteManager implements DBManager {
          
           Statement stmt6 = c.createStatement();
 		String sql6 = "CREATE TABLE doctor_patient "
-				   + "(patient_id REFERENCES patient(medical_card_number) ON UPDATE CASCADE ON DELETE SET NULL,"
-				   + " doctor_id REFERENCES doctor(doctorId) ON UPDATE CASCADE ON DELETE SET NULL, "
+				   + "(patient_id REFERENCES patient(medical_card_number) ON UPDATE RESTRICT ON DELETE CASCADE,"
+				   + " doctor_id REFERENCES doctor(doctorId) ON UPDATE RESTRICT ON DELETE CASCADE, "
 				   + " PRIMARY KEY (patient_id,doctor_id))";
 		stmt6.execute(sql6);
 		stmt6.close();

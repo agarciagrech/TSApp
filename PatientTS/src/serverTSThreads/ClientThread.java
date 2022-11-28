@@ -213,8 +213,6 @@ public class ClientThread implements Runnable {
                     break;
                 case 2:
                     // See all patients of the doctor
-                    
-                    
                     System.out.println("case 2 doctor menu");
                     int userid = userman.getId(u.getUsername());
                     Doctor d = doctorman.selectDoctorByUserId(userid);
@@ -224,8 +222,7 @@ public class ClientThread implements Runnable {
                     break;
                 case 3:
                     // Update patient information
-                    int a = Integer.parseInt(br.readLine());
-                    while(a!=0){
+                    
                     System.out.println("case 3 doctor menu");
                     int uid = userman.getId(u.getUsername());
                     Doctor d3 = doctorman.selectDoctorByUserId(uid);
@@ -234,10 +231,12 @@ public class ClientThread implements Runnable {
                     int medcard = Integer.parseInt(br.readLine());
                     PatientTS p = patientman.selectPatient(medcard);
                     Utilities.CommunicationWithClient.sendPatient(pw, p);
+                    
+                    int a = Integer.parseInt(br.readLine());
+                    while(a!=0){
                     PatientTS updatep= Utilities.CommunicationWithClient.receivePatient(br);
                     patientman.editPatient(updatep.getMedCardId(),updatep.getPatientName(),updatep.getPatientSurname(),updatep.getPatientDob(),updatep.getPatientAddress(), updatep.getPatientEmail(),updatep.getPatientDiagnosis(), updatep.getPatientAllergies(),updatep.getPatientGender(),updatep.getMacAddress());
                     a =  Integer.parseInt(br.readLine());
-                   
                     }
                     break;
                 case 4:
@@ -262,7 +261,10 @@ public class ClientThread implements Runnable {
                     List<PatientTS> patientList2 = patientman.selectPatientsByDoctorId(doctorman.getId(d2.getDoctorName()));
                     Utilities.CommunicationWithClient.sendPatientList(patientList2,pw, br);
                     int medcard3 = Integer.parseInt(br.readLine());
+                    System.out.println("before getting medcard");
+                    System.out.println("Med card received: "+ medcard3);
                     PatientTS pToDelete = patientman.selectPatient(medcard3);
+                    System.out.println("Patient to delete: "+ pToDelete.toString());
                     patientman.deletePatientByMedicalCardId(pToDelete.getMedCardId());
                     pw.println("success");
                     break;
