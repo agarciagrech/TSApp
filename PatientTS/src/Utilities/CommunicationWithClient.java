@@ -43,7 +43,7 @@ public class CommunicationWithClient {
     public static SQLiteSignalManager sman = new SQLiteSignalManager();
     public static void sendPatientList (List<PatientTS> patientList,PrintWriter pw,BufferedReader bf){
         for (int i =0;i<patientList.size();i++){
-          pw.println(patientList.get(i).toString());
+          pw.println("Patient:"+patientList.get(i).getPatientName()+"/"+patientList.get(i).getPatientSurname()+"/"+patientList.get(i).getMedCardId());
         }
         pw.println("End of list");
     }

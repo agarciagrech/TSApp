@@ -222,7 +222,8 @@ public class ClientThread implements Runnable {
                     break;
                 case 3:
                     // Update patient information
-                    
+                    int a = Integer.parseInt(br.readLine());
+                    while(a!=0){
                     System.out.println("case 3 doctor menu");
                     int uid = userman.getId(u.getUsername());
                     Doctor d3 = doctorman.selectDoctorByUserId(uid);
@@ -230,10 +231,7 @@ public class ClientThread implements Runnable {
                     Utilities.CommunicationWithClient.sendPatientList(pList,pw, br);
                     int medcard = Integer.parseInt(br.readLine());
                     PatientTS p = patientman.selectPatient(medcard);
-                    Utilities.CommunicationWithClient.sendPatient(pw, p);
-                    
-                    int a = Integer.parseInt(br.readLine());
-                    while(a!=0){
+                    Utilities.CommunicationWithClient.sendPatient(pw,p);
                     PatientTS updatep= Utilities.CommunicationWithClient.receivePatient(br);
                     patientman.editPatient(updatep.getMedCardId(),updatep.getPatientName(),updatep.getPatientSurname(),updatep.getPatientDob(),updatep.getPatientAddress(), updatep.getPatientEmail(),updatep.getPatientDiagnosis(), updatep.getPatientAllergies(),updatep.getPatientGender(),updatep.getMacAddress());
                     a =  Integer.parseInt(br.readLine());
