@@ -188,12 +188,11 @@ public class CommunicationWithClient {
             //line=line.replace("]","");
             //line=line.replace(",","");
             //String[] signals = line.split("// ");
-            int[] ECG = new int[16];
-            int[] EMG = new int[16];
+            
 
             List<Integer> ecgVals = new ArrayList<>();
             List<Integer> emgVals = new ArrayList<>();
-
+               /*
             boolean endECG = false;
             while (!endECG) {
                 String line = bf.readLine();
@@ -210,10 +209,18 @@ public class CommunicationWithClient {
                     System.out.println("Error");
                 }
             }
-            for (int i = 0; i < ecgVals.size(); i++) {
-                ECG[i] = ecgVals.get(i);
+            */
+            int ecg_size = Integer.parseInt(bf.readLine());
+            for (int i =0;i<ecg_size;i++){
+                Integer ecg_val = Integer.parseInt(bf.readLine());
+                ecgVals.add(i,ecg_val);
             }
-
+            int emg_size = Integer.parseInt(bf.readLine());
+            for (int i =0;i<emg_size;i++){
+                Integer emg_val = Integer.parseInt(bf.readLine());
+                emgVals.add(i,emg_val);
+            }
+               /*
             boolean endEMG = false;
             while (!endEMG) {
                 String line2 = bf.readLine();
@@ -228,10 +235,8 @@ public class CommunicationWithClient {
                     System.out.println("Error");
                 }
             }
-
-            for (int j = 0; j < emgVals.size(); j++) {
-                EMG[j] = emgVals.get(j);
-            }
+*/
+          
 
             System.out.println("ECG: " + ecgVals.toString() + "EMG: " + emgVals.toString());
             s.setECG_values(ecgVals);

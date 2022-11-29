@@ -310,6 +310,7 @@ public class Signal {
             CreateECGFilename(patientName);
             String ruta = "../PatientTS/"+this.ECGFilename;
             String contenido =ECG_values.toString();
+            System.out.println("prueba"+contenido);
             File file = new File(ruta);
             if (!file.exists()) {
                 file.createNewFile();
