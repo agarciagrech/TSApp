@@ -108,9 +108,9 @@ public class SQLiteManager implements DBManager {
           Statement stmt2 = c.createStatement();
           String sql2 = "CREATE TABLE users " 
                   + "(userid INTEGER PRIMARY KEY AUTOINCREMENT, " 
-                  + "userName TEXT NOT NULL, " 
-                  + "userPassword TEXT NOT NULL, "
-                  + "userRoleid FOREING KEY REFERENCES role(roleid) ON UPDATE CASCADE ON DELETE SET NULL) ";
+                  + "userName TEXT NOT NULL ON UPDATE RESTRICT ON DELETE CASCADE, " 
+                  + "userPassword TEXT NOT NULL ON UPDATE RESTRICT ON DELETE CASCADE, "
+                  + "userRoleid FOREING KEY REFERENCES role(roleid) ON UPDATE RESTRICT ON DELETE CASCADE) ";
           stmt2.execute(sql2);
           stmt2.close();
           
