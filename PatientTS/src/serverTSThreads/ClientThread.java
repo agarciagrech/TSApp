@@ -102,22 +102,20 @@ public class ClientThread implements Runnable {
         do {
             try {
                 option = Integer.parseInt(br.readLine());
-                System.out.println(option);
+                System.out.println("option:"+option);
                 System.out.println("in first");
 
                 switch (option) {
                     case 1:
                         System.out.println("case 1");
                         Utilities.ClientUtilities.registerPatient(br, pw, userman, patientman, doctorman);
-
                         break;
                     case 2:
                         System.out.println("case 2:");
                         int a = Integer.parseInt(br.readLine());
-                        System.out.println(a);
+                        System.out.println("a:"+a);
                         if (a == 1){
-                            option=1;
-                            
+                            break;
                         }else{
                         System.out.println("in login");
                         User user = Utilities.ClientUtilities.login(br, pw, userman);
