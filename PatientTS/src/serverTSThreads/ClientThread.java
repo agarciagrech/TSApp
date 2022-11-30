@@ -112,10 +112,12 @@ public class ClientThread implements Runnable {
 
                         break;
                     case 2:
+                        System.out.println("case 2:");
                         int a = Integer.parseInt(br.readLine());
+                        System.out.println(a);
                         if (a == 1){
                             option=1;
-                            break;
+                            
                         }else{
                         System.out.println("in login");
                         User user = Utilities.ClientUtilities.login(br, pw, userman);
@@ -135,9 +137,10 @@ public class ClientThread implements Runnable {
                             Doctor d = doctorman.selectDoctorByUserId(user.getUserId());
                             Utilities.CommunicationWithClient.sendDoctor(pw, d);
                             doctorMenu(user, br, pw, userman, patientman, signalman, doctorman);
-                        }
+                        }}
                         break;
-                        }
+                        
+                       
                 }
             } catch (IOException ex) {
                 Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
