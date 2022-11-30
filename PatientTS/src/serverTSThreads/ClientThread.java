@@ -281,10 +281,10 @@ public class ClientThread implements Runnable {
                         System.out.println("before getting medcard");
                         System.out.println("Med card received: " + medcard3);
                         PatientTS pToDelete = patientman.selectPatient(medcard3);
-                        int pid= pToDelete.getPatientUserId();
                         System.out.println("Patient to delete: " + pToDelete.toString());
                         patientman.deletePatientByMedicalCardId(pToDelete.getMedCardId());
-                        userman.deleteUserByUserid(pid);
+                        String medcard = ""+medcard3;
+                        userman.deleteUserByUserName(medcard);
                         //pw.println("success");
                         break;
                 }

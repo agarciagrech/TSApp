@@ -19,4 +19,5 @@ public interface UserManager {
     public int getId (String username);
     public void createLinkUserRole(int roleId, int userId);
     public User selectUserByUserId(Integer userId);
+    public void deleteUserByUserName(String userName);
 }

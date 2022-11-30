@@ -67,6 +67,7 @@ public class SQLiteUserManager implements UserManager {
             return user;
     }
     
+    @Override
     public void addUser(User u){
        
                 String sq1 = "INSERT INTO users ( userName, userPassword) VALUES (?, ?)";
@@ -81,6 +82,7 @@ public class SQLiteUserManager implements UserManager {
             }
     
     }
+    @Override
     public int getId (String username){
         String sql1 = "SELECT * FROM users WHERE userName = ?";
         int id=0;
@@ -104,6 +106,7 @@ public class SQLiteUserManager implements UserManager {
      
      */
    
+    @Override
     public void deleteUserByUserid(Integer userid){
         try {
             String sql = "DELETE FROM users WHERE userid = ?";
@@ -118,10 +121,11 @@ public class SQLiteUserManager implements UserManager {
     
     /**
      * Deletes any user with a userid that matches the given userid.
-     * @param userid - [Integer] Medical card number from the patient that will be deleted.
+     * @param userName- [String] username of the user to be deleted.
      
      */
    
+    @Override
     public void deleteUserByUserName(String userName){
         try {
             String sql = "DELETE FROM users WHERE userName = ?";
@@ -136,9 +140,11 @@ public class SQLiteUserManager implements UserManager {
     /**
      * Checks if it exists a username in the database
      * @param username - [String] 
+     * @return  
      
      */
    
+    @Override
     public boolean existingUserName(String username){
         try {
             String sql = "SELECT * FROM users WHERE userName = ?";
@@ -161,6 +167,7 @@ public class SQLiteUserManager implements UserManager {
      * @param roleId
      */
     
+    @Override
     public void createLinkUserRole(int roleId, int userId){
         try {
             String sql1 = "UPDATE users SET userRoleid = ? WHERE userid = ? ";
