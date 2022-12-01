@@ -108,10 +108,10 @@ public class SQLiteManager implements DBManager {
           Statement stmt2 = c.createStatement();
           String sql2 = "CREATE TABLE users " 
                   + "(userid INTEGER PRIMARY KEY AUTOINCREMENT, " 
-                  + "userName TEXT NOT NULL ON UPDATE RESTRICT ON DELETE CASCADE, " 
-                  + "userPassword TEXT NOT NULL ON UPDATE RESTRICT ON DELETE CASCADE, "
-                  + "userRoleid FOREING KEY REFERENCES role(roleid) ON UPDATE RESTRICT ON DELETE CASCADE) ";
-          stmt2.execute(sql2);
+                  + "userName TEXT NOT NULL, " 
+                  + "userPassword TEXT NOT NULL , "
+                  + "userRoleid FOREING KEY REFERENCES role(roleid) ON UPDATE CASCADE ON DELETE SET NULL) ";
+          stmt2.executeUpdate(sql2);
           stmt2.close();
           
           Statement stmt3 = c.createStatement();
@@ -126,8 +126,8 @@ public class SQLiteManager implements DBManager {
                   + "allergies TEXT, "
                   + "gender TEXT NOT NULL, "
                   + "macAddress TEXT NOT NULL, "
-                  + "userId FOREING KEY REFERENCES users(userid) ON UPDATE CASCADE ON DELETE SET NULL)";
-          stmt3.execute(sql3);
+                  + "userId FOREING KEY REFERENCES users(userid) ON UPDATE RESTRICT ON DELETE CASCADE)";
+          stmt3.executeUpdate(sql3);
           stmt3.close();
           
           Statement stmt4 = c.createStatement();
@@ -147,7 +147,7 @@ public class SQLiteManager implements DBManager {
                   + "dsurname TEXT NOT NULL, "
                   + "demail TEXT , "
                   + "userId FOREING KEY REFERENCES users(userid) ON UPDATE CASCADE ON DELETE SET NULL)";
-          stmt5.execute(sql5);
+          stmt5.executeUpdate(sql5);
           stmt5.close();
          
           Statement stmt6 = c.createStatement();
@@ -155,7 +155,7 @@ public class SQLiteManager implements DBManager {
 				   + "(patient_id REFERENCES patient(medical_card_number) ON UPDATE RESTRICT ON DELETE CASCADE,"
 				   + " doctor_id REFERENCES doctor(doctorId) ON UPDATE RESTRICT ON DELETE CASCADE, "
 				   + " PRIMARY KEY (patient_id,doctor_id))";
-		stmt6.execute(sql6);
+		stmt6.executeUpdate(sql6);
 		stmt6.close();
                
           return true;

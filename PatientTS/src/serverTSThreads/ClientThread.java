@@ -208,7 +208,7 @@ public class ClientThread implements Runnable {
                 System.out.println(option);
                 switch (option) {
                     case 0:
-                        // Exit
+                        // Exi
 
                         ServerTSThreads.releaseClientResources(br, socket);
                         break;

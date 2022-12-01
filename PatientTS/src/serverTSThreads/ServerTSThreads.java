@@ -52,7 +52,7 @@ public class ServerTSThreads {
     
     public static void main(String[] args) throws IOException{
        
-        serverSocketClient = new ServerSocket(9000); //IP, PORT?
+        serverSocketClient = new ServerSocket(9000);
         SQLiteManager manager = new SQLiteManager();
         manager.connect();
         Connection c = manager.getConnection();
@@ -84,12 +84,14 @@ public class ServerTSThreads {
         try{
             if(clientsThreadsList.isEmpty()==true){
             serverSocketClient.close();
+            System.exit(0);
             }
         }catch(IOException ex){
             Logger.getLogger(ServerTSThreads.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
         public static void releaseClientResources(BufferedReader bufferedReader, Socket socket) {
+            System.out.println("in release ClientResources");
         try {
             bufferedReader.close();
         } catch (IOException ex) {
