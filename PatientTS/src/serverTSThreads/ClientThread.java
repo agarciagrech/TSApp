@@ -53,6 +53,7 @@ public class ClientThread implements Runnable {
     public static DoctorManager doctorman;
     public static SignalManager signalman;
     public static int position;
+    public static boolean exit; 
 
     public ClientThread(Socket socket, UserManager userman, RoleManager roleman, PatientTSManager patientman, DoctorManager doctorman, SignalManager signalman, int position) {
         this.socket = socket;
@@ -74,19 +75,21 @@ public class ClientThread implements Runnable {
         OutputStream outputStream;
 
         try {
+          
             inputStream = socket.getInputStream();
             outputStream = socket.getOutputStream();
             BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
             PrintWriter pw = new PrintWriter(outputStream, true);
             first(inputStream,outputStream,br, pw, userman, patientman, signalman, doctorman);
 
-        } catch (Exception e) {
+        } catch (IOException e) {
             System.out.println("An error has occured");
         }
     }
 
     public static void first(InputStream inputStream,OutputStream outputStream,BufferedReader br, PrintWriter pw, UserManager userman, PatientTSManager patientman, SignalManager signalman, DoctorManager doctorman) {
         int option = 1;
+        exit = false;
         do {
             try {
                 option = Integer.parseInt(br.readLine());
@@ -126,7 +129,8 @@ public class ClientThread implements Runnable {
                         }}
                         break;
                     case 0: 
-                        ServerTSThreads.releaseClientResources(inputStream,outputStream,socket,position);
+                        
+                        //ServerTSThreads.releaseClientResources(inputStream,outputStream,socket,position);
                         break;
                        
                 }
@@ -135,20 +139,22 @@ public class ClientThread implements Runnable {
             } catch (Exception ex) {
                 Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
             }
-        } while (option != 0);
+        } while (option != 0 || exit == false);
+         ServerTSThreads.releaseClientResources(inputStream,outputStream,socket,position);
     }
 
     public static void patientMenu(User u, BufferedReader br, PrintWriter pw, UserManager userman, PatientTSManager patientman, SignalManager signalman) {
         System.out.println("Inside patient Menu");
         int option = 1;
-        boolean exit = false;
-        do {
+       // boolean exit = false;
+        
             try {
                 option = Integer.parseInt(br.readLine());
                 switch (option) {
                     case 0:
                         // Exit
                         exit= true;
+                        
                         break;
                     case 1:
                         // Record signal
@@ -180,7 +186,8 @@ public class ClientThread implements Runnable {
             } catch (IOException ex) {
                 Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
             }
-        } while (!exit);
+         
+        //ServerTSThreads.ReleaseClientThread(socket);
     }
 
     public static void createRoles(RoleManager roleman) {
@@ -193,8 +200,8 @@ public class ClientThread implements Runnable {
     public static void doctorMenu(User u, BufferedReader br, PrintWriter pw, UserManager userman, PatientTSManager patientman, SignalManager signalman, DoctorManager doctorman) {
         System.out.println("inside doctor menu");
         int option = 1;
-        boolean exit = false;
-        do {
+        // exit = false;
+       
             try {
                 option = Integer.parseInt(br.readLine());
                 System.out.println(option);
@@ -284,7 +291,7 @@ public class ClientThread implements Runnable {
             } catch (IOException ex) {
                 Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
             }
-        } while (!exit);
+        
     }
 
     public static void ReleaseResourcesClient(InputStream inputStream, OutputStream outputStream, Socket socket) {

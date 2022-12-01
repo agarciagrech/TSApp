@@ -95,7 +95,16 @@ public class ServerTSThreads {
         }catch(IOException ex){
             Logger.getLogger(ServerTSThreads.class.getName()).log(Level.SEVERE, null, ex);
         }
-}
+        }
+        
+       public static void ReleaseClientThread(Socket socket){
+            try{
+                socket.close();
+            }catch(IOException ex){
+                Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex); 
+            }
+        }
+
         
         public static void releaseClientResources(InputStream inputStream, OutputStream outputStream, Socket socket, int position) {
             System.out.println("in release ClientResources");
@@ -120,8 +129,9 @@ public class ServerTSThreads {
             ReleaseResourcesServerTSClient(serverSocketClient);
         }
     }
+}
     
     
   
     
-}
+
