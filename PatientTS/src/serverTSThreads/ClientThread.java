@@ -52,35 +52,23 @@ public class ClientThread implements Runnable {
     public static PatientTSManager patientman;
     public static DoctorManager doctorman;
     public static SignalManager signalman;
+    public static int position;
 
-    public ClientThread(Socket socket, UserManager userman, RoleManager roleman, PatientTSManager patientman, DoctorManager doctorman, SignalManager signalman) {
+    public ClientThread(Socket socket, UserManager userman, RoleManager roleman, PatientTSManager patientman, DoctorManager doctorman, SignalManager signalman, int position) {
         this.socket = socket;
         this.userman = userman;
         this.roleman = roleman;
         this.patientman = patientman;
         this.doctorman = doctorman;
         this.signalman = signalman;
+        this.position = position;
     }
 
     @Override
     public void run() {
         String byteRead;
         Scanner sc = new Scanner(System.in);
-        /*SQLiteManager manager = new SQLiteManager();
-        manager.connect();
-        Connection c = manager.getConnection();
-        UserManager userman = new SQLiteUserManager(c);
-        RoleManager roleman = new SQLiteRoleManager(c);
-        PatientTSManager patientman = new SQLitePatientTSManager(c);
-        DoctorManager doctorman = new SQLiteDoctorManager(c);
-        SignalManager signalman = new SQLiteSignalManager(c);
-        boolean create = manager.createTables();
-        if (create){
-            createRoles(roleman);
-            Utilities.ClientUtilities.firstlogin(userman,doctorman,roleman);
-            
-        }*/
-
+      
         String trashcan;
         InputStream inputStream;
         OutputStream outputStream;
@@ -90,14 +78,14 @@ public class ClientThread implements Runnable {
             outputStream = socket.getOutputStream();
             BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
             PrintWriter pw = new PrintWriter(outputStream, true);
-            first(br, pw, userman, patientman, signalman, doctorman);
+            first(inputStream,outputStream,br, pw, userman, patientman, signalman, doctorman);
 
         } catch (Exception e) {
             System.out.println("An error has occured");
         }
     }
 
-    public static void first(BufferedReader br, PrintWriter pw, UserManager userman, PatientTSManager patientman, SignalManager signalman, DoctorManager doctorman) {
+    public static void first(InputStream inputStream,OutputStream outputStream,BufferedReader br, PrintWriter pw, UserManager userman, PatientTSManager patientman, SignalManager signalman, DoctorManager doctorman) {
         int option = 1;
         do {
             try {
@@ -137,7 +125,9 @@ public class ClientThread implements Runnable {
                             doctorMenu(user, br, pw, userman, patientman, signalman, doctorman);
                         }}
                         break;
-                        
+                    case 0: 
+                        ServerTSThreads.releaseClientResources(inputStream,outputStream,socket,position);
+                        break;
                        
                 }
             } catch (IOException ex) {
@@ -151,13 +141,14 @@ public class ClientThread implements Runnable {
     public static void patientMenu(User u, BufferedReader br, PrintWriter pw, UserManager userman, PatientTSManager patientman, SignalManager signalman) {
         System.out.println("Inside patient Menu");
         int option = 1;
+        boolean exit = false;
         do {
             try {
                 option = Integer.parseInt(br.readLine());
                 switch (option) {
                     case 0:
                         // Exit
-                        ServerTSThreads.releaseClientResources(br, socket);
+                        exit= true;
                         break;
                     case 1:
                         // Record signal
@@ -189,7 +180,7 @@ public class ClientThread implements Runnable {
             } catch (IOException ex) {
                 Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
             }
-        } while (true);
+        } while (!exit);
     }
 
     public static void createRoles(RoleManager roleman) {
@@ -202,6 +193,7 @@ public class ClientThread implements Runnable {
     public static void doctorMenu(User u, BufferedReader br, PrintWriter pw, UserManager userman, PatientTSManager patientman, SignalManager signalman, DoctorManager doctorman) {
         System.out.println("inside doctor menu");
         int option = 1;
+        boolean exit = false;
         do {
             try {
                 option = Integer.parseInt(br.readLine());
@@ -210,7 +202,7 @@ public class ClientThread implements Runnable {
                     case 0:
                         // Exi
 
-                        ServerTSThreads.releaseClientResources(br, socket);
+                        exit= true;
                         break;
                     case 1:
                         // Register a doctor
@@ -292,7 +284,7 @@ public class ClientThread implements Runnable {
             } catch (IOException ex) {
                 Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
             }
-        } while (true);
+        } while (!exit);
     }
 
     public static void ReleaseResourcesClient(InputStream inputStream, OutputStream outputStream, Socket socket) {

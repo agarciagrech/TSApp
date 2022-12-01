@@ -25,6 +25,8 @@ import db.jdbc.SQLiteSignalManager;
 import db.jdbc.SQLiteUserManager;
 import db.pojos.Doctor;
 import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.security.MessageDigest;
 import java.sql.Connection;
 import java.util.ArrayList;
@@ -46,7 +48,7 @@ public class ServerTSThreads {
    
     public static ClientThread cThread;
     
-    
+    public static int contador;
     public static List<Thread> clientsThreadsList = new ArrayList();
    
     
@@ -67,13 +69,17 @@ public class ServerTSThreads {
             Utilities.ClientUtilities.firstlogin(userman,doctorman,roleman);
             
         }
+        int position;
         while(true){
             
             socketClient = serverSocketClient.accept();
-            cThread = new ClientThread(socketClient,userman,roleman,patientman,doctorman,signalman);
+            position = contador;
+            contador++;
+            cThread = new ClientThread(socketClient,userman,roleman,patientman,doctorman,signalman,position);
             Thread clientThread = new Thread(cThread);
             clientThread.start();
             clientsThreadsList.add(clientThread);
+            
         }
         //SI ES PATIENT HACER UNA COSA Y SI ES DOCTOR HACER OTRA  
                 
@@ -82,28 +88,37 @@ public class ServerTSThreads {
         
         public static void ReleaseResourcesServerTSClient(ServerSocket severSocketClient){
         try{
-            if(clientsThreadsList.isEmpty()==true){
+            
             serverSocketClient.close();
             System.exit(0);
-            }
+            
         }catch(IOException ex){
             Logger.getLogger(ServerTSThreads.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
-        public static void releaseClientResources(BufferedReader bufferedReader, Socket socket) {
+}
+        
+        public static void releaseClientResources(InputStream inputStream, OutputStream outputStream, Socket socket, int position) {
             System.out.println("in release ClientResources");
-        try {
-            bufferedReader.close();
+         try {
+            inputStream.close();
         } catch (IOException ex) {
-            Logger.getLogger(CommunicationWithClient.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            outputStream.close();
+        } catch (IOException ex) {
+            Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
             socket.close();
         } catch (IOException ex) {
-            Logger.getLogger(CommunicationWithClient.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
         }
-        clientsThreadsList.remove(socket);
-        
+        contador = contador -1;
+        clientsThreadsList.remove(position);
+        if (contador==0){
+            ReleaseResourcesServerTSClient(serverSocketClient);
+        }
     }
     
     
