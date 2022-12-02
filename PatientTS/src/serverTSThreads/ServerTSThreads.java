@@ -56,6 +56,7 @@ public class ServerTSThreads {
     public static void main(String[] args) throws IOException{
        
         serverSocketClient = new ServerSocket(9000);
+        
         SQLiteManager manager = new SQLiteManager();
         manager.connect();
         Connection c = manager.getConnection();
@@ -68,13 +69,19 @@ public class ServerTSThreads {
         if (create){
             createRoles(roleman);
             Utilities.ClientUtilities.firstlogin(userman,doctorman,roleman);
-            
         }
+        
         contador = 0;
+                /*
+        cThread = new ThreadToStopServer();
+            Thread threadToStopServer = new Thread(cThread);
+           
+            clientThread.start();
+                */
         while(true){
             do{
               socketClient = serverSocketClient.accept();
-            //position = contador;
+              //position = contador;
            
             cThread = new ClientThread(socketClient,userman,roleman,patientman,doctorman,signalman);
             Thread clientThread = new Thread(cThread);
@@ -82,8 +89,12 @@ public class ServerTSThreads {
             clientThread.start();
             clientsThreadsList.add(clientThread);  
              contador++;
-            }while(contador != 0);
+           
+        }while(!clientsThreadsList.isEmpty());
+            //if (clientsThreadsList.size()==0){
+             
             ReleaseResourcesServerTSClient(serverSocketClient);
+            //}
             
         }
         //SI ES PATIENT HACER UNA COSA Y SI ES DOCTOR HACER OTRA  

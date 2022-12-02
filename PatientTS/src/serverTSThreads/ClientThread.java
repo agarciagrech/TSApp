@@ -55,18 +55,25 @@ public class ClientThread implements Runnable {
     public static int position;
     public static boolean exit; 
 
-    public ClientThread(Socket socket, UserManager userman, RoleManager roleman, PatientTSManager patientman, DoctorManager doctorman, SignalManager signalman) {
+    public ClientThread(Socket socket) {
         this.socket = socket;
-        this.userman = userman;
-        this.roleman = roleman;
-        this.patientman = patientman;
-        this.doctorman = doctorman;
-        this.signalman = signalman;
         //this.position = position;
     }
 
     @Override
     public void run() {
+        
+        SQLiteManager manager = new SQLiteManager();
+        manager.connect();
+        Connection c = manager.getConnection();
+        UserManager userman = new SQLiteUserManager(c);
+        RoleManager roleman = new SQLiteRoleManager(c);
+        PatientTSManager patientman = new SQLitePatientTSManager(c);
+        DoctorManager doctorman = new SQLiteDoctorManager(c);
+        SignalManager signalman = new SQLiteSignalManager(c);
+        
+        
+        
         String byteRead;
         Scanner sc = new Scanner(System.in);
       
