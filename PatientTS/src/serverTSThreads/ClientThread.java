@@ -55,14 +55,14 @@ public class ClientThread implements Runnable {
     public static int position;
     public static boolean exit; 
 
-    public ClientThread(Socket socket, UserManager userman, RoleManager roleman, PatientTSManager patientman, DoctorManager doctorman, SignalManager signalman, int position) {
+    public ClientThread(Socket socket, UserManager userman, RoleManager roleman, PatientTSManager patientman, DoctorManager doctorman, SignalManager signalman) {
         this.socket = socket;
         this.userman = userman;
         this.roleman = roleman;
         this.patientman = patientman;
         this.doctorman = doctorman;
         this.signalman = signalman;
-        this.position = position;
+        //this.position = position;
     }
 
     @Override
@@ -140,7 +140,7 @@ public class ClientThread implements Runnable {
                 Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
             }
         } while (option != 0 || exit == false);
-         ServerTSThreads.releaseClientResources(inputStream,outputStream,socket,position);
+         ServerTSThreads.releaseClientResources(inputStream,outputStream,socket);
     }
 
     public static void patientMenu(User u, BufferedReader br, PrintWriter pw, UserManager userman, PatientTSManager patientman, SignalManager signalman) {

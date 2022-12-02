@@ -6,6 +6,7 @@
 package serverTSThreads;
 
 import java.io.IOException;
+
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.logging.Level;
@@ -69,16 +70,20 @@ public class ServerTSThreads {
             Utilities.ClientUtilities.firstlogin(userman,doctorman,roleman);
             
         }
-        int position;
+        contador = 0;
         while(true){
-            
-            socketClient = serverSocketClient.accept();
-            position = contador;
-            contador++;
-            cThread = new ClientThread(socketClient,userman,roleman,patientman,doctorman,signalman,position);
+            do{
+              socketClient = serverSocketClient.accept();
+            //position = contador;
+           
+            cThread = new ClientThread(socketClient,userman,roleman,patientman,doctorman,signalman);
             Thread clientThread = new Thread(cThread);
+           
             clientThread.start();
-            clientsThreadsList.add(clientThread);
+            clientsThreadsList.add(clientThread);  
+             contador++;
+            }while(contador != 0);
+            ReleaseResourcesServerTSClient(serverSocketClient);
             
         }
         //SI ES PATIENT HACER UNA COSA Y SI ES DOCTOR HACER OTRA  
@@ -106,7 +111,7 @@ public class ServerTSThreads {
         }
 
         
-        public static void releaseClientResources(InputStream inputStream, OutputStream outputStream, Socket socket, int position) {
+        public static void releaseClientResources(InputStream inputStream, OutputStream outputStream, Socket socket) {
             System.out.println("in release ClientResources");
          try {
             inputStream.close();
@@ -124,10 +129,11 @@ public class ServerTSThreads {
             Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
         }
         contador = contador -1;
-        clientsThreadsList.remove(position);
-        if (contador==0){
+        System.out.println(contador);
+        clientsThreadsList.remove(contador);
+        /*if (contador==0){
             ReleaseResourcesServerTSClient(serverSocketClient);
-        }
+        }*/
     }
 }
     
