@@ -66,11 +66,17 @@ public class ClientThread implements Runnable {
         SQLiteManager manager = new SQLiteManager();
         manager.connect();
         Connection c = manager.getConnection();
-        UserManager userman = new SQLiteUserManager(c);
-        RoleManager roleman = new SQLiteRoleManager(c);
-        PatientTSManager patientman = new SQLitePatientTSManager(c);
-        DoctorManager doctorman = new SQLiteDoctorManager(c);
-        SignalManager signalman = new SQLiteSignalManager(c);
+        this.userman = new SQLiteUserManager(c);
+        this.roleman = new SQLiteRoleManager(c);
+        this.patientman = new SQLitePatientTSManager(c);
+        this.doctorman = new SQLiteDoctorManager(c);
+        this.signalman = new SQLiteSignalManager(c);
+        boolean create = manager.createTables();
+        
+        if (create){
+            createRoles(roleman);
+            Utilities.ClientUtilities.firstlogin(userman,doctorman,roleman);
+        }
         
         
         
@@ -100,44 +106,34 @@ public class ClientThread implements Runnable {
         do {
             try {
                 option = Integer.parseInt(br.readLine());
-                System.out.println("option:"+option);
-                System.out.println("in first");
-
+               
                 switch (option) {
                     case 1:
-                        System.out.println("case 1");
                         Utilities.ClientUtilities.registerPatient(br, pw, userman, patientman, doctorman);
                         break;
                     case 2:
-                        System.out.println("case 2:");
                         int a = Integer.parseInt(br.readLine());
-                        System.out.println("a:"+a);
                         if (a == 1){
                             break;
                         }else{
-                        System.out.println("in login");
                         User user = Utilities.ClientUtilities.login(br, pw, userman);
 
                         System.out.println();
                         if (user.getRole() == 1) {
                             System.out.println("the user is a patient");
                             pw.println("patient");
-                            System.out.println("after pw");
                             PatientTS p = patientman.selectPatientByUserId(user.getUserId());
                             Utilities.CommunicationWithClient.sendPatient(pw, p);
                             patientMenu(user, br, pw, userman, patientman, signalman);
                         } else if (user.getRole() == 2) {
                             System.out.println("the user is a doctor");
                             pw.println("doctor");
-                            System.out.println("after pw");
                             Doctor d = doctorman.selectDoctorByUserId(user.getUserId());
                             Utilities.CommunicationWithClient.sendDoctor(pw, d);
                             doctorMenu(user, br, pw, userman, patientman, signalman, doctorman);
                         }}
                         break;
                     case 0: 
-                        
-                        //ServerTSThreads.releaseClientResources(inputStream,outputStream,socket,position);
                         break;
                        
                 }
@@ -151,20 +147,18 @@ public class ClientThread implements Runnable {
     }
 
     public static void patientMenu(User u, BufferedReader br, PrintWriter pw, UserManager userman, PatientTSManager patientman, SignalManager signalman) {
-        System.out.println("Inside patient Menu");
+
         int option = 1;
-       // boolean exit = false;
+
         
             try {
                 option = Integer.parseInt(br.readLine());
                 switch (option) {
                     case 0:
-                        // Exit
                         exit= true;
                         
                         break;
                     case 1:
-                        // Record signal
                         int userid1 = userman.getId(u.getUsername());
                         PatientTS p1 = patientman.selectPatientByUserId(userid1);
                         Signal s = Utilities.CommunicationWithClient.recieveSignal(br, pw);
@@ -176,25 +170,20 @@ public class ClientThread implements Runnable {
                         signalman.addSignal(s, p1);
                         break;
                     case 3:
-                        // See all the signals files of the patient
                         int userid3 = userman.getId(u.getUsername());
                         PatientTS p3 = patientman.selectPatientByUserId(userid3);
                         Utilities.CommunicationWithClient.sendAllSignal(br, pw, signalman, p3.getMedCardId());
                         String filename = br.readLine();
                         Signal s1 = signalman.selectSignalByName(filename);
                         pw.println(s1.toString());
-
                         break;
                     case 4:
-                        // Update bitalino mac
                         PatientTS updatep = Utilities.CommunicationWithClient.receivePatient(br);
                         patientman.editPatient(updatep.getMedCardId(), updatep.getPatientName(), updatep.getPatientSurname(), updatep.getPatientDob(), updatep.getPatientAddress(), updatep.getPatientEmail(), updatep.getPatientDiagnosis(), updatep.getPatientAllergies(), updatep.getPatientGender(), updatep.getMacAddress());
                 }
             } catch (IOException ex) {
                 Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
             }
-         
-        //ServerTSThreads.ReleaseClientThread(socket);
     }
 
     public static void createRoles(RoleManager roleman) {
@@ -205,38 +194,27 @@ public class ClientThread implements Runnable {
     }
 
     public static void doctorMenu(User u, BufferedReader br, PrintWriter pw, UserManager userman, PatientTSManager patientman, SignalManager signalman, DoctorManager doctorman) {
-        System.out.println("inside doctor menu");
         int option = 1;
-        // exit = false;
        
             try {
                 option = Integer.parseInt(br.readLine());
                 System.out.println(option);
                 switch (option) {
                     case 0:
-                        // Exi
-
                         exit= true;
                         break;
                     case 1:
-                        // Register a doctor
-                        System.out.println("case1 doctor menu");
                         Utilities.ClientUtilities.registerDoctor(br, pw, userman, doctorman);
                         break;
                     case 2:
-                        // See all patients of the doctor
-                        System.out.println("case 2 doctor menu");
                         int userid = userman.getId(u.getUsername());
                         Doctor d = doctorman.selectDoctorByUserId(userid);
                         List<PatientTS> patientList = patientman.selectPatientsByDoctorId(doctorman.getId(d.getDoctorName()));
                         Utilities.CommunicationWithClient.sendPatientList(patientList, pw, br);
-
                         break;
                     case 3:
-                        // Update patient information
                         int a = Integer.parseInt(br.readLine());
                         while (a != 0) {
-                            System.out.println("case 3 doctor menu");
                             int uid = userman.getId(u.getUsername());
                             Doctor d3 = doctorman.selectDoctorByUserId(uid);
                             List<PatientTS> pList = patientman.selectPatientsByDoctorId(doctorman.getId(d3.getDoctorName()));
@@ -250,8 +228,6 @@ public class ClientThread implements Runnable {
                         }
                         break;
                     case 4:
-                        // Consult filenames of patients dignals
-                        System.out.println("case 4 doctor menu");
                         int userid1 = userman.getId(u.getUsername());
                         Doctor d1 = doctorman.selectDoctorByUserId(userid1);
                         List<PatientTS> patientList1 = patientman.selectPatientsByDoctorId(doctorman.getId(d1.getDoctorName()));
@@ -271,8 +247,6 @@ public class ClientThread implements Runnable {
                         break;
 
                     case 5:
-                        //Delete patient
-                        System.out.println("case 5 doctor menu");
                         int userid2 = userman.getId(u.getUsername());
                         Doctor d2 = doctorman.selectDoctorByUserId(userid2);
                         List<PatientTS> patientList2 = patientman.selectPatientsByDoctorId(doctorman.getId(d2.getDoctorName()));
@@ -284,14 +258,12 @@ public class ClientThread implements Runnable {
                         }else if (medcard3==0){
                             break;
                         }
-                        System.out.println("before getting medcard");
                         System.out.println("Med card received: " + medcard3);
                         PatientTS pToDelete = patientman.selectPatient(medcard3);
                         System.out.println("Patient to delete: " + pToDelete.toString());
                         patientman.deletePatientByMedicalCardId(pToDelete.getMedCardId());
                         String medcard = ""+medcard3;
                         userman.deleteUserByUserName(medcard);
-                        //pw.println("success");
                         break;
                 }
 

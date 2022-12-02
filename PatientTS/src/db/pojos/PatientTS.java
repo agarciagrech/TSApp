@@ -25,7 +25,6 @@ public class PatientTS implements Serializable {
     private String diagnosis;
     private String allergies;
     private String gender;
-    //Can be either Male or Female, nothing else.
     private Integer userId;
     private String macAddress;
     
