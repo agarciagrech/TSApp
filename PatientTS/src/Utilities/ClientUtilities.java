@@ -37,9 +37,8 @@ public class ClientUtilities {
     
     
     public static void registerDoctor(BufferedReader br, PrintWriter pw, UserManager userman, DoctorManager doctorman){
-        System.out.println("Inside register Doctor");
         try {
-            Doctor d =  Utilities.CommunicationWithClient.receiveDoctor(br); //receivePatient and doctor deberia devolver un objeto paciente o doctor
+            Doctor d =  Utilities.CommunicationWithClient.receiveDoctor(br); 
             
             //autogenerate username
             String username = ""+d.getDoctorName().charAt(0)+"."+d.getDoctorSurname()+""+Integer.valueOf(d.getDoctorSurname().charAt(0));
@@ -79,7 +78,6 @@ public class ClientUtilities {
     }
     
     public static void registerPatient(BufferedReader br, PrintWriter pw, UserManager userman,PatientTSManager patientman,DoctorManager doctorman){
-        System.out.println("in register patient");
         try {
             //autogenerate username
             PatientTS p =  Utilities.CommunicationWithClient.receivePatient(br); //receivePatient and doctor deberia devolver un objeto paciente o doctor
@@ -150,7 +148,6 @@ public class ClientUtilities {
         String username = "admin";
         String password = "admin";
         Role role = roleman.selectRoleById(2);
-        // TO DO : ENCRIPTAR PASSWORD
         User user = new User(username, password,2);
         userman.addUser(user);
         user.setUserId(userman.getId(username));
@@ -164,34 +161,5 @@ public class ClientUtilities {
                 ex.printStackTrace();
         }
     }
-    /*
-    // Al final damos esta opcion?
-    public static void changePassword() {
-        sc = new Scanner (System.in);
-        try{
-            System.out.println("Please enter your username and password:");
-            System.out.println("Username:");
-            String username = sc.next();
-            System.out.println("Password:");
-            String password = sc.next();
-            User user = null;
-            userman.checkPassword(username, password);
-            System.out.println("Introduce the new password: ");
-            String newPassword1 = sc.next();
-            System.out.println("Confirm your new password: ");
-            String newPassword2 = sc.next();
-            if(newPassword1.equals(newPassword2)) {
-                    MessageDigest md = MessageDigest.getInstance("MD5");
-                    md.update(password.getBytes());
-                    byte[] hash = md.digest();
-                    userman.updateUser(user, hash);
-                    System.out.println("Password updated");
-            } else {
-                    System.out.println("Error. Password confirmation does not match");
-            }
-        }catch(Exception ex) {
-                ex.printStackTrace();
-        }
-    }
-    */
+   
 }

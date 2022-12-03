@@ -56,50 +56,31 @@ public class ServerTSThreads {
     public static void main(String[] args) throws IOException{
        
         serverSocketClient = new ServerSocket(9000);
-        
-        SQLiteManager manager = new SQLiteManager();
-        manager.connect();
-        Connection c = manager.getConnection();
-        UserManager userman = new SQLiteUserManager(c);
-        RoleManager roleman = new SQLiteRoleManager(c);
-        PatientTSManager patientman = new SQLitePatientTSManager(c);
-        DoctorManager doctorman = new SQLiteDoctorManager(c);
-        SignalManager signalman = new SQLiteSignalManager(c);
-        boolean create = manager.createTables();
-        if (create){
-            createRoles(roleman);
-            Utilities.ClientUtilities.firstlogin(userman,doctorman,roleman);
-        }
-        
-        contador = 0;
-                /*
-        cThread = new ThreadToStopServer();
-            Thread threadToStopServer = new Thread(cThread);
-           
-            clientThread.start();
-                */
-        while(true){
-            do{
-              socketClient = serverSocketClient.accept();
-              //position = contador;
-           
-            cThread = new ClientThread(socketClient,userman,roleman,patientman,doctorman,signalman);
-            Thread clientThread = new Thread(cThread);
-           
-            clientThread.start();
-            clientsThreadsList.add(clientThread);  
-             contador++;
-           
-        }while(!clientsThreadsList.isEmpty());
-            //if (clientsThreadsList.size()==0){
-             
-            ReleaseResourcesServerTSClient(serverSocketClient);
-            //}
-            
-        }
-        //SI ES PATIENT HACER UNA COSA Y SI ES DOCTOR HACER OTRA  
+               
+        ThreadToStopServer SThread = new ThreadToStopServer();
+        Thread threadToStopServer = new Thread(SThread);
+
+        threadToStopServer.start();
                 
-        }
+        while(true){
+            socketClient = serverSocketClient.accept();
+            cThread = new ClientThread(socketClient);
+            Thread clientThread = new Thread(cThread);
+
+            clientThread.start();
+            clientsThreadsList.add(clientThread);
+            contador++;
+        }      
+    }
+    
+       public static void ExitServer(){
+         Scanner sc = new Scanner (System.in);
+         System.out.println("If you want to close the  server press 'x', if you want to continue press any other key ");
+         String line = sc.nextLine();
+         if(line.equals("x")){
+             ReleaseResourcesServerTSClient(serverSocketClient);
+         }
+       }
         
         
         public static void ReleaseResourcesServerTSClient(ServerSocket severSocketClient){
@@ -139,12 +120,9 @@ public class ServerTSThreads {
         } catch (IOException ex) {
             Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
         }
-        contador = contador -1;
-        System.out.println(contador);
-        clientsThreadsList.remove(contador);
-        /*if (contador==0){
-            ReleaseResourcesServerTSClient(serverSocketClient);
-        }*/
+        
+        //clientsThreadsList.remove(contador);
+        
     }
 }
     
