@@ -134,6 +134,7 @@ public class ClientThread implements Runnable {
                         }}
                         break;
                     case 0: 
+                        ServerTSThreads.releaseClientResources(inputStream,outputStream,socket);
                         break;
                        
                 }
@@ -142,8 +143,8 @@ public class ClientThread implements Runnable {
             } catch (Exception ex) {
                 Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
             }
-        } while (option != 0 || exit == false);
-         ServerTSThreads.releaseClientResources(inputStream,outputStream,socket);
+        } while (option != 0);
+         
     }
 
     public static void patientMenu(User u, BufferedReader br, PrintWriter pw, UserManager userman, PatientTSManager patientman, SignalManager signalman) {
@@ -156,7 +157,7 @@ public class ClientThread implements Runnable {
                 switch (option) {
                     case 0:
                         exit= true;
-                        
+                        ServerTSThreads.ReleaseClientThread(socket);
                         break;
                     case 1:
                         int userid1 = userman.getId(u.getUsername());

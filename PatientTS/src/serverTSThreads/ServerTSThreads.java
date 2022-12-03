@@ -104,7 +104,6 @@ public class ServerTSThreads {
 
         
         public static void releaseClientResources(InputStream inputStream, OutputStream outputStream, Socket socket) {
-            System.out.println("in release ClientResources");
          try {
             inputStream.close();
         } catch (IOException ex) {
