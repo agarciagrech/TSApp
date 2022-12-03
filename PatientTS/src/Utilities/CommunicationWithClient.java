@@ -73,8 +73,6 @@ public class CommunicationWithClient {
                         case "surname":  p.setPatientSurname(data2[j+1]);
                                         break;
                          case "dob": 
-                             //Date dob = java.sql.Date.valueOf(data2[j+1]);
-                           // p.setPatientDob(dob);
                             try{
                                p.setPatientDob(format.parse(data2[j+1]));
                             }catch(ParseException ex){
@@ -113,7 +111,6 @@ public class CommunicationWithClient {
        
     }
         public static Doctor receiveDoctor(BufferedReader bufferReader){
-        System.out.println("in receive doctor");
         Doctor d= new Doctor();
         try{
             String line = bufferReader.readLine();
@@ -160,56 +157,23 @@ public class CommunicationWithClient {
         printWriter.println(d.toString());
     }
     public static void sendUser (PrintWriter printWriter,User u){
-        System.out.println("in send user");
         printWriter.println(u.toString());
     }
     
     public static void sendAllSignal(BufferedReader bf, PrintWriter pw, SignalManager sman, int medcard){
-        System.out.println("Inside senAllSignals");
-       
-      
-        System.out.println("medcard readed");
-                List<String> filenames = sman.ListSignalsFilenamesByPatient(medcard); //ESTA LISTA TIENE LOS NOMBRES DE LOS FIKES ASOCIADOS AL PATIENT. Lo hace bien
-                System.out.println("after db method");
-                pw.println(filenames.size()); 
-                for (int i=0; i<filenames.size();i++){
-                    pw.println(filenames.get(i)); //imprime la lista, esto lo hace bien. 
-                }
-        
+        List<String> filenames = sman.ListSignalsFilenamesByPatient(medcard); 
+        pw.println(filenames.size()); 
+        for (int i=0; i<filenames.size();i++){
+            pw.println(filenames.get(i)); //imprime la lista, esto lo hace bien. 
         }
+    }
+    
     public static Signal recieveSignal(BufferedReader bf, PrintWriter pw){
-        System.out.println("Inside recieve signal");
-       
         try {
             Signal s = new Signal();
-
-            //System.out.println(line);
-            //line=line.replace("[", "");
-            //line=line.replace("]","");
-            //line=line.replace(",","");
-            //String[] signals = line.split("// ");
-            
-
             List<Integer> ecgVals = new ArrayList<>();
             List<Integer> emgVals = new ArrayList<>();
-               /*
-            boolean endECG = false;
-            while (!endECG) {
-                String line = bf.readLine();
-                if (line != null) {
-                    if (line.equals("END OF ECG")) {
-                        endECG = true;
-                    } else {
 
-                        Integer ecg_val = Integer.parseInt(line);
-                        ecgVals.add(ecg_val);
-                    }
-
-                } else {
-                    System.out.println("Error");
-                }
-            }
-            */
             int ecg_size = Integer.parseInt(bf.readLine());
             for (int i =0;i<ecg_size;i++){
                 Integer ecg_val = Integer.parseInt(bf.readLine());
@@ -220,42 +184,19 @@ public class CommunicationWithClient {
                 Integer emg_val = Integer.parseInt(bf.readLine());
                 emgVals.add(i,emg_val);
             }
-               /*
-            boolean endEMG = false;
-            while (!endEMG) {
-                String line2 = bf.readLine();
-                if (line2 != null) {
-                    if (line2.equals("END OF EMG")) {
-                        endEMG = true;
-                    } else {
-                        Integer emg_val = Integer.parseInt(line2);
-                        emgVals.add(emg_val);
-                    }
-                } else {
-                    System.out.println("Error");
-                }
-            }
-*/
-          
-
+               
             System.out.println("ECG: " + ecgVals.toString() + "EMG: " + emgVals.toString());
             s.setECG_values(ecgVals);
             s.setEMG_values(emgVals);
-            
-            
-            //HAY QUE CONSEGUIR AQUI EL NOMBRE Y EL DATE DE LA SEÑAL Y AÑADIRLO  S
             
             return s;
         } catch (IOException ex) {
             Logger.getLogger(CommunicationWithClient.class.getName()).log(Level.SEVERE, null, ex);
             return null;
         }
-
-    
     }
     
     public static User receiveUser (BufferedReader br){
-        System.out.println("in receive user");
         User u = new User();
         try {
         String line = br.readLine();
@@ -307,9 +248,6 @@ public class CommunicationWithClient {
             Logger.getLogger(CommunicationWithClient.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    
-
 }
     
 
