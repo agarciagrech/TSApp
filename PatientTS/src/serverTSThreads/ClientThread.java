@@ -120,13 +120,11 @@ public class ClientThread implements Runnable {
 
                         System.out.println();
                         if (user.getRole() == 1) {
-                            System.out.println("the user is a patient");
                             pw.println("patient");
                             PatientTS p = patientman.selectPatientByUserId(user.getUserId());
                             Utilities.CommunicationWithClient.sendPatient(pw, p);
                             patientMenu(user, br, pw, userman, patientman, signalman);
                         } else if (user.getRole() == 2) {
-                            System.out.println("the user is a doctor");
                             pw.println("doctor");
                             Doctor d = doctorman.selectDoctorByUserId(user.getUserId());
                             Utilities.CommunicationWithClient.sendDoctor(pw, d);
@@ -171,7 +169,6 @@ public class ClientThread implements Runnable {
                         signalman.addSignal(s, p1);
                         break;
                     case 3:
-                        System.out.println("case 3");
                         int userid3 = userman.getId(u.getUsername());
                         PatientTS p3 = patientman.selectPatientByUserId(userid3);
                         Utilities.CommunicationWithClient.sendAllSignal(br, pw, signalman, p3.getMedCardId());

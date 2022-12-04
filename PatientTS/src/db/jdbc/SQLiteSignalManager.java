@@ -224,7 +224,6 @@ public class SQLiteSignalManager implements SignalManager{
      */
     @Override
     public Signal selectSignalByName (String name) {
-        System.out.println("inside db method");
          Signal s= new Signal();
         String cadena1;
         String cadena2;
@@ -245,9 +244,6 @@ public class SQLiteSignalManager implements SignalManager{
             template.setString(2, name);
            
             ResultSet result_set = template.executeQuery();
-            System.out.println(template.toString());
-            System.out.println(result_set.toString());
-            System.out.println("after query");
             while(result_set.next()){
             s.setSignalId(result_set.getInt("signalId"));
             s.setSignalStartDate(date = new Date(result_set.getString("startDate")));
