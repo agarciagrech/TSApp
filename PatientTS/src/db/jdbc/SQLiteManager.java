@@ -34,7 +34,6 @@ public class SQLiteManager implements DBManager {
     
     public SQLiteManager(){
         super();
-        this.connect();
     }
     
     @Override
@@ -69,9 +68,9 @@ public class SQLiteManager implements DBManager {
     @Override
     public void connect() {
         try {
-            Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection("jdbc:sqlite:./db/TSApp.db");
-            c.createStatement().execute("PRAGMA foreign_keys=ON");
+            Class.forName("org.sqlite.JDBC"); 
+            c = DriverManager.getConnection("jdbc:sqlite:./db/TSApp.db"); 
+            c.createStatement().execute("PRAGMA foreign_keys=ON"); 
             patient = new SQLitePatientTSManager(c);
             doctor = new SQLiteDoctorManager(c);
             signalman = new SQLiteSignalManager(c);

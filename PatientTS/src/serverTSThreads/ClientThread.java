@@ -53,6 +53,7 @@ public class ClientThread implements Runnable {
     public static PatientTSManager patientman;
     public static DoctorManager doctorman;
     public static SignalManager signalman;
+    public static SQLiteManager manager;
     
     public static boolean exit; 
 
@@ -63,14 +64,14 @@ public class ClientThread implements Runnable {
     @Override
     public void run() {
         
-        SQLiteManager manager = new SQLiteManager();
+        manager = new SQLiteManager();
         manager.connect();
-        Connection c = manager.getConnection();
-        this.userman = new SQLiteUserManager(c);
-        this.roleman = new SQLiteRoleManager(c);
-        this.patientman = new SQLitePatientTSManager(c);
-        this.doctorman = new SQLiteDoctorManager(c);
-        this.signalman = new SQLiteSignalManager(c);
+        //Connection c = manager.getConnection();
+        userman = manager.getUserManager();
+        roleman = manager.getRoleManager();
+        patientman = manager.getPatientManager();
+        doctorman = manager.getDoctorManager();
+        signalman = manager.getSignalManager();
         boolean create = manager.createTables();
         
         if (create){
