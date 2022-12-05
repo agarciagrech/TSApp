@@ -112,27 +112,9 @@ public class SQLiteSignalManager implements SignalManager{
         }
     }
     
-    /**
-     * Deletes any signal with an id that matches the given signalid.
-     * @param signalid - [Integer] Medical card number from the patient that will be deleted.
-     * @return boolean
-     */
-    @Override
-    public boolean deleteSignalById(Integer signalid) {
-        try {
-            String SQL_code = "DELETE FROM signal WHERE signalId = ?;";
-            PreparedStatement template = this.c.prepareStatement(SQL_code);
-            template.setInt(1, signalid);
-            template.executeUpdate();
-            template.close();
-            return true;
-        } catch (SQLException deleteSignalById_error) {
-            deleteSignalById_error.printStackTrace();
-            return false;
-        }
-    }
+   
 
-     // PENSAR BIEN ESTO:
+   
     /**
      * Selects a signal searching by id.
      * @param id - id of the signal (int).
@@ -401,34 +383,11 @@ public class SQLiteSignalManager implements SignalManager{
         } 
          
     }
-	
 
-    /**
-     * List all the ECG signals of an specific patient.
-     * @param patient_medcard - Medical card number of the patient (Integer)
-     * @return signals [List of Signals].
-     */
     
-    public int getId (String filename){
-        String sql1 = "SELECT * FROM signal WHERE ECGFilename = ?";
-        int id=0;
-                try {
-                    PreparedStatement preparedStatement = c.prepareStatement(sql1);
-                    PreparedStatement p = c.prepareStatement(sql1);
-                    p.setString(1,filename);
-                    ResultSet rs = p.executeQuery();
-                    id = rs.getInt("signalId");
-                    return id;
-                } catch (SQLException ex) {
-                Logger.getLogger(SQLitePatientTSManager.class.getName()).log(Level.SEVERE, null, ex);
-                return 0;
-            }
-        
-    }
-    
-    public String formatDate (java.util.Date dob){
+    public String formatDate (java.util.Date date){
         SimpleDateFormat  formato = new SimpleDateFormat("YYYY/MM/dd");
-        return formato.format(dob);
+        return formato.format(date);
     }
     
    

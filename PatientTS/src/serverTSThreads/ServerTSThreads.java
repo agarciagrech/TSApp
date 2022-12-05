@@ -120,7 +120,6 @@ public class ServerTSThreads {
             Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        //clientsThreadsList.remove(contador);
         
     }
 }

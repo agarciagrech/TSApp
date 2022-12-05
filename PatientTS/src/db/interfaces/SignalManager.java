@@ -19,10 +19,8 @@ public interface SignalManager {
     public void addSignal(Signal s, PatientTS p);
     public boolean editSignal(Integer signalid, java.util.Date startDate,String ECGFilename,String EMGFilename);
     public Signal selectSignalByName (String name);
-    public boolean deleteSignalById(Integer signalid);
     public Signal selectSignalById (Integer id);
     public List<Signal> listSignalsByPatient(Integer patient_medcard);
-   
     public List<String> ListSignalsFilenamesByPatient(Integer patient_medcard);
     
 }

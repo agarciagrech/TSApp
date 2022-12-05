@@ -33,8 +33,8 @@ public class SQLiteDoctorManager implements DoctorManager{
      * @throws SQLException
      */
     @Override
-    public void addDoctor(Doctor d)  {
-        try {
+    public void addDoctor(Doctor d) throws SQLException  {
+        
             String sq1 = "INSERT INTO doctor (dname, dsurname, demail) VALUES (?, ?, ?)";
             PreparedStatement preparedStatement = c.prepareStatement(sq1);
             preparedStatement.setString(1, d.getDoctorName());
@@ -42,48 +42,17 @@ public class SQLiteDoctorManager implements DoctorManager{
             preparedStatement.setString(3, d.getDoctorEmail());
             preparedStatement.executeUpdate();	
             preparedStatement.close();
-        } catch (SQLException ex) {
-            Logger.getLogger(SQLiteDoctorManager.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    /**
-     * Searches patients with the given surname.
-     * @param surname - [String] Surname of the patient the doctor is looking for
-     * @return - List of patients with the same surname that the docotr has been looking for
-     */
-    @Override
-    public List<PatientTS> searchPatient(String surname){
-        try {
-            String sql = "SELECT * FROM patient WHERE surname LIKE ?";
-            PreparedStatement p = c.prepareStatement(sql);
-            p.setString(1,"%" + surname + "%");
-            ResultSet rs = p.executeQuery();
-            List <PatientTS> pList = new ArrayList<PatientTS>();
-            while(rs.next()){ 
-                pList.add(new PatientTS(rs.getInt("medical_card_number"),rs.getString("name"),rs.getString("surname"),rs.getDate("dob"),
-                        rs.getString("address"),rs.getString("email"),rs.getString("diagnosis"),rs.getString("allergies"),rs.getString("gender")));
-            }
-            p.close();
-            rs.close();
-            return pList;
-        } catch (SQLException ex) {
-            Logger.getLogger(SQLiteDoctorManager.class.getName()).log(Level.SEVERE, null, ex);
-            return null;
-        }
         
     }
-
-
-
-    /**
+  /**
      * Selects a dctor by using the doctor's userId.
      * @param userID - [Integer] User Id of the doctor.
      * @return - [Doctor] The doctor to whom the inserted user Id corresponds.
+     * @throws SQLException
     */
     @Override
-    public Doctor selectDoctorByUserId(Integer userID) {
-        try {
+    public Doctor selectDoctorByUserId(Integer userID) throws SQLException {
+        
             String sql = "SELECT * FROM doctor WHERE userId = ? ";
             PreparedStatement pStatement = c.prepareStatement(sql);
             pStatement.setInt(1, userID);
@@ -95,10 +64,7 @@ public class SQLiteDoctorManager implements DoctorManager{
             pStatement.close();
             rs.close();
             return doctor;
-        } catch (SQLException ex) {
-            Logger.getLogger(SQLiteDoctorManager.class.getName()).log(Level.SEVERE, null, ex);
-            return null;
-        }
+        
         
     }
 
@@ -107,11 +73,10 @@ public class SQLiteDoctorManager implements DoctorManager{
      * @param doctorId - [Integer] Id of the doctor we are looking for.
      * @return - [Doctor] The doctor to whom the inserted Id corresponds.
      * @throws SQLException
-     * @throws NotBoundException
      */
     @Override
-    public Doctor selectDoctor(Integer doctorId) {
-        try {
+    public Doctor selectDoctor(Integer doctorId) throws SQLException {
+        
             String sql = "SELECT * FROM doctor WHERE doctorId = ?";
             PreparedStatement p = c.prepareStatement(sql);
             p.setInt(1,doctorId);
@@ -123,32 +88,12 @@ public class SQLiteDoctorManager implements DoctorManager{
             p.close();
             rs.close();
             return doctor;
-        } catch (SQLException ex) {
-            Logger.getLogger(SQLiteDoctorManager.class.getName()).log(Level.SEVERE, null, ex);
-            return null;
-        }
+        
     }
     
-    /**
-     * Deletes any doctor with an id that matches the given id.
-     * @param doctorId - [Integer] Id from the doctor that will be deleted.
-     * @throws SQLException
-     */
     @Override
-    public void deleteDoctorById(Integer doctorId) {
-        try {
-            String sql = "DELETE FROM doctor WHERE doctorId = ?";
-            PreparedStatement pStatement = c.prepareStatement(sql);
-            pStatement.setInt(1, doctorId);
-            pStatement.executeUpdate();
-            pStatement.close();
-        } catch (SQLException ex) {
-            Logger.getLogger(SQLiteDoctorManager.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    @Override
-    public List<Doctor> selectAllDoctors(){
-        try {
+    public List<Doctor> selectAllDoctors()throws SQLException{
+        
             String sql = "SELECT * FROM doctor";
             PreparedStatement p = c.prepareStatement(sql);
             
@@ -162,10 +107,7 @@ public class SQLiteDoctorManager implements DoctorManager{
             p.close();
             rs.close();
             return dList;
-        } catch (SQLException ex) {
-            Logger.getLogger(SQLitePatientTSManager.class.getName()).log(Level.SEVERE, null, ex);
-            return null;
-        }
+        
         
     }
     

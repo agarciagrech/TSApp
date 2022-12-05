@@ -17,12 +17,10 @@ import java.util.*;
 public interface DoctorManager {
     
     public void addDoctor(Doctor d) throws SQLException;
-    public List<PatientTS> searchPatient(String surname);
-    public Doctor selectDoctorByUserId(Integer userID) ;
-    public Doctor selectDoctor(Integer doctorId) ;
-    public void deleteDoctorById(Integer doctorId) ;
-    public void createLinkUserDoctor(Integer userId, Integer doctorId);
-    public int getId (String dname);
-    public List<Doctor> selectAllDoctors();
+    public Doctor selectDoctorByUserId(Integer userID) throws SQLException ;
+    public Doctor selectDoctor(Integer doctorId)throws SQLException ;
+    public void createLinkUserDoctor(Integer userId, Integer doctorId)throws SQLException;
+    public int getId (String dname)throws SQLException;
+    public List<Doctor> selectAllDoctors()throws SQLException;
     
 }

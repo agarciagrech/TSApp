@@ -35,6 +35,7 @@ import db.pojos.PatientTS;
 import db.pojos.Signal;
 import java.rmi.NotBoundException;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
@@ -52,12 +53,11 @@ public class ClientThread implements Runnable {
     public static PatientTSManager patientman;
     public static DoctorManager doctorman;
     public static SignalManager signalman;
-    public static int position;
+    
     public static boolean exit; 
 
     public ClientThread(Socket socket) {
         this.socket = socket;
-        //this.position = position;
     }
 
     @Override
@@ -268,26 +268,10 @@ public class ClientThread implements Runnable {
 
             } catch (IOException ex) {
                 Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            } catch (SQLException ex) {
+            Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
-    }
-
-    public static void ReleaseResourcesClient(InputStream inputStream, OutputStream outputStream, Socket socket) {
-        try {
-            inputStream.close();
-        } catch (IOException ex) {
-            Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        try {
-            outputStream.close();
-        } catch (IOException ex) {
-            Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        try {
-            socket.close();
-        } catch (IOException ex) {
-            Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
 
 }
