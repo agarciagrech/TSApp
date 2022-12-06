@@ -61,8 +61,7 @@ public class SQLiteSignalManager implements SignalManager{
             template.close();	
         } catch (SQLException ex) {
             Logger.getLogger(SQLiteSignalManager.class.getName()).log(Level.SEVERE, null, ex);
-        }
-			
+        }	
     }
   
   /**
@@ -103,17 +102,13 @@ public class SQLiteSignalManager implements SignalManager{
                     pStatement.setInt(2, signalid);
                     pStatement.executeUpdate();	
             }
-
-
-               return true;
+            return true;
         } catch (SQLException update_signal_error) {
             update_signal_error.printStackTrace();
             return false;
         }
     }
     
-   
-
    
     /**
      * Selects a signal searching by id.
@@ -123,17 +118,18 @@ public class SQLiteSignalManager implements SignalManager{
     @Override
     public Signal selectSignalById (Integer id) {
         Signal s= new Signal();
-            String cadena1;
-            String cadena2;
-            String ruta1;
-            String ruta2;
-            List<Integer> values = new ArrayList();
-            List<Integer> values2 = new ArrayList();
-            Date date;
-            FileReader f = null;
-            FileReader f2 = null;
-            BufferedReader b = null;
-            BufferedReader b2 = null;
+        String cadena1;
+        String cadena2;
+        String ruta1;
+        String ruta2;
+        List<Integer> values = new ArrayList();
+        List<Integer> values2 = new ArrayList();
+        Date date;
+        FileReader f = null;
+        FileReader f2 = null;
+        BufferedReader b = null;
+        BufferedReader b2 = null;
+        
 	try {
             String SQL_code = "SELECT * FROM signal WHERE signalId LIKE ?";
             PreparedStatement template = this.c.prepareStatement(SQL_code);
@@ -154,8 +150,7 @@ public class SQLiteSignalManager implements SignalManager{
                 for (int i=0; i < separatedCadena.length;i++){
                      values.add(i, Integer.parseInt(separatedCadena[i]));
                 }
-                    s.setECG_values(values);
-                
+                s.setECG_values(values);
             }
             // Get the values of the EMG: 
             ruta2 ="../PatientTS/"+s.getEMGFilename();
@@ -166,8 +161,7 @@ public class SQLiteSignalManager implements SignalManager{
                 for (int i=0; i < separatedCadena2.length;i++){
                    values2.add(i, Integer.parseInt(separatedCadena2[i]));
                 }
-                    s.setEMG_values(values2);
-                
+                s.setEMG_values(values2);
             }
             
             template.close();
@@ -193,10 +187,7 @@ public class SQLiteSignalManager implements SignalManager{
                 Logger.getLogger(SQLiteSignalManager.class.getName()).log(Level.SEVERE, null, ex);
                 return null;
             }
-            
         }
-        
-        
     }
        
     /**
@@ -206,7 +197,7 @@ public class SQLiteSignalManager implements SignalManager{
      */
     @Override
     public Signal selectSignalByName (String name) {
-         Signal s= new Signal();
+        Signal s= new Signal();
         String cadena1;
         String cadena2;
         String ruta1;
@@ -234,31 +225,29 @@ public class SQLiteSignalManager implements SignalManager{
 
             // Get the values of the ECG:
             if(name.contains("ECG")){
-            ruta1 = "../PatientTS/"+s.getECGFilename();
-            f = new FileReader(ruta1);
-            b = new BufferedReader(f);
-            while((cadena1 = b.readLine())!=null) {
-                String[] separatedCadena = cadena1.replaceAll("\\[", "").replaceAll("]", "").replace(" ", "").split(",");
-                for (int i=0; i < separatedCadena.length;i++){
-                    values.add(i, Integer.parseInt(separatedCadena[i]));
-                }
+                ruta1 = "../PatientTS/"+s.getECGFilename();
+                f = new FileReader(ruta1);
+                b = new BufferedReader(f);
+                while((cadena1 = b.readLine())!=null) {
+                    String[] separatedCadena = cadena1.replaceAll("\\[", "").replaceAll("]", "").replace(" ", "").split(",");
+                    for (int i=0; i < separatedCadena.length;i++){
+                        values.add(i, Integer.parseInt(separatedCadena[i]));
+                    }
                     s.setECG_values(values);
-                    //System.out.println(s.getECG_values());
-                
-            }}else{
-            // Get the values of the EMG: 
-            ruta2 = "../PatientTS/"+s.getECGFilename();
-            f2 = new FileReader(ruta2);
-            b2 = new BufferedReader(f2);
-            while((cadena2 = b2.readLine())!=null) {
-                String[] separatedCadena = cadena2.replaceAll("\\[", "").replaceAll("]", "").replace(" ", "").split(",");
-                for (int i=0; i < separatedCadena.length;i++){
-                    values2.add(i, Integer.parseInt(separatedCadena[i]));
                 }
+            }else{
+                // Get the values of the EMG: 
+                ruta2 = "../PatientTS/"+s.getECGFilename();
+                f2 = new FileReader(ruta2);
+                b2 = new BufferedReader(f2);
+                while((cadena2 = b2.readLine())!=null) {
+                    String[] separatedCadena = cadena2.replaceAll("\\[", "").replaceAll("]", "").replace(" ", "").split(",");
+                    for (int i=0; i < separatedCadena.length;i++){
+                        values2.add(i, Integer.parseInt(separatedCadena[i]));
+                    }
                     s.setEMG_values(values2);
-                    //System.out.println(s.getEMG_values());
-                
-            }}
+                }
+            }
             }
             template.close();
             
@@ -273,7 +262,6 @@ public class SQLiteSignalManager implements SignalManager{
             Logger.getLogger(SQLiteSignalManager.class.getName()).log(Level.SEVERE, null, ex);
             return null;
         }
-   
     }
 
 
@@ -285,7 +273,6 @@ public class SQLiteSignalManager implements SignalManager{
     @Override
     public List<Signal> listSignalsByPatient(Integer patient_medcard) {
         List<Signal> signals = new LinkedList();
-        
         Date date;
         
         try {
@@ -294,7 +281,7 @@ public class SQLiteSignalManager implements SignalManager{
             template.setInt(1,patient_medcard);
             ResultSet rs = template.executeQuery();
             while(rs.next()) {
-                 List<Integer> values = new ArrayList();
+                List<Integer> values = new ArrayList();
                 List<Integer> values2 = new ArrayList();
                 String ruta1;
                 String ruta2;
@@ -319,9 +306,9 @@ public class SQLiteSignalManager implements SignalManager{
                     for (int i=0; i < separatedCadena.length;i++){
                         values.add(i, Integer.parseInt(separatedCadena[i]));
                     }
-                        s.setECG_values(values);
+                    s.setECG_values(values);
                  }
-            // Get the values of the EMG: 
+                // Get the values of the EMG: 
                 ruta2 = "../PatientTS/"+s.getEMGFilename();
                 f2 = new FileReader(ruta2);
                 b2 = new BufferedReader(f2);
@@ -330,16 +317,14 @@ public class SQLiteSignalManager implements SignalManager{
                     for (int i=0; i < separatedCadena2.length;i++){
                        values2.add(i, Integer.parseInt(separatedCadena2[i]));
                     }
-                        s.setEMG_values(values2);
+                    s.setEMG_values(values2);
                  }
-                
                 signals.add(s);
-               
             }
             
             template.close();
             return signals;
-         }    catch (SQLException listSignalsByPatient_error) {
+        } catch (SQLException listSignalsByPatient_error) {
             listSignalsByPatient_error.printStackTrace(); 
             return null;
         } catch (IOException ex) {
@@ -349,7 +334,6 @@ public class SQLiteSignalManager implements SignalManager{
             Logger.getLogger(SQLiteSignalManager.class.getName()).log(Level.SEVERE, null, ex);
             return null;
         } 
-         
     }
     
     /**
@@ -360,7 +344,6 @@ public class SQLiteSignalManager implements SignalManager{
     @Override
     public List<String> ListSignalsFilenamesByPatient(Integer patient_medcard) {
         List<String> signalsFilenames = new ArrayList();
-        
         try {
             String SQL_code = "SELECT * FROM signal WHERE id_patient = ?";
             PreparedStatement template = this.c.prepareStatement(SQL_code);
@@ -381,14 +364,10 @@ public class SQLiteSignalManager implements SignalManager{
             Logger.getLogger(SQLiteSignalManager.class.getName()).log(Level.SEVERE, null, ex);
             return null;
         } 
-         
     }
 
-    
     public String formatDate (java.util.Date date){
         SimpleDateFormat  formato = new SimpleDateFormat("YYYY/MM/dd");
         return formato.format(date);
     }
-    
-   
 }

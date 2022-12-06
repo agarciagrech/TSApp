@@ -34,16 +34,15 @@ public class SQLiteDoctorManager implements DoctorManager{
      */
     @Override
     public void addDoctor(Doctor d) throws SQLException  {
-        
-            String sq1 = "INSERT INTO doctor (dname, dsurname, demail) VALUES (?, ?, ?)";
-            PreparedStatement preparedStatement = c.prepareStatement(sq1);
-            preparedStatement.setString(1, d.getDoctorName());
-            preparedStatement.setString(2, d.getDoctorSurname());
-            preparedStatement.setString(3, d.getDoctorEmail());
-            preparedStatement.executeUpdate();	
-            preparedStatement.close();
-        
+        String sq1 = "INSERT INTO doctor (dname, dsurname, demail) VALUES (?, ?, ?)";
+        PreparedStatement preparedStatement = c.prepareStatement(sq1);
+        preparedStatement.setString(1, d.getDoctorName());
+        preparedStatement.setString(2, d.getDoctorSurname());
+        preparedStatement.setString(3, d.getDoctorEmail());
+        preparedStatement.executeUpdate();	
+        preparedStatement.close();
     }
+    
   /**
      * Selects a dctor by using the doctor's userId.
      * @param userID - [Integer] User Id of the doctor.
@@ -52,20 +51,17 @@ public class SQLiteDoctorManager implements DoctorManager{
     */
     @Override
     public Doctor selectDoctorByUserId(Integer userID) throws SQLException {
-        
-            String sql = "SELECT * FROM doctor WHERE userId = ? ";
-            PreparedStatement pStatement = c.prepareStatement(sql);
-            pStatement.setInt(1, userID);
-            ResultSet rs = pStatement.executeQuery();
-            Doctor doctor = null;
-            if(rs.next()){
-                doctor = new Doctor(rs.getInt("doctorId"), rs.getString("dname"), rs.getString("dsurname"), rs.getString("demail"));
-            }
-            pStatement.close();
-            rs.close();
-            return doctor;
-        
-        
+        String sql = "SELECT * FROM doctor WHERE userId = ? ";
+        PreparedStatement pStatement = c.prepareStatement(sql);
+        pStatement.setInt(1, userID);
+        ResultSet rs = pStatement.executeQuery();
+        Doctor doctor = null;
+        if(rs.next()){
+            doctor = new Doctor(rs.getInt("doctorId"), rs.getString("dname"), rs.getString("dsurname"), rs.getString("demail"));
+        }
+        pStatement.close();
+        rs.close();
+        return doctor;
     }
 
     /**
@@ -76,39 +72,32 @@ public class SQLiteDoctorManager implements DoctorManager{
      */
     @Override
     public Doctor selectDoctor(Integer doctorId) throws SQLException {
-        
-            String sql = "SELECT * FROM doctor WHERE doctorId = ?";
-            PreparedStatement p = c.prepareStatement(sql);
-            p.setInt(1,doctorId);
-            ResultSet rs = p.executeQuery();
-            Doctor doctor = null;
-            if(rs.next()){
-                doctor = new Doctor(rs.getInt("doctorId"), rs.getString("dname"), rs.getString("dsurname"), rs.getString("demail"));
-            }
-            p.close();
-            rs.close();
-            return doctor;
-        
+        String sql = "SELECT * FROM doctor WHERE doctorId = ?";
+        PreparedStatement p = c.prepareStatement(sql);
+        p.setInt(1,doctorId);
+        ResultSet rs = p.executeQuery();
+        Doctor doctor = null;
+        if(rs.next()){
+            doctor = new Doctor(rs.getInt("doctorId"), rs.getString("dname"), rs.getString("dsurname"), rs.getString("demail"));
+        }
+        p.close();
+        rs.close();
+        return doctor;
     }
     
     @Override
     public List<Doctor> selectAllDoctors()throws SQLException{
-        
-            String sql = "SELECT * FROM doctor";
-            PreparedStatement p = c.prepareStatement(sql);
-            
-            ResultSet rs = p.executeQuery();
-            List <Doctor> dList = new ArrayList<Doctor>();
-            while(rs.next()){ 
-            
-                dList.add(new Doctor(rs.getInt("doctorId"),rs.getString("dname"),rs.getString("dsurname"),rs.getString("demail")));
-                
-            }
-            p.close();
-            rs.close();
-            return dList;
-        
-        
+        String sql = "SELECT * FROM doctor";
+        PreparedStatement p = c.prepareStatement(sql);
+
+        ResultSet rs = p.executeQuery();
+        List <Doctor> dList = new ArrayList<Doctor>();
+        while(rs.next()){ 
+            dList.add(new Doctor(rs.getInt("doctorId"),rs.getString("dname"),rs.getString("dsurname"),rs.getString("demail")));
+        }
+        p.close();
+        rs.close();
+        return dList;
     }
     
     
@@ -147,9 +136,5 @@ public class SQLiteDoctorManager implements DoctorManager{
                 Logger.getLogger(SQLitePatientTSManager.class.getName()).log(Level.SEVERE, null, ex);
                 return 0;
             }
-        
     }
 }
-
-    
-     

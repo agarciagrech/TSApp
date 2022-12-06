@@ -61,10 +61,8 @@ public class ClientUtilities {
             userman.addUser(user);
             user.setUserId(userman.getId(username));
             userman.createLinkUserRole(2,user.getUserId());
-            System.out.println("user added");
             Utilities.CommunicationWithClient.sendUser(pw, user);
             doctorman.addDoctor(d);
-            System.out.println("doctor added");
             d.setDoctorId(doctorman.getId(d.getDoctorName()));
             doctorman.createLinkUserDoctor(user.getUserId(), d.getDoctorId());
             pw.println("Doctor successfully registered");
@@ -103,10 +101,8 @@ public class ClientUtilities {
             userman.addUser(user);
             user.setUserId(userman.getId(username));
             userman.createLinkUserRole(1,user.getUserId() );
-            System.out.println("user added");
             Utilities.CommunicationWithClient.sendUser(pw, user);
             patientman.addPatient(p);
-            System.out.println("patient added");
             patientman.createLinkUserPatient(user.getUserId(), p.getMedCardId());
             pw.println("Patient successfully registered");
             List<Doctor> doctorl=doctorman.selectAllDoctors();
@@ -129,14 +125,12 @@ public class ClientUtilities {
     public static User login(BufferedReader bf, PrintWriter pw,UserManager userman){
         User u = Utilities.CommunicationWithClient.receiveUser(bf);
         User user = userman.checkPassword(u.getUsername(), u.getPassword());
-        System.out.println(user.toString());
         if(user == null) {
             pw.println("Wrong username or password");
         }else{
             if(u.getUsername().equals(user.getUsername())&&u.getPassword().equals(user.getPassword())){
                 int id = userman.getId(u.getUsername());
                 User u2 = userman.selectUserByUserId(id);
-                System.out.println(u2.toString());
                 return u2;
             }else{
                 pw.println("Wrong username or password");
@@ -158,7 +152,6 @@ public class ClientUtilities {
         doctorman.addDoctor(doctor);
         doctor.setDoctorId(doctorman.getId(doctor.getDoctorName()));
 	doctorman.createLinkUserDoctor(user.getUserId(), doctor.getDoctorId());
-        System.out.println("Admin created");
         }catch(Exception ex) {
                 ex.printStackTrace();
         }

@@ -240,7 +240,6 @@ public class SQLitePatientTSManager implements PatientTSManager {
             Logger.getLogger(SQLitePatientTSManager.class.getName()).log(Level.SEVERE, null, ex);
             return null;
         }
-        
     }
 
     /**
@@ -270,7 +269,6 @@ public class SQLitePatientTSManager implements PatientTSManager {
             Logger.getLogger(SQLitePatientTSManager.class.getName()).log(Level.SEVERE, null, ex);
             return null;
         }
-        
     }
     
     /**
@@ -298,7 +296,6 @@ public class SQLitePatientTSManager implements PatientTSManager {
             Logger.getLogger(SQLitePatientTSManager.class.getName()).log(Level.SEVERE, null, ex);
             return null;
         }
-        
     }
     
     
@@ -365,6 +362,4 @@ public class SQLitePatientTSManager implements PatientTSManager {
         SimpleDateFormat  formato = new SimpleDateFormat("YYYY/MM/dd");
         return formato.format(dob);
     }
-    
-   
 }

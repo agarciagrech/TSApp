@@ -19,14 +19,17 @@ import pojos.users.Role;
  * @author albic
  */
 public class SQLiteRoleManager implements RoleManager {
+    
     private Connection c;
     
     public SQLiteRoleManager(Connection c){
         this.c = c;
     }
+    
       public SQLiteRoleManager() {
         super();
     }
+      
     /**
      * Creates and adds a new role into the database
      * @param r - [Role] Role that is added to the database
@@ -34,15 +37,15 @@ public class SQLiteRoleManager implements RoleManager {
      */
     public void addRole(Role r) {
        
-                String sq1 = "INSERT INTO role (type) VALUES (?)";
-                try {
-                    PreparedStatement preparedStatement = c.prepareStatement(sq1);
-                    preparedStatement.setString(1, r.getRole());
-                    preparedStatement.executeUpdate();
-                    preparedStatement.close();
-                } catch (SQLException ex) {
-                Logger.getLogger(SQLitePatientTSManager.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        String sq1 = "INSERT INTO role (type) VALUES (?)";
+        try {
+            PreparedStatement preparedStatement = c.prepareStatement(sq1);
+            preparedStatement.setString(1, r.getRole());
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(SQLitePatientTSManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
     
     }
     /**
@@ -124,7 +127,4 @@ public class SQLiteRoleManager implements RoleManager {
         }
         return false;
      }
-    
-    
-
 }

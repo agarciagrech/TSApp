@@ -40,9 +40,6 @@ public class SQLiteUserManager implements UserManager {
     public User checkPassword(String username, String password) {
         User user = new User();
         try {
-//                    MessageDigest md = MessageDigest.getInstance("MD5");
-//                    md.update(password.getBytes());
-//                    byte[] hash = md.digest();
             String sql = "SELECT * FROM users WHERE userName = ? AND userPassword = ? ";
             PreparedStatement preparedStatement = c.prepareStatement(sql);
             preparedStatement.setString(1, username);
@@ -70,7 +67,6 @@ public class SQLiteUserManager implements UserManager {
 
     @Override
     public void addUser(User u) {
-
         String sq1 = "INSERT INTO users ( userName, userPassword) VALUES (?, ?)";
         try {
             PreparedStatement preparedStatement = c.prepareStatement(sq1);
@@ -81,7 +77,6 @@ public class SQLiteUserManager implements UserManager {
         } catch (SQLException ex) {
             Logger.getLogger(SQLitePatientTSManager.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }
 
     @Override
@@ -158,7 +153,6 @@ public class SQLiteUserManager implements UserManager {
             }
         } catch (SQLException ex) {
             Logger.getLogger(SQLiteUserManager.class.getName()).log(Level.SEVERE, null, ex);
-
         }
         return false;
     }
@@ -214,5 +208,4 @@ public class SQLiteUserManager implements UserManager {
             return null;
         }
     }
-
 }

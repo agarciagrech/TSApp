@@ -96,77 +96,77 @@ public class SQLiteManager implements DBManager {
     
     @Override
     public boolean createTables() {
-      try{
-          Statement stmt1 = c.createStatement();
-          String sql1 = "CREATE TABLE role " 
-                  + "(roleid INTEGER PRIMARY KEY AUTOINCREMENT, " 
-                  + "type TEXT NOT NULL)"; 
-          stmt1.execute(sql1);
-          stmt1.close();
+        try{
+            Statement stmt1 = c.createStatement();
+            String sql1 = "CREATE TABLE role " 
+                + "(roleid INTEGER PRIMARY KEY AUTOINCREMENT, " 
+                + "type TEXT NOT NULL)"; 
+            stmt1.execute(sql1);
+            stmt1.close();
           
-          Statement stmt2 = c.createStatement();
-          String sql2 = "CREATE TABLE users " 
-                  + "(userid INTEGER PRIMARY KEY AUTOINCREMENT, " 
-                  + "userName TEXT NOT NULL, " 
-                  + "userPassword TEXT NOT NULL , "
-                  + "userRoleid FOREING KEY REFERENCES role(roleid) ON UPDATE CASCADE ON DELETE SET NULL) ";
-          stmt2.executeUpdate(sql2);
-          stmt2.close();
+            Statement stmt2 = c.createStatement();
+            String sql2 = "CREATE TABLE users " 
+                + "(userid INTEGER PRIMARY KEY AUTOINCREMENT, " 
+                + "userName TEXT NOT NULL, " 
+                + "userPassword TEXT NOT NULL , "
+                + "userRoleid FOREING KEY REFERENCES role(roleid) ON UPDATE CASCADE ON DELETE SET NULL) ";
+            stmt2.executeUpdate(sql2);
+            stmt2.close();
           
-          Statement stmt3 = c.createStatement();
-          String sql3 = "CREATE TABLE patient " 
-                  + "(medical_card_number INTEGER PRIMARY KEY, " 
-                  + "name TEXT NOT NULL, " 
-                  + "surname TEXT NOT NULL, "
-                  + "dob TEXT NOT NULL, " 
-                  + "address TEXT NOT NULL, "
-                  + "email TEXT, " 
-                  + "diagnosis TEXT NOT NULL, "
-                  + "allergies TEXT, "
-                  + "gender TEXT NOT NULL, "
-                  + "macAddress TEXT NOT NULL, "
-                  + "userId FOREING KEY REFERENCES users(userid) ON UPDATE RESTRICT ON DELETE CASCADE)";
-          stmt3.executeUpdate(sql3);
-          stmt3.close();
+            Statement stmt3 = c.createStatement();
+            String sql3 = "CREATE TABLE patient " 
+                    + "(medical_card_number INTEGER PRIMARY KEY, " 
+                    + "name TEXT NOT NULL, " 
+                    + "surname TEXT NOT NULL, "
+                    + "dob TEXT NOT NULL, " 
+                    + "address TEXT NOT NULL, "
+                    + "email TEXT, " 
+                    + "diagnosis TEXT NOT NULL, "
+                    + "allergies TEXT, "
+                    + "gender TEXT NOT NULL, "
+                    + "macAddress TEXT NOT NULL, "
+                    + "userId FOREING KEY REFERENCES users(userid) ON UPDATE RESTRICT ON DELETE CASCADE)";
+            stmt3.executeUpdate(sql3);
+            stmt3.close();
           
-          Statement stmt4 = c.createStatement();
-          String sql4 = "CREATE TABLE signal " 
-                  + "(signalId INTEGER PRIMARY KEY AUTOINCREMENT, "
-                  + "startDate TEXT NOT NULL, " 
-                  + "ECGFilename STRING NOT NULL, "
-                  + "EMGFilename STRING NOT NULL, "
-                  + "id_patient FOREING KEY REFERENCES patient(medical_card_number) ON UPDATE CASCADE ON DELETE SET NULL)";
-          stmt4.executeUpdate(sql4);
-          stmt4.close();
+            Statement stmt4 = c.createStatement();
+            String sql4 = "CREATE TABLE signal " 
+                    + "(signalId INTEGER PRIMARY KEY AUTOINCREMENT, "
+                    + "startDate TEXT NOT NULL, " 
+                    + "ECGFilename STRING NOT NULL, "
+                    + "EMGFilename STRING NOT NULL, "
+                    + "id_patient FOREING KEY REFERENCES patient(medical_card_number) ON UPDATE CASCADE ON DELETE SET NULL)";
+            stmt4.executeUpdate(sql4);
+            stmt4.close();
           
-          Statement stmt5 = c.createStatement();
-          String sql5 = "CREATE TABLE doctor " 
-                  + "(doctorId INTEGER PRIMARY KEY AUTOINCREMENT, " 
-                  + "dname TEXT NOT NULL, " 
-                  + "dsurname TEXT NOT NULL, "
-                  + "demail TEXT , "
-                  + "userId FOREING KEY REFERENCES users(userid) ON UPDATE CASCADE ON DELETE SET NULL)";
-          stmt5.executeUpdate(sql5);
-          stmt5.close();
+            Statement stmt5 = c.createStatement();
+            String sql5 = "CREATE TABLE doctor " 
+                    + "(doctorId INTEGER PRIMARY KEY AUTOINCREMENT, " 
+                    + "dname TEXT NOT NULL, " 
+                    + "dsurname TEXT NOT NULL, "
+                    + "demail TEXT , "
+                    + "userId FOREING KEY REFERENCES users(userid) ON UPDATE CASCADE ON DELETE SET NULL)";
+            stmt5.executeUpdate(sql5);
+            stmt5.close();
          
-          Statement stmt6 = c.createStatement();
-		String sql6 = "CREATE TABLE doctor_patient "
-				   + "(patient_id REFERENCES patient(medical_card_number) ON UPDATE RESTRICT ON DELETE CASCADE,"
-				   + " doctor_id REFERENCES doctor(doctorId) ON UPDATE RESTRICT ON DELETE CASCADE, "
-				   + " PRIMARY KEY (patient_id,doctor_id))";
-		stmt6.executeUpdate(sql6);
-		stmt6.close();
+            Statement stmt6 = c.createStatement();
+            String sql6 = "CREATE TABLE doctor_patient "
+                               + "(patient_id REFERENCES patient(medical_card_number) ON UPDATE RESTRICT ON DELETE CASCADE,"
+                               + " doctor_id REFERENCES doctor(doctorId) ON UPDATE RESTRICT ON DELETE CASCADE, "
+                               + " PRIMARY KEY (patient_id,doctor_id))";
+            stmt6.executeUpdate(sql6);
+            stmt6.close();
                
           return true;
       }catch(SQLException tables_error){
-          if (tables_error.getMessage().contains("already exists")) {
-				System.out.println("Database already exists.");
-				return false;
-			} else {
-				System.out.println("Error creating tables! Abort.");
-				tables_error.printStackTrace();
-				return false;
-			}
+            if (tables_error.getMessage().contains("already exists")) {
+                System.out.println("Database already exists.");
+                return false;
+            } else {
+                    System.out.println("Error creating tables! Abort.");
+                    tables_error.printStackTrace();
+                    return false;
+            }
       }
             
     }

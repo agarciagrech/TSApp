@@ -73,38 +73,36 @@ public class ServerTSThreads {
         }      
     }
     
-       public static void ExitServer(){
-         Scanner sc = new Scanner (System.in);
-         System.out.println("If you want to close the  server press 'x', if you want to continue press any other key ");
-         String line = sc.nextLine();
-         if(line.equals("x")){
-             ReleaseResourcesServerTSClient(serverSocketClient);
-         }
-       }
+    public static void ExitServer(){
+        Scanner sc = new Scanner (System.in);
+        System.out.println("If you want to close the  server press 'x', if you want to continue press any other key ");
+        String line = sc.nextLine();
+        if(line.equals("x")){
+            ReleaseResourcesServerTSClient(serverSocketClient);
+        }
+    }
         
         
-        public static void ReleaseResourcesServerTSClient(ServerSocket severSocketClient){
+    public static void ReleaseResourcesServerTSClient(ServerSocket severSocketClient){
         try{
-            
             serverSocketClient.close();
             System.exit(0);
-            
         }catch(IOException ex){
             Logger.getLogger(ServerTSThreads.class.getName()).log(Level.SEVERE, null, ex);
         }
-        }
+    }
         
-       public static void ReleaseClientThread(Socket socket){
-            try{
-                socket.close();
-            }catch(IOException ex){
-                Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex); 
-            }
+    public static void ReleaseClientThread(Socket socket){
+        try{
+            socket.close();
+        }catch(IOException ex){
+            Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex); 
         }
+    }
 
         
-        public static void releaseClientResources(InputStream inputStream, OutputStream outputStream, Socket socket) {
-         try {
+    public static void releaseClientResources(InputStream inputStream, OutputStream outputStream, Socket socket) {
+        try {
             inputStream.close();
         } catch (IOException ex) {
             Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
@@ -119,8 +117,6 @@ public class ServerTSThreads {
         } catch (IOException ex) {
             Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        
     }
 }
     

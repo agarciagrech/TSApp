@@ -40,7 +40,9 @@ import pojos.users.User;
  * @author albic
  */
 public class CommunicationWithClient {
+    
     public static SQLiteSignalManager sman = new SQLiteSignalManager();
+    
     public static void sendPatientList (List<PatientTS> patientList,PrintWriter pw,BufferedReader bf){
         for (int i =0;i<patientList.size();i++){
           pw.println("Patient:"+patientList.get(i).getPatientName()+"/"+patientList.get(i).getPatientSurname()+"/"+patientList.get(i).getMedCardId());
@@ -48,7 +50,6 @@ public class CommunicationWithClient {
         pw.println("End of list");
     }
     public static PatientTS receivePatient(BufferedReader bufferReader){
-        System.out.println("in receive patient");
         boolean recieved = true; 
         PatientTS p = new PatientTS();
         
@@ -94,23 +95,19 @@ public class CommunicationWithClient {
                         case "macAddress": p.setMacAddress(data2[j+1]);
                                          break;
                     }
- 
                 }
-                
-             }
-        System.out.println("Patient received:");
-        System.out.println(p.toString());
-        
-        return p;
+            }
+            System.out.println(p.toString());
+            return p;
         }catch(IOException exception){
             return null;
         } catch (NotBoundException ex) {
              Logger.getLogger(CommunicationWithClient.class.getName()).log(Level.SEVERE, null, ex);
              return null;
          }
-       
     }
-        public static Doctor receiveDoctor(BufferedReader bufferReader){
+    
+    public static Doctor receiveDoctor(BufferedReader bufferReader){
         Doctor d= new Doctor();
         try{
             String line = bufferReader.readLine();
@@ -134,22 +131,19 @@ public class CommunicationWithClient {
                                      break;
                         
                     }
- 
                 }
-                
              }
-        System.out.println("Doctor received:");
-        System.out.println(d.toString());
-        return d;
-        
+            System.out.println("Doctor received:");
+            System.out.println(d.toString());
+            return d;
         }catch(IOException exception){
             return null;
         } catch (NotBoundException ex) {
              Logger.getLogger(CommunicationWithClient.class.getName()).log(Level.SEVERE, null, ex);
              return null;
          }
-         
     }
+    
     public static void sendPatient (PrintWriter printWriter,PatientTS p){
         printWriter.println(p.toString());
     }
@@ -164,7 +158,7 @@ public class CommunicationWithClient {
         List<String> filenames = sman.ListSignalsFilenamesByPatient(medcard); 
         pw.println(filenames.size()); 
         for (int i=0; i<filenames.size();i++){
-            pw.println(filenames.get(i)); //imprime la lista, esto lo hace bien. 
+            pw.println(filenames.get(i));
         }
     }
     
@@ -190,6 +184,7 @@ public class CommunicationWithClient {
             s.setEMG_values(emgVals);
             
             return s;
+            
         } catch (IOException ex) {
             Logger.getLogger(CommunicationWithClient.class.getName()).log(Level.SEVERE, null, ex);
             return null;
@@ -199,32 +194,31 @@ public class CommunicationWithClient {
     public static User receiveUser (BufferedReader br){
         User u = new User();
         try {
-        String line = br.readLine();
-        line=line.replace("{", "");
-        line=line.replace("User", "");
-        line=line.replace("}", "");
-        String[] atribute = line.split(",");
-        for (int i =0;i <atribute.length; i++){
-            String[] data2 = atribute[i].split("=");
-            for (int j =0;j <data2.length - 1; j++){
-                data2[j]=data2[j].replace(" ", "");
-                switch(data2[j]){
-                    case "username":
-                        u.setUsername(data2[j+1]);
-                        break;
-                    case "password":
-                        u.setPassword(data2[j+1]);
-                        break;
-                    case "role":
-                        u.setRole(Integer.parseInt(data2[j+1]));
-                        break;
-                    case "userId":
-                        u.setUserId(Integer.parseInt(data2[j+1]));
-                        break;
+            String line = br.readLine();
+            line=line.replace("{", "");
+            line=line.replace("User", "");
+            line=line.replace("}", "");
+            String[] atribute = line.split(",");
+            for (int i =0;i <atribute.length; i++){
+                String[] data2 = atribute[i].split("=");
+                for (int j =0;j <data2.length - 1; j++){
+                    data2[j]=data2[j].replace(" ", "");
+                    switch(data2[j]){
+                        case "username":
+                            u.setUsername(data2[j+1]);
+                            break;
+                        case "password":
+                            u.setPassword(data2[j+1]);
+                            break;
+                        case "role":
+                            u.setRole(Integer.parseInt(data2[j+1]));
+                            break;
+                        case "userId":
+                            u.setUserId(Integer.parseInt(data2[j+1]));
+                            break;
+                    }
                 }
             }
-        }
-            System.out.println(u.toString());
         } catch (IOException ex) {
             Logger.getLogger(CommunicationWithClient.class.getName()).log(Level.SEVERE, null, ex);
         }
