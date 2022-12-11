@@ -75,7 +75,7 @@ public class ServerTSThreads {
     
     public static void ExitServer(){
         Scanner sc = new Scanner (System.in);
-        System.out.println("If you want to close the  server press 'x', if you want to continue press any other key ");
+        System.out.println("If you want to close the  server press 'x':");
         String line = sc.nextLine();
         if(line.equals("x")){
             ReleaseResourcesServerTSClient(serverSocketClient);
